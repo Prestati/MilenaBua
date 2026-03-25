@@ -1,0 +1,62 @@
+[
+  {
+    "slug": "escape-haugesund",
+    "title": "Escape Haugesund",
+    "description": "En escape room-bedrift i Haugesund driftet ved siden av fulltidsjobb — med ChatGPT som prosjektleder og mål om 1 million i omsetning.",
+    "tags": [
+      "Escape Room",
+      "AI",
+      "Prosjektledelse"
+    ],
+    "imageUrl": "",
+    "liveUrl": "https://escapehaugesund.no",
+    "githubUrl": "",
+    "content": "Escape Haugesund er et escape room-konsept med ambisiøst mål om å omsette for 1 million kroner i 2026 ved hjelp av AI-drevet prosjektledelse.",
+    "emoji": "🔐",
+    "subtitle": "Primærfokus 2026"
+  },
+  {
+    "slug": "chatbot-norge",
+    "title": "Chatbot Norge",
+    "description": "Norsk chatbot-løsning for bedrifter. Automatisert kundekommunikasjon — på norsk — for norske SMB-er.",
+    "tags": [
+      "AI",
+      "Chatbot",
+      "B2B"
+    ],
+    "imageUrl": "",
+    "liveUrl": "https://www.chatbotnorge.no/",
+    "githubUrl": "",
+    "content": "Chatbot Norge leverer automatisert kundekommunikasjon på norsk, tilpasset norske SMB-er som ønsker å effektivisere kundeservice.",
+    "emoji": "🤖",
+    "subtitle": "Teknologi"
+  },
+  {
+    "slug": "economio",
+    "title": "Economio",
+    "description": "Brettspill som lærer ungdom om personlig økonomi. Solgt til skoler i hele Norge.",
+    "tags": [
+      "Utdanning",
+      "Brettspill",
+      "Økonomi"
+    ],
+    "imageUrl": "",
+    "liveUrl": "https://www.economio.no/",
+    "githubUrl": "",
+    "content": "Economio er et brettspill designet for å lære ungdom om personlig økonomi på en engasjerende og praktisk måte.",
+    "emoji": "🎲",
+    "subtitle": "Økonomi & utdanning"
+  },
+  {
+    "slug": "prosjekt-1774391861108",
+    "title": "Plandish",
+    "description": "PlanDish hjelper familier og par å planlegge ukens middager og generere handleliste – enkelt og uten stress. Aldri mer lure på hva som skal stå på bordet i kveld.",
+    "tags": [],
+    "imageUrl": "",
+    "liveUrl": "https://www.plandish.no/",
+    "githubUrl": "",
+    "content": "PlanDish hjelper familier og par å planlegge ukens middager og genere handleliste – enkelt og uten stress. Du velger retter, appen holder oversikten. Spar tid, tankekraft og matsvinn. Aldri mer lure på hva som skal stå på bordet i kveld.",
+    "emoji": "🍽️",
+    "subtitle": "Planlegger"
+  }
+]

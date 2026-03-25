@@ -1,0 +1,114 @@
+{
+  "lastUpdated": "Mars 2026",
+  "goals": {
+    "prevYear": { "revenue": 640000, "bookings": 294, "label": "2025" },
+    "target": { "revenue": 1000000, "bookings": 420, "label": "Mål 2026" }
+  },
+  "kpis": [
+    {
+      "id": "revenue",
+      "label": "Omsetning 2026",
+      "value": 149970,
+      "unit": "kr",
+      "context": "Jan + Feb (mål hittil: 105 000 kr)",
+      "periodGoal": 105000,
+      "yearGoal": 1000000,
+      "status": "on-track",
+      "statusText": "143% av periodesmål"
+    },
+    {
+      "id": "bookings",
+      "label": "Bookinger",
+      "value": 80,
+      "unit": "stk",
+      "context": "Jan + Feb (mål hittil: 48)",
+      "periodGoal": 48,
+      "yearGoal": 420,
+      "status": "on-track",
+      "statusText": "167% av periodesmål"
+    },
+    {
+      "id": "reviews",
+      "label": "Anmeldelser",
+      "value": 7,
+      "unit": "nye",
+      "context": "Jan + Feb (mål hittil: 20)",
+      "periodGoal": 20,
+      "yearGoal": 140,
+      "status": "behind",
+      "statusText": "35% av periodesmål"
+    }
+  ],
+  "months": [
+    {
+      "id": "2026-03",
+      "date": "Kommer i mars",
+      "title": "Neste steg",
+      "visible": true,
+      "isUpcoming": true,
+      "introText": "",
+      "bullets": [
+        "Oppdatere og forbedre utstyr i eksisterende rom",
+        "Sette opp struktur for kontakt med nye B2B-kunder",
+        "Starte planlegging og bygging av nytt escape room",
+        "Få på plass QR-koder for anmeldelser i lokalene"
+      ],
+      "aiTag": "",
+      "stats": null
+    },
+    {
+      "id": "2026-02",
+      "date": "Februar 2026",
+      "title": "Automasjon, konsept og nye folk",
+      "visible": true,
+      "isUpcoming": false,
+      "introText": "Automatisk e-post til kunder etter besøk er nå på plass. Konsept for nytt rom er landet. AI har vært med på hele reisen – levert forslag til prosess og tekniske løsninger. Forslagene var gode, men vi har valgt å la menneskene i bedriften gjennomføre dette. Vi vil dele mer om hvordan vi eventuelt bruker AI til selve gjennomføringen.",
+      "bullets": [
+        "Automatisk takke-e-post satt opp",
+        "Konsept for nytt rom besluttet",
+        "To nye gamemastere ansatt (anbefalt av AI)",
+        "Fast ukentlig møtetidspunkt for eierne etablert"
+      ],
+      "aiTag": "🤖 Prosess og løsninger foreslått av AI",
+      "stats": { "revenue": 72131, "bookings": 38 }
+    },
+    {
+      "id": "2026-01",
+      "date": "Januar 2026",
+      "title": "Prosjektet starter",
+      "visible": true,
+      "isUpcoming": false,
+      "introText": "Første måned med AI som strategisk rådgiver. Årsplan utarbeidet med ChatGPT, vedtatt i styremøte, og dugnad gjennomført for å klargjøre rom for bygging.",
+      "bullets": [
+        "Årsplan 2026 utarbeidet med AI og vedtatt i styremøte",
+        "Budsjett og investeringer vedtatt – søker banklån på 100k",
+        "Dugnad gjennomført – rom ryddet for bygging",
+        "Prisøkning på helger vedtatt"
+      ],
+      "aiTag": "🤖 Plan generert av ChatGPT + Claude",
+      "stats": { "revenue": 77839, "bookings": 42 }
+    }
+  ],
+  "tools": [
+    {
+      "id": "claude",
+      "icon": "🧠",
+      "name": "Claude",
+      "role": "Strategisk rådgiver",
+      "description": "Brukes til dype analyser, årsplanlegging, og strukturerte dokumenter. Lager PDF-er vi faktisk kan bruke i styremøter. Føles som å ha en senior konsulent på laget."
+    },
+    {
+      "id": "chatgpt",
+      "icon": "💬",
+      "name": "ChatGPT",
+      "role": "Daglig sparringspartner",
+      "description": "Brukes til raske spørsmål, idémyldring, og å bryte ned komplekse planer til konkrete oppgaver. Alle kjenner ChatGPT – det gjør det lett å få med hele teamet."
+    }
+  ],
+  "quote": "«Vi tar ingen strategiske beslutninger uten å konsultere AI først. Ikke fordi vi må – men fordi det gir bedre beslutninger.»",
+  "principle": {
+    "title": "⚡ Hvordan vi jobber",
+    "content": "Claude lager de store planene og analysene. ChatGPT hjelper oss å forstå dem og bryte dem ned i hverdagslige oppgaver. Vi bruker begge – men til forskjellige ting. Det handler ikke om hvilket verktøy som er «best», men om å bruke riktig verktøy til riktig jobb.",
+    "content2": "Vi lukter på flere verktøy og vil komme tilbake til dem etter å ha testet godt nok."
+  }
+}

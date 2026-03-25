@@ -1,0 +1,29 @@
+[
+  {
+    "slug": "kom-i-gang-med-nextjs",
+    "title": "Kom i gang med Next.js 15",
+    "excerpt": "En praktisk introduksjon til Next.js App Router og hva som er nytt i versjon 15.",
+    "date": "2026-03-10",
+    "author": "Milena Bua",
+    "tags": ["Next.js", "React", "Webutvikling"],
+    "content": "Next.js 15 introduserer flere spennende forbedringer til App Router. I dette innlegget går vi gjennom de viktigste endringene og hvordan du kommer raskt i gang."
+  },
+  {
+    "slug": "tailwind-tips-og-triks",
+    "title": "10 Tailwind CSS-tips du burde kjenne til",
+    "excerpt": "Nyttige teknikker for å skrive renere og mer vedlikeholdbar Tailwind-kode.",
+    "date": "2026-02-28",
+    "author": "Milena Bua",
+    "tags": ["Tailwind CSS", "CSS", "Design"],
+    "content": "Tailwind CSS har blitt et av de mest populære CSS-rammeverkene. Her er ti tips som vil hjelpe deg å skrive bedre Tailwind-kode."
+  },
+  {
+    "slug": "tilgjengelighet-pa-nett",
+    "title": "Tilgjengelighet på nett – en praktisk guide",
+    "excerpt": "Hvorfor universell utforming er viktig og hvordan du implementerer det i prosjektene dine.",
+    "date": "2026-02-14",
+    "author": "Milena Bua",
+    "tags": ["Tilgjengelighet", "UX", "HTML"],
+    "content": "Universell utforming handler om å lage nettsider som fungerer for alle. I denne guiden ser vi på konkrete tiltak du kan ta i dag."
+  }
+]

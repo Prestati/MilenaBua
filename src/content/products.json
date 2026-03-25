@@ -1,0 +1,38 @@
+[
+  {
+    "id": "1",
+    "name": "Budsjettark for sideprosjekter",
+    "description": "Regnearket jeg bruker for å holde oversikt over økonomi og fremdrift — tilpasset deg med lite tid.",
+    "price": 99,
+    "imageUrl": "",
+    "category": "Maler",
+    "inStock": true,
+    "type": "pdf",
+    "buyUrl": "",
+    "pageContent": ""
+  },
+  {
+    "id": "3",
+    "name": "Årskalender 2026",
+    "description": "Planleggingskalender for deg som driver sideprosjekter ved siden av full jobb.",
+    "price": 79,
+    "imageUrl": "",
+    "category": "Planlegging",
+    "inStock": true,
+    "type": "pdf",
+    "buyUrl": "",
+    "pageContent": ""
+  },
+  {
+    "id": "4",
+    "name": "Veggkalender 2026",
+    "description": "Trykt veggkalender for deg som vil ha oversikt over hele året. Leveres per post.",
+    "price": 249,
+    "imageUrl": "",
+    "category": "Planlegging",
+    "inStock": true,
+    "type": "physical",
+    "buyUrl": "",
+    "pageContent": ""
+  }
+]

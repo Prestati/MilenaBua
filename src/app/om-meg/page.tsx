@@ -1,0 +1,99 @@
+export const dynamic = "force-dynamic";
+
+import { readContent } from "@/lib/content";
+import type { Metadata } from "next";
+import Link from "next/link";
+
+export const metadata: Metadata = { title: "Om meg" };
+
+interface AboutData {
+  name: string;
+  tagline: string;
+  bio: string;
+  bio2: string;
+  imageUrl: string;
+  portraitUrl: string;
+  email: string;
+  ctaText: string;
+  ctaUrl: string;
+}
+interface Social { label: string; href: string; }
+
+const wrap = "max-w-[860px] mx-auto px-6";
+
+export default function AboutPage() {
+  const d = readContent<AboutData>("about.json");
+  const socials = readContent<Social[]>("socials.json").filter((s) => s.href);
+
+  return (
+    <div className={wrap} style={{ paddingTop: 64, paddingBottom: 80 }}>
+      {/* Hero */}
+      <div className="flex flex-col sm:flex-row gap-10 items-start mb-16 pb-16 border-b" style={{ borderColor: "var(--faint)" }}>
+        {d.imageUrl ? (
+          <img src={d.imageUrl} alt={d.name} style={{ width: 120, height: 120, borderRadius: "50%", objectFit: "cover", flexShrink: 0 }} />
+        ) : (
+          <div style={{ width: 120, height: 120, borderRadius: "50%", background: "var(--blue-lt)", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 40 }}>
+            👋
+          </div>
+        )}
+        <div>
+          <h1 className="font-extrabold tracking-[-0.04em] leading-[1.05] mb-3" style={{ fontSize: "clamp(2rem, 4vw, 3rem)", color: "var(--ink)" }}>
+            {d.name}
+          </h1>
+          <p className="text-[1.05rem] font-medium mb-5" style={{ color: "var(--blue)" }}>{d.tagline}</p>
+          {d.ctaText && d.ctaUrl && (
+            <a href={d.ctaUrl}
+              className="inline-flex items-center gap-2 text-[0.88rem] font-bold px-6 py-3 rounded-full text-white no-underline"
+              style={{ background: "var(--blue)", boxShadow: "0 4px 16px rgba(59,111,212,0.25)" }}>
+              {d.ctaText}
+            </a>
+          )}
+        </div>
+      </div>
+
+      {/* Bio + portrait */}
+      <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-12 mb-16">
+        <div>
+          <h2 className="text-[1.2rem] font-extrabold mb-5 tracking-[-0.02em]" style={{ color: "var(--ink)" }}>Om meg</h2>
+          {d.bio && <p className="text-[0.95rem] leading-[1.85] mb-4" style={{ color: "var(--mid)" }}>{d.bio}</p>}
+          {d.bio2 && <p className="text-[0.95rem] leading-[1.85]" style={{ color: "var(--mid)" }}>{d.bio2}</p>}
+        </div>
+
+        {/* Portrait */}
+        {d.portraitUrl ? (
+          <div style={{ position: "relative" }}>
+            <img
+              src={d.portraitUrl}
+              alt={d.name}
+              style={{
+                width: "100%",
+                aspectRatio: "3/4",
+                objectFit: "cover",
+                objectPosition: "center top",
+                borderRadius: 20,
+                display: "block",
+              }}
+            />
+          </div>
+        ) : (
+          <div style={{
+            width: "100%", aspectRatio: "3/4", borderRadius: 20,
+            background: "var(--blue-lt)", border: "2px dashed var(--faint)",
+            display: "flex", flexDirection: "column", alignItems: "center",
+            justifyContent: "center", gap: 8,
+          }}>
+            <span style={{ fontSize: 32 }}>🖼</span>
+            <span style={{ fontSize: "0.78rem", color: "var(--mid)" }}>Legg til portrettbilde i admin</span>
+          </div>
+        )}
+      </div>
+
+      {/* Prosjekter */}
+      <div className="pt-8 border-t" style={{ borderColor: "var(--faint)" }}>
+        <p className="text-[0.82rem] font-semibold" style={{ color: "var(--mid)" }}>
+          ← <Link href="/" style={{ color: "var(--blue)", textDecoration: "none" }}>Tilbake til forsiden</Link>
+        </p>
+      </div>
+    </div>
+  );
+}

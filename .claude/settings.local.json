@@ -2,7 +2,13 @@
   "permissions": {
     "allow": [
       "Bash(yes n:*)",
-      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --no-git --no-turbopack)"
+      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --no-git --no-turbopack)",
+      "Bash(npm run:*)",
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)",
+      "Bash(curl -s http://localhost:3000/)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ]
   }
 }
