@@ -6,7 +6,7 @@ import { saveEscapeAction } from "./actions";
 interface EscapeData {
   tag: string; heading: string; headingAccent: string; description: string;
   goalLabel: string; goalText: string; primaryBtn: string; secondaryBtn: string;
-  secondaryBtnUrl: string;
+  secondaryBtnUrl?: string;
 }
 
 export default function EscapeForm({ data }: { data: EscapeData }) {
