@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { savePostsAction } from "./actions";
+import Image from "next/image";
 import type { BlogPost } from "@/types";
 
 const empty = (): BlogPost => ({
@@ -12,6 +13,7 @@ const empty = (): BlogPost => ({
   author: "Milena Bua",
   tags: [],
   content: "",
+  imageUrl: "",
 });
 
 export default function BlogAdmin({ initial }: { initial: BlogPost[] }) {
@@ -19,6 +21,9 @@ export default function BlogAdmin({ initial }: { initial: BlogPost[] }) {
   const [editingSlug, setEditingSlug] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<{ ok?: boolean; text?: string } | null>(null);
+  const [previews, setPreviews] = useState<Record<string, string>>(
+    initial.reduce((acc, p) => ({ ...acc, [p.slug]: p.imageUrl || "" }), {})
+  );
 
   const save = async () => {
     setSaving(true);
@@ -37,6 +42,28 @@ export default function BlogAdmin({ initial }: { initial: BlogPost[] }) {
     const p = empty();
     setItems((prev) => [p, ...prev]);
     setEditingSlug(p.slug);
+  };
+
+  const handleImageChange = async (slug: string, file: File) => {
+    const preview = URL.createObjectURL(file);
+    setPreviews((prev) => ({ ...prev, [slug]: preview }));
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    const response = await fetch("/api/upload", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (response.ok) {
+      const { url } = await response.json();
+      update(slug, "imageUrl", url);
+      setPreviews((prev) => ({ ...prev, [slug]: url }));
+    } else {
+      console.error("Bildeopplasting feilet", await response.text());
+      update(slug, "imageUrl", "");
+    }
   };
 
   return (
@@ -70,6 +97,46 @@ export default function BlogAdmin({ initial }: { initial: BlogPost[] }) {
 
           {editingSlug === p.slug && (
             <div className="px-5 pb-5 pt-2 border-t grid sm:grid-cols-2 gap-4" style={{ borderColor: "var(--faint)" }}>
+              {/* Bilde upload */}
+              <div className="sm:col-span-2">
+                <label className="block text-[0.72rem] font-semibold mb-2" style={{ color: "var(--mid)" }}>
+                  Blogg-bilde
+                </label>
+                {previews[p.slug] && (
+                  <div className="relative mb-3 rounded-[12px] overflow-hidden border" style={{ borderColor: "var(--faint)", height: 150 }}>
+                    <Image
+                      src={previews[p.slug]}
+                      alt="Preview"
+                      fill
+                      className="object-cover"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setPreviews((prev) => ({ ...prev, [p.slug]: "" }));
+                        update(p.slug, "imageUrl", "");
+                      }}
+                      className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/50 text-white text-sm flex items-center justify-center hover:bg-black/70"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) handleImageChange(p.slug, file);
+                  }}
+                  className="w-full text-[0.82rem] file:mr-3 file:px-4 file:py-2 file:rounded-full file:border-0 file:text-[0.78rem] file:font-semibold file:cursor-pointer"
+                  style={{ color: "var(--mid)" }}
+                />
+                <p className="text-[0.72rem] mt-1" style={{ color: "var(--mid)" }}>
+                  JPG, PNG eller WebP. Anbefalt: 800×500px.
+                </p>
+              </div>
+
               {([
                 ["title", "Tittel"],
                 ["slug", "Slug (URL)"],

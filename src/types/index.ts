@@ -19,6 +19,11 @@ export interface BlogPost {
   author: string;
   tags: string[];
   content: string;
+  imageUrl?: string;
+  category?: string;
+  published?: boolean;
+  publishDate?: string;
+  visible?: boolean;
 }
 
 export interface Product {
