@@ -3,7 +3,7 @@ import EscapeForm from "./EscapeForm";
 
 interface EscapeData {
   tag: string; heading: string; headingAccent: string; description: string;
-  goalLabel: string; goalText: string; primaryBtn: string; secondaryBtn: string;
+  goalLabel: string; goalText: string; primaryBtn: string; secondaryBtn: string; secondaryBtnUrl: string;
 }
 
 export default async function AdminEscapePage() {
