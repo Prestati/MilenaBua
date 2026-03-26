@@ -9,8 +9,34 @@ export const metadata: Metadata = {
 };
 
 function isPublished(post: typeof posts[number]) {
-  const now = new Date().toISOString().slice(0, 10);
-  return post.visible !== false && post.published && post.publishDate && post.publishDate <= now;
+  // Innlegg må være marked som publisert
+  if (post.status !== "published") {
+    return false;
+  }
+
+  // Innlegg må være markert som synlig (kan skjules selv om det er publisert)
+  if (!post.visible) {
+    return false;
+  }
+
+  // Sjekk om publiseringsdato/tidspunkt er nådd
+  const now = new Date();
+  const nowDate = now.toISOString().slice(0, 10); // YYYY-MM-DD
+  const nowTime = now.toTimeString().slice(0, 5); // HH:mm
+
+  // Hvis publiseringsdato er i fremtiden, vis ikke
+  if (post.publishDate > nowDate) {
+    return false;
+  }
+
+  // Hvis dato er i dag og tidspunktet er oppgitt, sjekk tidspunktet
+  if (post.publishDate === nowDate && post.publishTime) {
+    if (post.publishTime > nowTime) {
+      return false; // Tidspunktet er ennå ikke nådd
+    }
+  }
+
+  return true;
 }
 
 export default function BloggPage() {

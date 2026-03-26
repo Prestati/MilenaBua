@@ -19,11 +19,25 @@ export interface BlogPost {
   author: string;
   tags: string[];
   content: string;
-  imageUrl?: string;
-  category?: string;
-  published?: boolean;
-  publishDate?: string;
-  visible?: boolean;
+  imageUrl: string;
+  gallery?: string[]; // Array av bildeurlater
+  category: string;
+  
+  // Status: draft | scheduled | published | hidden
+  status: "draft" | "scheduled" | "published" | "hidden";
+  
+  // Publisering og synlighet
+  publishDate: string; // YYYY-MM-DD
+  publishTime?: string; // HH:mm format
+  visible: boolean; // Manuell skjuling av publisert innlegg
+  
+  // SEO
+  metaTitle?: string;
+  metaDescription?: string;
+  
+  // Tracking
+  createdAt: string; // ISO string
+  updatedAt: string; // ISO string
 }
 
 export interface Product {

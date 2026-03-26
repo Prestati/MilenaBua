@@ -9,9 +9,12 @@
     "content": "Next.js 15 introduserer flere spennende forbedringer til App Router. I dette innlegget går vi gjennom de viktigste endringene og hvordan du kommer raskt i gang.",
     "imageUrl": "",
     "category": "Teknologi",
-    "published": true,
+    "status": "published",
     "publishDate": "2026-03-10",
-    "visible": true
+    "publishTime": "10:00",
+    "visible": true,
+    "createdAt": "2026-03-10T10:00:00Z",
+    "updatedAt": "2026-03-10T10:00:00Z"
   },
   {
     "slug": "tailwind-tips-og-triks",
@@ -23,9 +26,12 @@
     "content": "Tailwind CSS har blitt et av de mest populære CSS-rammeverkene. Her er ti tips som vil hjelpe deg å skrive bedre Tailwind-kode.",
     "imageUrl": "",
     "category": "Design",
-    "published": true,
+    "status": "published",
     "publishDate": "2026-02-28",
-    "visible": true
+    "publishTime": "09:30",
+    "visible": true,
+    "createdAt": "2026-02-28T09:30:00Z",
+    "updatedAt": "2026-02-28T09:30:00Z"
   },
   {
     "slug": "tilgjengelighet-pa-nett",
@@ -37,8 +43,11 @@
     "content": "Universell utforming handler om å lage nettsider som fungerer for alle. I denne guiden ser vi på konkrete tiltak du kan ta i dag.",
     "imageUrl": "",
     "category": "UX",
-    "published": true,
+    "status": "published",
     "publishDate": "2026-02-14",
-    "visible": true
+    "publishTime": "14:00",
+    "visible": true,
+    "createdAt": "2026-02-14T14:00:00Z",
+    "updatedAt": "2026-02-14T14:00:00Z"
   }
 ]
