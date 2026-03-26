@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { saveProductsAction, uploadProductImageAction } from "./actions";
+import { saveProductsAction, uploadProductImageAction, saveShopAction } from "./actions";
 import type { Product } from "@/types";
 
 const empty = (): Product => ({
@@ -24,11 +24,13 @@ const input = {
   outline: "none", boxSizing: "border-box" as const,
 };
 
-export default function ProductsAdmin({ initial }: { initial: Product[] }) {
+export default function ProductsAdmin({ initial, initialShopDesc }: { initial: Product[]; initialShopDesc: string }) {
   const [items, setItems] = useState(initial);
+  const [shopDesc, setShopDesc] = useState(initialShopDesc);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<{ ok?: boolean; text?: string } | null>(null);
+  const [shopMsg, setShopMsg] = useState<{ ok?: boolean; text?: string } | null>(null);
   const [uploading, setUploading] = useState<string | null>(null);
   const fileRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
@@ -38,6 +40,12 @@ export default function ProductsAdmin({ initial }: { initial: Product[] }) {
     setSaving(false);
     setMsg(res.success ? { ok: true, text: "Lagret!" } : { ok: false, text: res.error });
     setTimeout(() => setMsg(null), 3000);
+  };
+
+  const saveShop = async () => {
+    const res = await saveShopAction({ description: shopDesc });
+    setShopMsg(res.success ? { ok: true, text: "Lagret!" } : { ok: false, text: res.error });
+    setTimeout(() => setShopMsg(null), 3000);
   };
 
   const update = (id: string, field: keyof Product, value: unknown) =>
@@ -61,7 +69,27 @@ export default function ProductsAdmin({ initial }: { initial: Product[] }) {
   };
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-6">
+      {/* Butikkbeskrivelse */}
+      <div className="rounded-[12px] border p-5" style={{ background: "var(--white)", borderColor: "var(--faint)" }}>
+        <label style={{ display: "block", fontSize: "0.72rem", fontWeight: 600, color: "var(--mid)", marginBottom: 6 }}>
+          Beskrivelse under «Butikk»-overskriften
+        </label>
+        <textarea
+          style={{ ...input, resize: "vertical", minHeight: 72 }}
+          rows={3}
+          value={shopDesc}
+          onChange={(e) => setShopDesc(e.target.value)}
+        />
+        <div style={{ display: "flex", gap: 10, alignItems: "center", marginTop: 10 }}>
+          <button onClick={saveShop}
+            style={{ padding: "8px 20px", borderRadius: 20, border: "none", background: "var(--blue)", color: "white", fontSize: "0.82rem", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
+            Lagre beskrivelse
+          </button>
+          {shopMsg && <span style={{ fontSize: "0.82rem", color: shopMsg.ok ? "#16a34a" : "#dc2626" }}>{shopMsg.ok ? "✓" : "✕"} {shopMsg.text}</span>}
+        </div>
+      </div>
+
       {items.map((p) => (
         <div key={p.id} className="rounded-[12px] border overflow-hidden"
           style={{ background: "var(--white)", borderColor: "var(--faint)" }}>

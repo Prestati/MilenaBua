@@ -6,8 +6,7 @@ import FadeIn from "@/components/FadeIn";
 
 const spaceMono = Space_Mono({ weight: ["400", "700"], subsets: ["latin"], variable: "--font-mono" });
 import { readContent } from "@/lib/content";
-import { products } from "@/data/products";
-import type { Project } from "@/types";
+import type { Project, Product } from "@/types";
 
 interface HeroData {
   badge: string; h1Line1: string; h1Highlight: string; h1Line2: string;
@@ -34,11 +33,15 @@ const SectionHeader = ({ tag, title }: { tag: string; title: string }) => (
   </div>
 );
 
-export default function HomePage() {
-  const hero = readContent<HeroData>("hero.json");
-  const escape = readContent<EscapeData>("escape.json");
-  const nl = readContent<NewsletterData>("newsletter.json");
-  const allProjects = readContent<Project[]>("projects.json");
+export default async function HomePage() {
+  const [hero, escape, nl, allProjects, products, shop] = await Promise.all([
+    readContent<HeroData>("hero.json"),
+    readContent<EscapeData>("escape.json"),
+    readContent<NewsletterData>("newsletter.json"),
+    readContent<Project[]>("projects.json"),
+    readContent<Product[]>("products.json"),
+    readContent<{ description: string }>("shop.json"),
+  ]);
   const otherProjects = allProjects.filter((p) => p.slug !== "escape-haugesund");
 
   return (
@@ -245,6 +248,11 @@ export default function HomePage() {
       <div className={wrap}>
         <section id="butikk" className="py-[70px] border-b" style={{ borderColor: "var(--faint)" }}>
           <SectionHeader tag="Butikk" title="Produkter &amp; ressurser" />
+          {shop.description && (
+            <p className="text-[0.95rem] leading-[1.75] mb-8 max-w-[60ch]" style={{ color: "var(--mid)", marginTop: -16 }}>
+              {shop.description}
+            </p>
+          )}
           <FadeIn>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {products.map((p) => (

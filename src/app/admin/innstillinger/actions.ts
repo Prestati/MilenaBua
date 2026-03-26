@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 
 export async function saveSocialsAction(data: unknown) {
   try {
-    writeContent("socials.json", data);
+    await writeContent("socials.json", data);
     revalidatePath("/");
     revalidatePath("/om-meg");
     return { success: true };

@@ -1,0 +1,9 @@
+-- Kjør dette i Supabase → SQL Editor
+
+CREATE TABLE IF NOT EXISTS content (
+  key TEXT PRIMARY KEY,
+  data JSONB NOT NULL,
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE content DISABLE ROW LEVEL SECURITY;

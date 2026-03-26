@@ -6,7 +6,7 @@ import type { Project } from "@/types";
 
 export async function saveProjectsAction(projects: Project[]): Promise<{ success?: boolean; error?: string }> {
   try {
-    writeContent("projects.json", projects);
+    await writeContent("projects.json", projects);
     revalidatePath("/");
     revalidatePath("/prosjekter");
     return { success: true };

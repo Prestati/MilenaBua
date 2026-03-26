@@ -2,8 +2,8 @@ import { readContent } from "@/lib/content";
 import EscapePageAdmin from "./EscapePageAdmin";
 import Link from "next/link";
 
-export default function EscapeSideAdminPage() {
-  const data = readContent("escape-page.json");
+export default async function EscapeSideAdminPage() {
+  const data = await readContent("escape-page.json");
 
   return (
     <div style={{ padding: "32px 40px", maxWidth: 900 }}>

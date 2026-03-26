@@ -11,7 +11,7 @@ interface Props { params: Promise<{ id: string }>; searchParams: Promise<{ succe
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
-  const products = readContent<Product[]>("products.json");
+  const products = await readContent<Product[]>("products.json");
   const p = products.find((p) => p.id === id);
   return { title: p?.name ?? "Produkt" };
 }
@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ProductPage({ params, searchParams }: Props) {
   const { id } = await params;
   const { success } = await searchParams;
-  const products = readContent<Product[]>("products.json");
+  const products = await readContent<Product[]>("products.json");
   const p = products.find((p) => p.id === id);
   if (!p) notFound();
 

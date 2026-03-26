@@ -6,8 +6,8 @@ interface EscapeData {
   goalLabel: string; goalText: string; primaryBtn: string; secondaryBtn: string;
 }
 
-export default function AdminEscapePage() {
-  const data = readContent<EscapeData>("escape.json");
+export default async function AdminEscapePage() {
+  const data = await readContent<EscapeData>("escape.json");
 
   return (
     <div className="p-8">

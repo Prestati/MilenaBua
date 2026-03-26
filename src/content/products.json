@@ -34,5 +34,17 @@
     "type": "physical",
     "buyUrl": "",
     "pageContent": ""
+  },
+  {
+    "id": "1774475822332",
+    "name": "Mine AI-vertøy",
+    "description": "",
+    "price": 99,
+    "imageUrl": "/uploads/product-1774475881951.png",
+    "category": "",
+    "inStock": true,
+    "type": "pdf",
+    "buyUrl": "",
+    "pageContent": ""
   }
 ]

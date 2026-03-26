@@ -2,8 +2,9 @@ import { readContent } from "@/lib/content";
 import ProductsAdmin from "./ProductsAdmin";
 import type { Product } from "@/types";
 
-export default function AdminProdukterPage() {
-  const products = readContent<Product[]>("products.json");
+export default async function AdminProdukterPage() {
+  const products = await readContent<Product[]>("products.json");
+  const shop = await readContent<{ description: string }>("shop.json");
 
   return (
     <div className="p-8">
@@ -13,7 +14,7 @@ export default function AdminProdukterPage() {
       <p className="text-[0.85rem] mb-8" style={{ color: "var(--mid)" }}>
         Legg til, rediger eller slett produkter. Husk å lagre.
       </p>
-      <ProductsAdmin initial={products} />
+      <ProductsAdmin initial={products} initialShopDesc={shop.description ?? ""} />
     </div>
   );
 }

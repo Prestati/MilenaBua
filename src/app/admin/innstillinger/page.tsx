@@ -3,8 +3,8 @@ import SocialsAdmin from "./SocialsAdmin";
 
 interface Social { label: string; href: string; }
 
-export default function InnstillingerPage() {
-  const socials = readContent<Social[]>("socials.json");
+export default async function InnstillingerPage() {
+  const socials = await readContent<Social[]>("socials.json");
   return (
     <div style={{ padding: "32px 40px", maxWidth: 700 }}>
       <div style={{ marginBottom: 28 }}>

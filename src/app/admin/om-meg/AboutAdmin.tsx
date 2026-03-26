@@ -1,6 +1,6 @@
 "use client";
-import { useState } from "react";
-import { saveAboutAction } from "./actions";
+import { useState, useRef } from "react";
+import { saveAboutAction, uploadAboutImageAction } from "./actions";
 
 interface AboutData {
   name: string; tagline: string; bio: string; bio2: string;
@@ -18,6 +18,9 @@ export default function AboutAdmin({ initial }: { initial: AboutData }) {
   const [data, setData] = useState(initial);
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const [uploading, setUploading] = useState<string | null>(null);
+  const profileRef = useRef<HTMLInputElement>(null);
+  const portraitRef = useRef<HTMLInputElement>(null);
 
   const set = (field: keyof AboutData, value: string) =>
     setData((prev) => ({ ...prev, [field]: value }));
@@ -30,13 +33,39 @@ export default function AboutAdmin({ initial }: { initial: AboutData }) {
     setTimeout(() => setMsg(null), 3000);
   };
 
+  const uploadImage = async (field: "imageUrl" | "portraitUrl", file: File) => {
+    setUploading(field);
+    const fd = new FormData();
+    fd.append("file", file);
+    const res = await uploadAboutImageAction(fd, field);
+    setUploading(null);
+    if (res.success && res.url) set(field, res.url);
+  };
+
+  const ImageUploadField = ({ field, label }: { field: "imageUrl" | "portraitUrl"; label: string }) => (
+    <div>
+      <label style={{ display: "block", fontSize: "0.72rem", fontWeight: 600, color: "var(--mid)", marginBottom: 6 }}>{label}</label>
+      <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+        <input style={{ ...inputStyle, flex: 1 }} value={data[field]} onChange={(e) => set(field, e.target.value)} placeholder="Eller last opp bilde →" />
+        <button type="button"
+          onClick={() => (field === "imageUrl" ? profileRef : portraitRef).current?.click()}
+          style={{ padding: "8px 14px", borderRadius: 8, border: "1px solid var(--faint)", background: "var(--faint)", color: "var(--ink)", fontSize: "0.8rem", fontWeight: 600, cursor: "pointer", whiteSpace: "nowrap", fontFamily: "inherit" }}>
+          {uploading === field ? "Laster opp…" : "Last opp"}
+        </button>
+      </div>
+      <input ref={field === "imageUrl" ? profileRef : portraitRef} type="file" accept="image/*" style={{ display: "none" }}
+        onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadImage(field, f); }} />
+      {data[field] && (
+        <img src={data[field]} alt="" style={{ marginTop: 8, height: 80, borderRadius: 8, objectFit: "cover", border: "1px solid var(--faint)" }} />
+      )}
+    </div>
+  );
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16, maxWidth: 680 }}>
       {([
         ["name", "Navn", "text"],
         ["tagline", "Tagline", "text"],
-        ["imageUrl", "Profilbilde URL (rundt, øverst)", "url"],
-        ["portraitUrl", "Portrettbilde URL (stående, ved siden av bio)", "url"],
         ["email", "E-post (vises på siden)", "email"],
         ["ctaText", "CTA-knapp tekst", "text"],
         ["ctaUrl", "CTA-knapp lenke", "text"],
@@ -46,6 +75,8 @@ export default function AboutAdmin({ initial }: { initial: AboutData }) {
           <input style={inputStyle} value={data[field]} onChange={(e) => set(field, e.target.value)} />
         </div>
       ))}
+      <ImageUploadField field="imageUrl" label="Profilbilde (rundt, øverst)" />
+      <ImageUploadField field="portraitUrl" label="Portrettbilde (stående, ved siden av bio)" />
       {(["bio", "bio2"] as const).map((field) => (
         <div key={field}>
           <label style={{ display: "block", fontSize: "0.72rem", fontWeight: 600, color: "var(--mid)", marginBottom: 6 }}>

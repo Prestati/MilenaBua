@@ -12,8 +12,8 @@ interface HeroData {
   imageUrl: string;
 }
 
-export default function AdminHeroPage() {
-  const data = readContent<HeroData>("hero.json");
+export default async function AdminHeroPage() {
+  const data = await readContent<HeroData>("hero.json");
 
   return (
     <div className="p-8">

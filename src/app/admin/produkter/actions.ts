@@ -8,9 +8,19 @@ import type { Product } from "@/types";
 
 export async function saveProductsAction(products: Product[]): Promise<{ success?: boolean; error?: string }> {
   try {
-    writeContent("products.json", products);
+    await writeContent("products.json", products);
     revalidatePath("/");
     products.forEach((p) => revalidatePath(`/produkter/${p.id}`));
+    return { success: true };
+  } catch {
+    return { error: "Noe gikk galt." };
+  }
+}
+
+export async function saveShopAction(data: { description: string }): Promise<{ success?: boolean; error?: string }> {
+  try {
+    await writeContent("shop.json", data);
+    revalidatePath("/");
     return { success: true };
   } catch {
     return { error: "Noe gikk galt." };

@@ -1,14 +1,42 @@
 import "server-only";
 import { readFileSync, writeFileSync } from "fs";
 import path from "path";
+import { supabase } from "./supabase";
 
 const dir = path.join(process.cwd(), "src/content");
+const key = (file: string) => file.replace(".json", "");
 
-export function readContent<T>(file: string): T {
+// ── Local JSON fallback (dev / no Supabase) ─────────────────────────────────
+
+function readLocal<T>(file: string): T {
   const raw = readFileSync(path.join(dir, file), "utf-8");
   return JSON.parse(raw) as T;
 }
 
-export function writeContent(file: string, data: unknown): void {
+function writeLocal(file: string, data: unknown): void {
   writeFileSync(path.join(dir, file), JSON.stringify(data, null, 2));
+}
+
+// ── Public API ───────────────────────────────────────────────────────────────
+
+export async function readContent<T>(file: string): Promise<T> {
+  if (supabase) {
+    const { data, error } = await supabase
+      .from("content")
+      .select("data")
+      .eq("key", key(file))
+      .single();
+    if (!error && data) return data.data as T;
+  }
+  return readLocal<T>(file);
+}
+
+export async function writeContent(file: string, data: unknown): Promise<void> {
+  if (supabase) {
+    await supabase
+      .from("content")
+      .upsert({ key: key(file), data, updated_at: new Date().toISOString() });
+  }
+  // Always write locally too (keeps JSON files in sync for git)
+  try { writeLocal(file, data); } catch { /* read-only on Vercel — ignore */ }
 }

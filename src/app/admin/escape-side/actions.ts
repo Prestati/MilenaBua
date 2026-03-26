@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 
 export async function saveEscapePageAction(data: unknown) {
   try {
-    writeContent("escape-page.json", data);
+    await writeContent("escape-page.json", data);
     revalidatePath("/escape-haugesund");
     return { success: true };
   } catch (e) {

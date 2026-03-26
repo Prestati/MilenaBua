@@ -84,8 +84,8 @@ function progressColor(s: string) {
   return C.red;
 }
 
-export default function EscapePage() {
-  const d = readContent<EscapePageData>("escape-page.json");
+export default async function EscapePage() {
+  const d = await readContent<EscapePageData>("escape-page.json");
   const visibleMonths = d.months.filter((m) => m.visible);
 
   return (

@@ -1,19 +1,10 @@
-import { readFileSync } from "fs";
-import path from "path";
+import { readContent } from "@/lib/content";
 
 interface Social { label: string; href: string; }
 
-function loadSocials(): Social[] {
-  try {
-    const file = path.join(process.cwd(), "src/content/socials.json");
-    return JSON.parse(readFileSync(file, "utf-8"));
-  } catch {
-    return [];
-  }
-}
-
-export default function Footer() {
-  const socials = loadSocials().filter((s) => s.href);
+export default async function Footer() {
+  const socialsRaw = await readContent<Social[]>("socials.json").catch(() => [] as Social[]);
+  const socials = socialsRaw.filter((s) => s.href);
 
   return (
     <footer

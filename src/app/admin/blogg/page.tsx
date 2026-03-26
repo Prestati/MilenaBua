@@ -2,8 +2,8 @@ import { readContent } from "@/lib/content";
 import BlogAdmin from "./BlogAdmin";
 import type { BlogPost } from "@/types";
 
-export default function AdminBloggPage() {
-  const posts = readContent<BlogPost[]>("posts.json");
+export default async function AdminBloggPage() {
+  const posts = await readContent<BlogPost[]>("posts.json");
 
   return (
     <div className="p-8">

@@ -6,7 +6,7 @@ import type { BlogPost } from "@/types";
 
 export async function savePostsAction(posts: BlogPost[]): Promise<{ success?: boolean; error?: string }> {
   try {
-    writeContent("posts.json", posts);
+    await writeContent("posts.json", posts);
     revalidatePath("/blogg");
     return { success: true };
   } catch {

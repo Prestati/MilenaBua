@@ -8,7 +8,7 @@ export async function saveEscapeAction(
   formData: FormData
 ): Promise<{ success?: boolean; error?: string }> {
   try {
-    writeContent("escape.json", {
+    await writeContent("escape.json", {
       tag: formData.get("tag"),
       heading: formData.get("heading"),
       headingAccent: formData.get("headingAccent"),

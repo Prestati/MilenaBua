@@ -23,7 +23,7 @@ export async function saveHeroAction(
       imageUrl = `/uploads/${filename}`;
     }
 
-    writeContent("hero.json", {
+    await writeContent("hero.json", {
       badge: formData.get("badge"),
       h1Line1: formData.get("h1Line1"),
       h1Highlight: formData.get("h1Highlight"),

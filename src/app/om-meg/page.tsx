@@ -21,9 +21,12 @@ interface Social { label: string; href: string; }
 
 const wrap = "max-w-[860px] mx-auto px-6";
 
-export default function AboutPage() {
-  const d = readContent<AboutData>("about.json");
-  const socials = readContent<Social[]>("socials.json").filter((s) => s.href);
+export default async function AboutPage() {
+  const [d, socialsRaw] = await Promise.all([
+    readContent<AboutData>("about.json"),
+    readContent<Social[]>("socials.json"),
+  ]);
+  const socials = socialsRaw.filter((s) => s.href);
 
   return (
     <div className={wrap} style={{ paddingTop: 64, paddingBottom: 80 }}>
@@ -55,8 +58,11 @@ export default function AboutPage() {
       <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-12 mb-16">
         <div>
           <h2 className="text-[1.2rem] font-extrabold mb-5 tracking-[-0.02em]" style={{ color: "var(--ink)" }}>Om meg</h2>
-          {d.bio && <p className="text-[0.95rem] leading-[1.85] mb-4" style={{ color: "var(--mid)" }}>{d.bio}</p>}
-          {d.bio2 && <p className="text-[0.95rem] leading-[1.85]" style={{ color: "var(--mid)" }}>{d.bio2}</p>}
+          {[d.bio, d.bio2].filter(Boolean).flatMap((block) =>
+            block.split("\n").filter(Boolean).map((para, i) => (
+              <p key={`${block.slice(0,10)}-${i}`} className="text-[0.95rem] leading-[1.85] mb-4" style={{ color: "var(--mid)" }}>{para}</p>
+            ))
+          )}
         </div>
 
         {/* Portrait */}

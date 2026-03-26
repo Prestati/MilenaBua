@@ -2,8 +2,8 @@ import { readContent } from "@/lib/content";
 import ProjectsAdmin from "./ProjectsAdmin";
 import type { Project } from "@/types";
 
-export default function AdminProsjekterPage() {
-  const projects = readContent<Project[]>("projects.json");
+export default async function AdminProsjekterPage() {
+  const projects = await readContent<Project[]>("projects.json");
 
   return (
     <div className="p-8">

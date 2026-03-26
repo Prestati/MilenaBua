@@ -2,8 +2,8 @@ import { readContent } from "@/lib/content";
 import AboutAdmin from "./AboutAdmin";
 import Link from "next/link";
 
-export default function OmMegAdminPage() {
-  const data = readContent("about.json");
+export default async function OmMegAdminPage() {
+  const data = await readContent("about.json");
   return (
     <div style={{ padding: "32px 40px", maxWidth: 760 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 6 }}>
