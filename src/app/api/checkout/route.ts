@@ -1,20 +1,17 @@
-import Stripe from "stripe";
-import { readFileSync } from "fs";
-import path from "path";
+import { readContent } from "@/lib/content";
 import { NextResponse } from "next/server";
 import type { Product } from "@/types";
 
-const stripeKey = process.env.STRIPE_SECRET_KEY;
-const stripe = stripeKey ? new Stripe(stripeKey) : null;
-
 export async function POST(req: Request) {
   try {
-    if (!stripe) return NextResponse.json({ error: "Betalingsfunksjon ikke konfigurert" }, { status: 503 });
-    const { productId } = await req.json();
+    const stripeKey = process.env.STRIPE_SECRET_KEY;
+    if (!stripeKey) return NextResponse.json({ error: "Betalingsfunksjon ikke konfigurert" }, { status: 503 });
 
-    const products: Product[] = JSON.parse(
-      readFileSync(path.join(process.cwd(), "src/content/products.json"), "utf-8")
-    );
+    const Stripe = (await import("stripe")).default;
+    const stripe = new Stripe(stripeKey);
+
+    const { productId } = await req.json();
+    const products = await readContent<Product[]>("products.json");
     const product = products.find((p) => p.id === productId);
     if (!product) return NextResponse.json({ error: "Produkt ikke funnet" }, { status: 404 });
 
