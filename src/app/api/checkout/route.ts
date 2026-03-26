@@ -4,10 +4,12 @@ import path from "path";
 import { NextResponse } from "next/server";
 import type { Product } from "@/types";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+const stripeKey = process.env.STRIPE_SECRET_KEY;
+const stripe = stripeKey ? new Stripe(stripeKey) : null;
 
 export async function POST(req: Request) {
   try {
+    if (!stripe) return NextResponse.json({ error: "Betalingsfunksjon ikke konfigurert" }, { status: 503 });
     const { productId } = await req.json();
 
     const products: Product[] = JSON.parse(
