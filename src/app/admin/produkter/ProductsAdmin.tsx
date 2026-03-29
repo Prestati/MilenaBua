@@ -117,17 +117,30 @@ export default function ProductsAdmin({ initial, initialShopDesc }: { initial: P
                 {p.name || <em style={{ color: "var(--mid)" }}>Nytt produkt</em>}
               </span>
               <span className="text-[0.85rem] font-bold" style={{ color: "var(--mid)" }}>{p.price} kr</span>
-              <button
-                onClick={() => toggleVisible(p.id, p.visible)}
-                style={{
-                  fontSize: "0.7rem", fontWeight: 700, padding: "3px 10px", borderRadius: 20, border: "none", cursor: "pointer", fontFamily: "inherit",
-                  background: p.visible === false ? "#fef2f2" : "#f0fdf4",
-                  color: p.visible === false ? "#dc2626" : "#16a34a",
-                }}>
-                {p.visible === false ? "⏸ Skjult" : "✓ Publisert"}
-              </button>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 items-center">
+              {/* Aktiv/inaktiv toggle */}
+              <label style={{ display: "flex", alignItems: "center", gap: 6, cursor: "pointer", userSelect: "none" }}>
+                <div
+                  onClick={() => toggleVisible(p.id, p.visible)}
+                  style={{
+                    width: 36, height: 20, borderRadius: 10, position: "relative", cursor: "pointer",
+                    background: p.visible === false ? "#e5e7eb" : "var(--blue)",
+                    transition: "background 0.2s",
+                    flexShrink: 0,
+                  }}>
+                  <div style={{
+                    position: "absolute", top: 2, left: p.visible === false ? 2 : 18,
+                    width: 16, height: 16, borderRadius: "50%", background: "white",
+                    transition: "left 0.2s",
+                    boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+                  }} />
+                </div>
+                <span style={{ fontSize: "0.75rem", fontWeight: 600, color: p.visible === false ? "var(--mid)" : "var(--ink)" }}>
+                  {p.visible === false ? "Inaktiv" : "Aktiv"}
+                </span>
+              </label>
+              <div style={{ width: 1, height: 20, background: "var(--faint)" }} />
               <a href={`/produkter/${p.id}`} target="_blank"
                 style={{ fontSize: "0.72rem", fontWeight: 600, color: "var(--mid)", textDecoration: "none", padding: "4px 10px", borderRadius: 6, border: "1px solid var(--faint)" }}>
                 Se side ↗
