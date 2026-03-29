@@ -24,6 +24,15 @@ export default async function Footer() {
         </a>
 
         <ul className="flex gap-[1.8rem] list-none m-0 p-0">
+          <li>
+            <a
+              href="/om-meg"
+              className="text-[0.75rem] font-medium no-underline transition-colors hover:text-[var(--ink)]"
+              style={{ color: "var(--mid)" }}
+            >
+              Kontakt
+            </a>
+          </li>
           {socials.map(({ label, href }) => (
             <li key={label}>
               <a

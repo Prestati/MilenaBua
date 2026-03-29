@@ -3,10 +3,13 @@ export const dynamic = "force-dynamic";
 import Image from "next/image";
 import { Space_Mono } from "next/font/google";
 import FadeIn from "@/components/FadeIn";
+import Link from "next/link";
+import NewsletterForm from "@/components/NewsletterForm";
 
 const spaceMono = Space_Mono({ weight: ["400", "700"], subsets: ["latin"], variable: "--font-mono" });
 import { readContent } from "@/lib/content";
 import type { Project, Product } from "@/types";
+import { posts } from "@/data/posts";
 
 interface HeroData {
   badge: string; h1Line1: string; h1Highlight: string; h1Line2: string;
@@ -22,6 +25,17 @@ interface NewsletterData {
 
 const wrap = "max-w-[1100px] mx-auto px-6";
 
+function isPublished(post: typeof posts[number]) {
+  if (post.status !== "published") return false;
+  if (!post.visible) return false;
+  const now = new Date();
+  const nowDate = now.toISOString().slice(0, 10);
+  const nowTime = now.toTimeString().slice(0, 5);
+  if (post.publishDate > nowDate) return false;
+  if (post.publishDate === nowDate && post.publishTime && post.publishTime > nowTime) return false;
+  return true;
+}
+
 const SectionHeader = ({ tag, title }: { tag: string; title: string }) => (
   <div className="flex items-center gap-4 mb-10">
     <span className="text-[0.72rem] font-bold tracking-[0.1em] uppercase px-[0.8rem] py-[0.3rem] rounded-[6px]"
@@ -34,7 +48,7 @@ const SectionHeader = ({ tag, title }: { tag: string; title: string }) => (
 );
 
 export default async function HomePage() {
-  const [hero, escape, nl, allProjects, products, shop] = await Promise.all([
+  const [hero, escape, nl, allProjects, allProducts, shop] = await Promise.all([
     readContent<HeroData>("hero.json"),
     readContent<EscapeData>("escape.json"),
     readContent<NewsletterData>("newsletter.json"),
@@ -43,6 +57,7 @@ export default async function HomePage() {
     readContent<{ description: string }>("shop.json"),
   ]);
   const otherProjects = allProjects.filter((p) => p.slug !== "escape-haugesund");
+  const products = allProducts.filter((p) => p.visible !== false);
 
   return (
     <div>
@@ -316,32 +331,78 @@ export default async function HomePage() {
         </section>
       </div>
 
+      {/* ── NYESTE INNBLIKK ── */}
+      <div className={wrap}>
+        <section className="py-[70px] border-b" style={{ borderColor: "var(--faint)" }}>
+          <SectionHeader tag="Innblikk" title="Nyeste innblikk" />
+          <FadeIn>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {posts
+                .filter(isPublished)
+                .sort((a, b) => ((a.publishDate || a.date) < (b.publishDate || b.date) ? 1 : -1))
+                .slice(0, 3)
+                .map((post) => (
+                  <Link
+                    key={post.slug}
+                    href={`/blogg/${post.slug}`}
+                    className="group block rounded-[16px] border overflow-hidden no-underline transition-all hover:-translate-y-[3px] hover:shadow-[0_12px_32px_rgba(59,111,212,0.1)] hover:border-[var(--blue)]"
+                    style={{ background: "var(--white)", borderColor: "var(--faint)" }}
+                  >
+                    {post.imageUrl && (
+                      <div className="relative w-full h-40 overflow-hidden">
+                        <Image
+                          src={post.imageUrl}
+                          alt={post.title}
+                          fill
+                          className="object-cover transition-transform group-hover:scale-105"
+                        />
+                      </div>
+                    )}
+                    <div className="p-5">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-[0.7rem] font-semibold px-2 py-1 rounded-full bg-gray-100 text-gray-700">
+                          {post.category || "Uten kategori"}
+                        </span>
+                        <span className="text-[0.7rem] text-gray-400">
+                          {new Date(post.publishDate || post.date).toLocaleDateString("no-NO")}
+                        </span>
+                      </div>
+                      <h3 className="text-[1.1rem] font-bold leading-[1.3] mb-2 group-hover:text-[var(--blue)] transition-colors" style={{ color: "var(--ink)" }}>
+                        {post.title}
+                      </h3>
+                      <p className="text-[0.85rem] leading-[1.6] mb-4" style={{ color: "var(--mid)" }}>
+                        {post.excerpt}
+                      </p>
+                      <span className="text-[0.8rem] font-semibold text-[var(--blue)] group-hover:underline">
+                        Les mer →
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+            </div>
+            <div className="text-center mt-8">
+              <Link
+                href="/blogg"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold no-underline transition-all hover:-translate-y-0.5"
+                style={{ background: "var(--blue-lt)", color: "var(--blue)" }}
+              >
+                Se alle innblikk →
+              </Link>
+            </div>
+          </FadeIn>
+        </section>
+      </div>
+
       {/* ── NYHETSBREV ── */}
       <div className={wrap}>
         <section id="nyhetsbrev" className="py-20 border-b" style={{ borderColor: "var(--faint)" }}>
           <FadeIn>
-            <div className="rounded-[24px] px-8 py-12 md:px-14 md:py-14 grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center border"
-              style={{ background: "linear-gradient(135deg, #eef2fb 0%, #fff1ea 100%)", borderColor: "var(--faint)" }}>
-              <div>
-                <h2 className="font-extrabold tracking-[-0.04em] leading-[1.05] mb-3"
-                  style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", color: "var(--ink)" }}>
-                  {nl.heading.includes("innenfra") ? (
-                    <>Følg med<br /><span style={{ color: "var(--blue)" }}>innenfra</span> 👀</>
-                  ) : nl.heading}
-                </h2>
-                <p className="text-[0.92rem] leading-[1.8]" style={{ color: "var(--mid)" }}>{nl.description}</p>
-              </div>
-              <div className="flex flex-col gap-3">
-                <input className="border px-[1.1rem] py-[0.9rem] rounded-[12px] text-[0.9rem] outline-none focus:border-[var(--blue)]"
-                  type="email" placeholder="din@epost.no"
-                  style={{ borderColor: "var(--faint)", background: "white", color: "var(--ink)", fontFamily: "inherit", transition: "border-color 0.2s" }} />
-                <button className="py-[0.95rem] rounded-[12px] text-[0.88rem] font-bold text-white cursor-pointer border-none transition-all hover:-translate-y-0.5"
-                  style={{ background: "var(--blue)", fontFamily: "inherit", boxShadow: "0 4px 16px rgba(59,111,212,0.25)" }}>
-                  {nl.btnText}
-                </button>
-                <p className="text-[0.72rem]" style={{ color: "var(--mid)" }}>{nl.note}</p>
-              </div>
-            </div>
+            <NewsletterForm 
+              heading={nl.heading} 
+              description={nl.description} 
+              btnText={nl.btnText} 
+              note={nl.note} 
+            />
           </FadeIn>
         </section>
       </div>

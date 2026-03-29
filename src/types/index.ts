@@ -51,4 +51,5 @@ export interface Product {
   type: "pdf" | "physical";
   buyUrl?: string;
   pageContent?: string;
+  visible?: boolean;
 }

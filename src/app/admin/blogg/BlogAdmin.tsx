@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { savePostsAction } from "./actions";
+import { saveCategoriesAction } from "./categoryActions";
+import { generateImageAction } from "./imageActions";
 import Image from "next/image";
 import type { BlogPost } from "@/types";
 
@@ -32,8 +34,10 @@ const STATUS_LABELS: Record<string, { label: string; color: string }> = {
   hidden: { label: "Skjult", color: "#fee2e2" },
 };
 
-export default function BlogAdmin({ initial }: { initial: BlogPost[] }) {
+export default function BlogAdmin({ initial, categories: initialCategories }: { initial: BlogPost[]; categories: string[] }) {
   const [items, setItems] = useState(initial);
+  const [categories, setCategories] = useState<string[]>(initialCategories);
+  const [newCategory, setNewCategory] = useState("");
   const [editingSlug, setEditingSlug] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<{ ok?: boolean; text?: string } | null>(null);
@@ -42,6 +46,8 @@ export default function BlogAdmin({ initial }: { initial: BlogPost[] }) {
   const [previews, setPreviews] = useState<Record<string, string>>(
     initial.reduce((acc, p) => ({ ...acc, [p.slug]: p.imageUrl || "" }), {})
   );
+  const [imagePrompt, setImagePrompt] = useState("");
+  const [generatingImage, setGeneratingImage] = useState(false);
 
   const save = async () => {
     setSaving(true);
@@ -49,6 +55,43 @@ export default function BlogAdmin({ initial }: { initial: BlogPost[] }) {
     setSaving(false);
     setMsg(res.success ? { ok: true, text: "Lagret!" } : { ok: false, text: res.error });
     setTimeout(() => setMsg(null), 3000);
+  };
+
+  const saveCategories = async () => {
+    const res = await saveCategoriesAction(categories);
+    setMsg(res.success ? { ok: true, text: "Kategorier lagret" } : { ok: false, text: res.error });
+    setTimeout(() => setMsg(null), 3000);
+  };
+
+  const addCategory = async () => {
+    const value = newCategory.trim();
+    if (!value) return;
+    const next = Array.from(new Set([...categories, value]));
+    setCategories(next);
+    setNewCategory("");
+    await saveCategories();
+  };
+
+  const removeCategory = async (category: string) => {
+    const next = categories.filter((c) => c !== category);
+    setCategories(next);
+    // Ikke fjern kategori fra eksisterende innlegg automatisk; la admin gjøre det med status.
+    await saveCategories();
+  };
+
+  const generateImage = async () => {
+    if (!imagePrompt.trim()) return;
+    setGeneratingImage(true);
+    const res = await generateImageAction(imagePrompt);
+    setGeneratingImage(false);
+    if (res.success && res.url) {
+      setMsg({ ok: true, text: `Bilde generert: ${res.url}` });
+      setImagePrompt(""); // Tøm prompt etter suksess
+      // Kan legge til logikk for å sette som imageUrl for et innlegg her senere
+    } else {
+      setMsg({ ok: false, text: res.error || "Feil ved generering" });
+    }
+    setTimeout(() => setMsg(null), 5000); // Lengre tid for å se URL
   };
 
   const update = (slug: string, field: keyof BlogPost, value: unknown) => {
@@ -131,6 +174,88 @@ export default function BlogAdmin({ initial }: { initial: BlogPost[] }) {
         >
           + Nytt innlegg
         </button>
+      </div>
+
+      {/* Kategori-styring */}
+      <div className="rounded-[12px] border p-4" style={{ background: "var(--white)", borderColor: "var(--faint)" }}>
+        <div className="flex flex-wrap items-center gap-2 mb-3">
+          <label className="text-[0.85rem] font-semibold" style={{ color: "var(--ink)" }}>
+            Kategorier
+          </label>
+          <span className="text-[0.72rem]" style={{ color: "var(--mid)" }}>
+            (Velg kategori i hvert innlegg og legg til nye her)
+          </span>
+        </div>
+
+        <div className="flex gap-2">
+          <input
+            value={newCategory}
+            onChange={(e) => setNewCategory(e.target.value)}
+            placeholder="Ny kategori"
+            className="flex-1 px-3 py-2 rounded-[8px] border text-[0.85rem] outline-none focus:border-[var(--blue)]"
+            style={{ borderColor: "var(--faint)", background: "var(--bg)", color: "var(--ink)" }}
+          />
+          <button
+            onClick={addCategory}
+            className="px-3 py-2 rounded-[8px] font-semibold text-white"
+            style={{ background: "var(--blue)" }}
+          >
+            Legg til kategori
+          </button>
+        </div>
+
+        <div className="mt-3 flex flex-wrap gap-2">
+          {categories.length === 0 ? (
+            <span className="text-[0.8rem]" style={{ color: "var(--mid)" }}>Ingen kategorier enda.</span>
+          ) : (
+            categories.map((category) => (
+              <span key={category} className="px-2.5 py-1.5 rounded-full border text-[0.75rem] flex items-center gap-2" style={{ borderColor: "var(--faint)", background: "var(--bg)" }}>
+                {category}
+                <button
+                  onClick={() => removeCategory(category)}
+                  className="text-xs text-red-600 font-bold"
+                  aria-label={`Fjern kategori ${category}`}
+                >
+                  ×
+                </button>
+              </span>
+            ))
+          )}
+        </div>
+      </div>
+
+      {/* Bildegenerator */}
+      <div className="rounded-[12px] border p-4" style={{ background: "var(--white)", borderColor: "var(--faint)" }}>
+        <div className="flex flex-wrap items-center gap-2 mb-3">
+          <label className="text-[0.85rem] font-semibold" style={{ color: "var(--ink)" }}>
+            Bildegenerator (OpenAI DALL-E)
+          </label>
+          <span className="text-[0.72rem]" style={{ color: "var(--mid)" }}>
+            (Generer bilder basert på tekstbeskrivelse)
+          </span>
+        </div>
+
+        <div className="space-y-3">
+          <textarea
+            value={imagePrompt}
+            onChange={(e) => setImagePrompt(e.target.value)}
+            placeholder="Beskriv bildet du vil generere, f.eks. 'En moderne webutvikler som koder ved et skrivebord med en laptop og kaffe'"
+            className="w-full px-3 py-2 rounded-[8px] border text-[0.85rem] outline-none focus:border-[var(--blue)] resize-none"
+            style={{ borderColor: "var(--faint)", background: "var(--bg)", color: "var(--ink)" }}
+            rows={3}
+          />
+          <button
+            onClick={generateImage}
+            disabled={generatingImage || !imagePrompt.trim()}
+            className="px-4 py-2 rounded-[8px] font-semibold text-white disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{ background: "var(--blue)" }}
+          >
+            {generatingImage ? "Genererer…" : "Generer bilde"}
+          </button>
+          <p className="text-[0.7rem]" style={{ color: "var(--mid)" }}>
+            Bruker OpenAI DALL-E 3. Bildet lastes opp automatisk til ditt galleri. Kostnad: ~$0.08 per bilde.
+          </p>
+        </div>
       </div>
 
       {/* Innlegg liste */}
@@ -250,7 +375,9 @@ export default function BlogAdmin({ initial }: { initial: BlogPost[] }) {
                         style={{ color: "var(--mid)" }}
                       />
                       <p className="text-[0.72rem] mt-1" style={{ color: "var(--mid)" }}>
-                        JPG, PNG eller WebP. Anbefalt: 800×500px.
+                        JPG, PNG eller WebP. Anbefalt: 800×500px for beste kvalitet og lastetid.
+                        <br />
+                        Bruk JPG for foto, PNG for grafikk med gjennomsiktighet, WebP for moderne nettlesere.
                       </p>
                     </div>
 
@@ -283,12 +410,19 @@ export default function BlogAdmin({ initial }: { initial: BlogPost[] }) {
                       <label className="block text-[0.72rem] font-semibold mb-1" style={{ color: "var(--mid)" }}>
                         Kategori
                       </label>
-                      <input
+                      <select
                         value={p.category}
                         onChange={(e) => update(p.slug, "category", e.target.value)}
                         className="w-full px-3 py-2 rounded-[8px] border text-[0.85rem] outline-none focus:border-[var(--blue)]"
                         style={{ borderColor: "var(--faint)", background: "var(--bg)", color: "var(--ink)" }}
-                      />
+                      >
+                        <option value="">— Velg kategori —</option>
+                        {categories.map((category) => (
+                          <option key={category} value={category}>
+                            {category}
+                          </option>
+                        ))}
+                      </select>
                     </div>
 
                     <div>

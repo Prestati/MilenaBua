@@ -51,6 +51,13 @@ export default function ProductsAdmin({ initial, initialShopDesc }: { initial: P
   const update = (id: string, field: keyof Product, value: unknown) =>
     setItems((prev) => prev.map((p) => (p.id === id ? { ...p, [field]: value } : p)));
 
+  const toggleVisible = async (id: string, current: boolean | undefined) => {
+    const newValue = current === false ? true : false;
+    const updated = items.map((p) => (p.id === id ? { ...p, visible: newValue } : p));
+    setItems(updated);
+    await saveProductsAction(updated);
+  };
+
   const remove = (id: string) => setItems((prev) => prev.filter((p) => p.id !== id));
 
   const add = () => {
@@ -110,6 +117,15 @@ export default function ProductsAdmin({ initial, initialShopDesc }: { initial: P
                 {p.name || <em style={{ color: "var(--mid)" }}>Nytt produkt</em>}
               </span>
               <span className="text-[0.85rem] font-bold" style={{ color: "var(--mid)" }}>{p.price} kr</span>
+              <button
+                onClick={() => toggleVisible(p.id, p.visible)}
+                style={{
+                  fontSize: "0.7rem", fontWeight: 700, padding: "3px 10px", borderRadius: 20, border: "none", cursor: "pointer", fontFamily: "inherit",
+                  background: p.visible === false ? "#fef2f2" : "#f0fdf4",
+                  color: p.visible === false ? "#dc2626" : "#16a34a",
+                }}>
+                {p.visible === false ? "⏸ Skjult" : "✓ Publisert"}
+              </button>
             </div>
             <div className="flex gap-2">
               <a href={`/produkter/${p.id}`} target="_blank"

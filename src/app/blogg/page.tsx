@@ -4,7 +4,7 @@ import { posts } from "@/data/posts";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Blogg",
+  title: "Innblikk",
   description: "Tanker og erfaringer om webutvikling, design og teknologi.",
 };
 
@@ -39,17 +39,41 @@ function isPublished(post: typeof posts[number]) {
   return true;
 }
 
-export default function BloggPage() {
-  const visiblePosts = posts
+export default function BloggPage({ searchParams }: { searchParams?: { category?: string } }) {
+  const publishedPosts = posts
     .filter(isPublished)
     .sort((a, b) => ((a.publishDate || a.date) < (b.publishDate || b.date) ? 1 : -1));
 
+  const categories = Array.from(new Set(publishedPosts.map((p) => p.category).filter(Boolean)));
+  const selectedCategory = searchParams?.category || "all";
+  const visiblePosts = selectedCategory && selectedCategory !== "all"
+    ? publishedPosts.filter((post) => post.category === selectedCategory)
+    : publishedPosts;
+
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <h1 className="text-4xl font-bold text-gray-900 mb-4">Blogg</h1>
-      <p className="text-lg text-gray-500 mb-12">
+      <h1 className="text-4xl font-bold text-gray-900 mb-4">Innblikk</h1>
+      <p className="text-lg text-gray-500 mb-6">
         Tanker og erfaringer om webutvikling, design og det å jobbe selvstendig.
       </p>
+
+      <div className="flex flex-wrap gap-2 mb-8">
+        <a
+          href="/blogg"
+          className={`text-sm px-3 py-1 rounded-full ${selectedCategory === "all" ? "bg-indigo-600 text-white" : "bg-gray-100 text-gray-700"}`}
+        >
+          Alle kategorier
+        </a>
+        {categories.map((category) => (
+          <a
+            key={category}
+            href={`/blogg?category=${encodeURIComponent(category)}`}
+            className={`text-sm px-3 py-1 rounded-full ${selectedCategory === category ? "bg-indigo-600 text-white" : "bg-gray-100 text-gray-700"}`}
+          >
+            {category}
+          </a>
+        ))}
+      </div>
 
       <div className="space-y-6">
         {visiblePosts.map((post) => (

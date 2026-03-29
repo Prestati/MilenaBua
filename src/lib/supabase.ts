@@ -1,7 +1,10 @@
 import { createClient } from "@supabase/supabase-js";
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-export const supabase =
-  url && key ? createClient(url, key) : null;
+export const supabase = url && anonKey ? createClient(url, anonKey) : null;
+
+// Server-side klient med full tilgang (bruk kun i API routes og server components)
+export const supabaseAdmin = url && serviceKey ? createClient(url, serviceKey) : null;

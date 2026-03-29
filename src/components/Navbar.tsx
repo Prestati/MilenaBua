@@ -25,6 +25,7 @@ export default function Navbar() {
       <ul className="flex items-center gap-1 list-none m-0 p-0">
         {[
           { label: "Om meg", href: "/om-meg" },
+          { label: "Innblikk", href: "/blogg" },
           { label: "Prosjekt: Escape Haugesund", href: "/escape-haugesund" },
           { label: "Butikk", href: "/#butikk" },
           { label: "Prosjekter", href: "/#prosjekter" },

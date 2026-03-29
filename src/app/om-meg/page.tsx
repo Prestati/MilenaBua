@@ -3,6 +3,7 @@ export const dynamic = "force-dynamic";
 import { readContent } from "@/lib/content";
 import type { Metadata } from "next";
 import Link from "next/link";
+import ContactForm from "@/components/ContactForm";
 
 export const metadata: Metadata = { title: "Om meg" };
 
@@ -92,6 +93,15 @@ export default async function AboutPage() {
             <span style={{ fontSize: "0.78rem", color: "var(--mid)" }}>Legg til portrettbilde i admin</span>
           </div>
         )}
+      </div>
+
+      {/* Kontakt */}
+      <div className="pt-16 pb-8 border-t" style={{ borderColor: "var(--faint)" }}>
+        <h2 className="text-[1.5rem] font-extrabold mb-6 tracking-[-0.02em]" style={{ color: "var(--ink)" }}>Ta kontakt</h2>
+        <p className="text-[0.95rem] leading-[1.7] mb-8" style={{ color: "var(--mid)" }}>
+          Har du spørsmål, ønsker å samarbeide, eller bare vil si hei? Send meg en melding så hører du fra meg snart.
+        </p>
+        <ContactForm />
       </div>
 
       {/* Prosjekter */}

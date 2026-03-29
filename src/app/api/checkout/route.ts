@@ -36,6 +36,10 @@ export async function POST(req: Request) {
       mode: "payment",
       success_url: `${siteUrl}/produkter/${productId}?success=1`,
       cancel_url: `${siteUrl}/produkter/${productId}`,
+      metadata: {
+        productId: productId,
+      },
+      customer_email: customerEmail,
     });
 
     return NextResponse.json({ url: session.url });
