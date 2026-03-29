@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     const Stripe = (await import("stripe")).default;
     const stripe = new Stripe(stripeKey);
 
-    const { productId } = await req.json();
+    const { productId, customerEmail } = await req.json();
     const products = await readContent<Product[]>("products.json");
     const product = products.find((p) => p.id === productId);
     if (!product) return NextResponse.json({ error: "Produkt ikke funnet" }, { status: 404 });
@@ -39,7 +39,7 @@ export async function POST(req: Request) {
       metadata: {
         productId: productId,
       },
-      customer_email: customerEmail,
+      ...(customerEmail ? { customer_email: customerEmail } : {}),
     });
 
     return NextResponse.json({ url: session.url });
