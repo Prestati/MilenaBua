@@ -1,7 +1,7 @@
 import "server-only";
 import { readFileSync, writeFileSync } from "fs";
 import path from "path";
-import { supabase } from "./supabase";
+import { supabaseAdmin } from "./supabase";
 
 const dir = path.join(process.cwd(), "src/content");
 const key = (file: string) => file.replace(".json", "");
@@ -20,8 +20,8 @@ function writeLocal(file: string, data: unknown): void {
 // ── Public API ───────────────────────────────────────────────────────────────
 
 export async function readContent<T>(file: string): Promise<T> {
-  if (supabase) {
-    const { data, error } = await supabase
+  if (supabaseAdmin) {
+    const { data, error } = await supabaseAdmin
       .from("content")
       .select("data")
       .eq("key", key(file))
@@ -32,8 +32,8 @@ export async function readContent<T>(file: string): Promise<T> {
 }
 
 export async function writeContent(file: string, data: unknown): Promise<void> {
-  if (supabase) {
-    await supabase
+  if (supabaseAdmin) {
+    await supabaseAdmin
       .from("content")
       .upsert({ key: key(file), data, updated_at: new Date().toISOString() });
   }
