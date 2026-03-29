@@ -1,7 +1,7 @@
 import { readContent } from "@/lib/content";
 import { NextResponse } from "next/server";
 
-export const runtime = "node";
+export const runtime = "nodejs";
 
 interface Product {
   id: string;
