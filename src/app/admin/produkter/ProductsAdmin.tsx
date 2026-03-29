@@ -55,7 +55,13 @@ export default function ProductsAdmin({ initial, initialShopDesc }: { initial: P
     const newValue = current === false ? true : false;
     const updated = items.map((p) => (p.id === id ? { ...p, visible: newValue } : p));
     setItems(updated);
-    await saveProductsAction(updated);
+    const res = await saveProductsAction(updated);
+    if (res.error) {
+      setMsg({ ok: false, text: `Kunne ikke lagre: ${res.error}` });
+    } else {
+      setMsg({ ok: true, text: "Lagret!" });
+      setTimeout(() => setMsg(null), 2000);
+    }
   };
 
   const remove = (id: string) => setItems((prev) => prev.filter((p) => p.id !== id));

@@ -33,10 +33,16 @@ export async function readContent<T>(file: string): Promise<T> {
 
 export async function writeContent(file: string, data: unknown): Promise<void> {
   if (supabaseAdmin) {
-    await supabaseAdmin
+    const { error } = await supabaseAdmin
       .from("content")
       .upsert({ key: key(file), data, updated_at: new Date().toISOString() });
+    if (error) {
+      console.error(`[writeContent] Supabase upsert feilet for "${file}":`, error.message);
+      throw new Error(error.message);
+    }
+  } else {
+    console.warn("[writeContent] supabaseAdmin er null — sjekk SUPABASE_SERVICE_ROLE_KEY");
   }
   // Always write locally too (keeps JSON files in sync for git)
-  try { writeLocal(file, data); } catch { /* read-only on Vercel — ignore */ }
+  try { writeLocal(file, data); } catch { /* read-only på Vercel — ignorer */ }
 }
