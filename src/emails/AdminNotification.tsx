@@ -30,7 +30,7 @@ export default function AdminNotification({
   return (
     <Html lang="no">
       <Head />
-      <Preview>🛍 Ny bestilling: {productName} — {String(amount)} kr</Preview>
+      <Preview>{`🛍 Ny bestilling: ${productName} — ${amount} kr`}</Preview>
       <Body style={body}>
         <Container style={container}>
 
