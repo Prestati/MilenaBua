@@ -16,7 +16,7 @@ interface SendOrderEmailsProps {
 export async function sendOrderEmails(props: SendOrderEmailsProps) {
   const { customerName, customerEmail, productName, amount, orderId, orderDate } = props;
 
-  await Promise.all([
+  const results = await Promise.all([
     resend.emails.send({
       from: process.env.EMAIL_FROM!,
       to: customerEmail,
@@ -30,4 +30,8 @@ export async function sendOrderEmails(props: SendOrderEmailsProps) {
       react: AdminNotification({ customerName, customerEmail, productName, amount, orderId }),
     }),
   ]);
+
+  for (const { error } of results) {
+    if (error) throw new Error(error.message);
+  }
 }

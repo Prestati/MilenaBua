@@ -101,11 +101,11 @@ export default async function HomePage() {
 
               {/* Høyre: bilde eller stats-kort */}
               {hero.imageUrl ? (
-                <div style={{ width: "480px", flexShrink: 0 }}>
+                <div className="w-full md:w-[480px] md:shrink-0">
                   <img src={hero.imageUrl} alt="Hero" style={{ width: "100%", borderRadius: "16px", display: "block" }} />
                 </div>
               ) : (
-                <div style={{ width: "480px", flexShrink: 0 }}>
+                <div className="w-full md:w-[480px] md:shrink-0">
                   <div className="rounded-[20px] p-8 border"
                     style={{ background: "var(--white)", borderColor: "var(--faint)", boxShadow: "0 8px 32px rgba(0,0,0,0.06)" }}>
                     <p className="text-[0.7rem] font-semibold tracking-[0.1em] uppercase mb-6" style={{ color: "var(--mid)" }}>
@@ -198,7 +198,7 @@ export default async function HomePage() {
 
               <div className="relative grid lg:grid-cols-[1.2fr_1fr] gap-0">
                 {/* Left */}
-                <div style={{ padding: "48px 48px 48px 48px", borderRight: "1px solid #2a2a2a" }}>
+                <div className="p-6 lg:p-12" style={{ borderRight: "1px solid #2a2a2a" }}>
                   <div style={{
                     display: "inline-flex", alignItems: "center", gap: 6,
                     fontFamily: "var(--font-mono)", fontSize: 11, color: "#00ff88",
@@ -236,7 +236,7 @@ export default async function HomePage() {
                 </div>
 
                 {/* Right: stats */}
-                <div style={{ padding: "48px 40px", display: "flex", flexDirection: "column", gap: 16, justifyContent: "center" }}>
+                <div className="p-6 lg:p-10" style={{ display: "flex", flexDirection: "column", gap: 16, justifyContent: "center" }}>
                   {[
                     { icon: "🤖", val: "AI-styrt", lbl: "ChatGPT som prosjektleder", color: "#00ff88" },
                     { icon: "📈", val: "1 000 000 kr", lbl: "Omsetningmål 2026", color: "#00ff88" },
