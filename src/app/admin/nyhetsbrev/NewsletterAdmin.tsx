@@ -55,58 +55,58 @@ function inlineHtml(text: string): string {
     .replace(/\*([^*]+)\*/g, "<em>$1</em>");
 }
 
+function getYouTubeId(url: string): string | null {
+  const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+
 function mdToHtml(text: string): string {
   if (!text.trim()) return "";
-  const lines = text.split("\n");
-  type Seg = { type: "p"; lines: string[] } | { type: "ul"; items: string[] };
-  const segs: Seg[] = [];
-  let cur: Seg | null = null;
+  const paras = text.split(/\n\n+/).filter(Boolean);
 
-  for (const line of lines) {
-    if (line.startsWith("- ")) {
-      if (cur?.type === "ul") cur.items.push(line.slice(2));
-      else {
-        cur = { type: "ul", items: [line.slice(2)] };
-        segs.push(cur);
-      }
-    } else if (line.trim() === "") {
-      cur = null;
-    } else {
-      if (cur?.type === "p") cur.lines.push(line);
-      else {
-        cur = { type: "p", lines: [line] };
-        segs.push(cur);
-      }
+  return paras.map((para) => {
+    const trimmed = para.trim();
+
+    // Image: ![alt](url)
+    const imgMatch = trimmed.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
+    if (imgMatch) {
+      return `<div style="margin:16px 0;"><img src="${imgMatch[2]}" alt="${imgMatch[1]}" style="display:block;width:100%;max-width:500px;border-radius:8px;" /></div>`;
     }
-  }
 
-  return segs
-    .map((seg) => {
-      if (seg.type === "ul") {
-        return `<ul style="padding-left:20px;margin:0 0 16px;">${seg.items
-          .map(
-            (item) =>
-              `<li style="margin-bottom:4px;color:#444240;font-size:15px;line-height:1.75;">${inlineHtml(item)}</li>`
-          )
-          .join("")}</ul>`;
-      }
-      const content = seg.lines
-        .map((l, i) => inlineHtml(l) + (i < seg.lines.length - 1 ? "<br/>" : ""))
-        .join("");
-      return `<p style="color:#444240;font-size:15px;line-height:1.75;margin:0 0 16px;">${content}</p>`;
-    })
-    .join("");
+    // YouTube video
+    const ytId = getYouTubeId(trimmed);
+    if (ytId) {
+      const thumb = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+      return `<div style="margin:16px 0;text-align:center;"><a href="${trimmed}" style="display:block;text-decoration:none;"><img src="${thumb}" alt="Se video" style="display:block;width:100%;max-width:500px;border-radius:8px;border:3px solid #e8e6e1;" /><p style="color:#3b6fd4;font-weight:700;font-size:14px;margin:8px 0 0;">▶ Se video på YouTube</p></a></div>`;
+    }
+
+    // List items
+    if (para.includes("\n- ") || para.startsWith("- ")) {
+      const lines = para.split("\n");
+      const items = lines.filter(l => l.startsWith("- ")).map(l => `<li style="margin-bottom:4px;color:#444240;font-size:15px;line-height:1.75;">${inlineHtml(l.slice(2))}</li>`).join("");
+      return `<ul style="padding-left:20px;margin:0 0 16px;">${items}</ul>`;
+    }
+
+    // Regular paragraph
+    const lines = para.split("\n");
+    const content = lines.map((l, i) => inlineHtml(l) + (i < lines.length - 1 ? "<br/>" : "")).join("");
+    return `<p style="color:#444240;font-size:15px;line-height:1.75;margin:0 0 16px;">${content}</p>`;
+  }).join("");
 }
 
 function buildEmailHtml(
   template: Template,
   content: string,
   posts: BlogPost[],
-  products: Product[]
+  products: Product[],
+  headerImageUrl?: string
 ): string {
   const SITE = "https://www.milenabua.no";
   const year = new Date().getFullYear();
   const contentHtml = mdToHtml(content);
+  const headerImg = headerImageUrl
+    ? `<img src="${headerImageUrl}" alt="" style="display:block;width:100%;max-width:580px;border-radius:12px 12px 0 0;" />`
+    : "";
 
   const footer = `
     <hr style="border:none;border-top:1px solid #e8e6e1;margin:0 40px;"/>
@@ -119,6 +119,7 @@ function buildEmailHtml(
     </div>`;
 
   const navyHeader = `
+    ${headerImg}
     <div style="background:#1a1a2e;padding:24px 40px;">
       <div style="color:#fff;font-size:18px;font-weight:800;letter-spacing:-0.5px;margin:0;">Milena Bua</div>
     </div>`;
@@ -184,13 +185,32 @@ function buildEmailHtml(
       </div>
       ${footer}`;
   } else {
-    // standard
-    body = `
-      ${navyHeader}
-      <div style="padding:36px 40px 24px;">
-        ${contentHtml || '<p style="color:#999;font-size:15px;">Innhold vises her…</p>'}
-      </div>
-      ${footer}`;
+    // standard — also show header image for short template
+    const shortHeaderImg = headerImageUrl
+      ? `<img src="${headerImageUrl}" alt="" style="display:block;width:100%;max-width:580px;border-radius:12px 12px 0 0;" />`
+      : "";
+    if (template === "short") {
+      body = `
+        ${shortHeaderImg}
+        <div style="padding:28px 40px 20px;">
+          <div style="font-size:14px;font-weight:800;color:#1a1a2e;letter-spacing:-0.3px;">Milena Bua</div>
+        </div>
+        <hr style="border:none;border-top:1px solid #e8e6e1;margin:0 40px 28px;"/>
+        <div style="padding:0 40px 24px;">${contentHtml || '<p style="color:#999;font-size:15px;">Innhold vises her…</p>'}</div>
+        <hr style="border:none;border-top:1px solid #e8e6e1;margin:0 40px;"/>
+        <div style="padding:16px 40px;text-align:center;">
+          <p style="color:#b0aead;font-size:11px;margin:0;">
+            <a href="#" style="color:#b0aead;text-decoration:underline;">Meld deg av</a> · milenabua.no · © ${year} Milena Bua
+          </p>
+        </div>`;
+    } else {
+      body = `
+        ${navyHeader}
+        <div style="padding:36px 40px 24px;">
+          ${contentHtml || '<p style="color:#999;font-size:15px;">Innhold vises her…</p>'}
+        </div>
+        ${footer}`;
+    }
   }
 
   return `<!DOCTYPE html><html lang="no"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/></head><body style="margin:0;padding:0;background:#f5f4f2;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;"><div style="max-width:580px;margin:40px auto;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e8e6e1;">${body}</div></body></html>`;
@@ -269,6 +289,10 @@ export default function NewsletterAdmin({
   const [template, setTemplate] = useState<Template>("standard");
   const [subject, setSubject] = useState("");
   const [content, setContent] = useState("");
+  const [headerImageUrl, setHeaderImageUrl] = useState("");
+  const [uploadingHeader, setUploadingHeader] = useState(false);
+  const [headerUploadErr, setHeaderUploadErr] = useState<string | null>(null);
+  const headerImgRef = useRef<HTMLInputElement>(null);
   const [selectedPosts, setSelectedPosts] = useState<string[]>([]);
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
   const [includeSubscribers, setIncludeSubscribers] = useState(true);
@@ -304,7 +328,27 @@ export default function NewsletterAdmin({
   const chosenPosts = posts.filter((p) => selectedPosts.includes(p.slug));
   const chosenProducts = products.filter((p) => selectedProducts.includes(p.id));
 
-  const previewHtml = buildEmailHtml(template, content, chosenPosts, chosenProducts);
+  const previewHtml = buildEmailHtml(template, content, chosenPosts, chosenProducts, headerImageUrl || undefined);
+
+  // ── Header image upload ──
+  const handleHeaderImageUpload = async (file: File) => {
+    setUploadingHeader(true);
+    setHeaderUploadErr(null);
+    const fd = new FormData();
+    fd.append("image", file);
+    try {
+      const res = await fetch("/api/admin/upload-image", { method: "POST", body: fd });
+      let data: { url?: string; error?: string };
+      try { data = await res.json(); }
+      catch { setHeaderUploadErr(`HTTP ${res.status} – fikk ikke svar fra server`); setUploadingHeader(false); return; }
+      if (data.url) setHeaderImageUrl(data.url);
+      else setHeaderUploadErr(data.error ?? `Feil ${res.status}`);
+    } catch (e) {
+      setHeaderUploadErr(e instanceof Error ? e.message : "Nettverksfeil");
+    } finally {
+      setUploadingHeader(false);
+    }
+  };
 
   // ── Handlers ──
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -354,6 +398,7 @@ export default function NewsletterAdmin({
           template,
           subject,
           content,
+          headerImageUrl: headerImageUrl || undefined,
           posts: chosenPosts,
           products: chosenProducts,
         }),
@@ -383,6 +428,7 @@ export default function NewsletterAdmin({
           template,
           subject,
           content,
+          headerImageUrl: headerImageUrl || undefined,
           emails: selectedEmails,
           posts: chosenPosts,
           products: chosenProducts,
@@ -775,6 +821,32 @@ export default function NewsletterAdmin({
               gap: 18,
             }}
           >
+            {/* Header image */}
+            <div>
+              <label style={labelStyle}>Headerbilde (valgfritt)</label>
+              {headerImageUrl && (
+                <div style={{ position: "relative", display: "inline-block", marginBottom: 8 }}>
+                  <img src={headerImageUrl} alt="" style={{ width: "100%", maxWidth: 360, borderRadius: 8, display: "block", border: "1px solid var(--faint)" }} />
+                  <button type="button" onClick={() => setHeaderImageUrl("")}
+                    style={{ position: "absolute", top: 6, right: 6, background: "rgba(0,0,0,0.6)", color: "#fff", border: "none", borderRadius: "50%", width: 26, height: 26, cursor: "pointer", fontSize: "0.85rem", lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    ✕
+                  </button>
+                </div>
+              )}
+              {headerUploadErr && (
+                <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 6, padding: "6px 10px", fontSize: "0.78rem", color: "#dc2626", marginBottom: 6 }}>
+                  ✕ {headerUploadErr}
+                </div>
+              )}
+              <input type="file" accept="image/*" ref={headerImgRef} style={{ display: "none" }}
+                onChange={(e) => { const f = e.target.files?.[0]; if (f) { handleHeaderImageUpload(f); e.target.value = ""; } }} />
+              <button type="button" onClick={() => headerImgRef.current?.click()} disabled={uploadingHeader}
+                style={{ padding: "7px 16px", borderRadius: 8, border: "1px solid var(--faint)", background: "var(--white)", color: "var(--ink)", fontSize: "0.82rem", fontWeight: 600, cursor: uploadingHeader ? "default" : "pointer", fontFamily: "inherit", opacity: uploadingHeader ? 0.6 : 1 }}>
+                {uploadingHeader ? "Laster opp…" : headerImageUrl ? "Bytt bilde" : "Last opp headerbilde"}
+              </button>
+              <p style={{ fontSize: "0.7rem", color: "var(--mid)", marginTop: 4 }}>Anbefalt: 580px bred. Vises øverst i e-posten.</p>
+            </div>
+
             {/* Template selector */}
             <div>
               <label style={labelStyle}>Mal</label>

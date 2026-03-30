@@ -3,6 +3,7 @@ import {
   Container,
   Head,
   Html,
+  Img,
   Preview,
   Section,
   Text,
@@ -14,9 +15,9 @@ interface NewsletterProps {
   content: string;
   unsubscribeUrl: string;
   recipientName?: string;
+  headerImageUrl?: string;
 }
 
-/** Parses inline **bold** and *italic* markdown */
 function parseInline(text: string): React.ReactNode[] {
   const parts = text.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
   return parts.map((part, i) => {
@@ -28,11 +29,55 @@ function parseInline(text: string): React.ReactNode[] {
   });
 }
 
+function getYouTubeId(url: string): string | null {
+  const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+
 function renderContent(text: string) {
   return text
     .split(/\n\n+/)
     .filter(Boolean)
     .map((para, i) => {
+      const trimmed = para.trim();
+
+      // Image: ![alt](url)
+      const imgMatch = trimmed.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
+      if (imgMatch) {
+        return (
+          <Section key={i} style={{ margin: "16px 0" }}>
+            <Img
+              src={imgMatch[2]}
+              alt={imgMatch[1] || ""}
+              width="500"
+              style={{ display: "block", width: "100%", maxWidth: "500px", borderRadius: "8px" }}
+            />
+          </Section>
+        );
+      }
+
+      // YouTube video
+      const ytId = getYouTubeId(trimmed);
+      if (ytId) {
+        const thumb = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+        return (
+          <Section key={i} style={{ margin: "16px 0", textAlign: "center" }}>
+            <a href={trimmed} style={{ display: "block", textDecoration: "none" }}>
+              <Img
+                src={thumb}
+                alt="Se video"
+                width="500"
+                style={{ display: "block", width: "100%", maxWidth: "500px", borderRadius: "8px", border: "3px solid #e8e6e1" }}
+              />
+              <Text style={{ color: "#3b6fd4", fontWeight: "700", fontSize: "14px", margin: "8px 0 0" }}>
+                ▶ Se video på YouTube
+              </Text>
+            </a>
+          </Section>
+        );
+      }
+
+      // Regular paragraph
       const lines = para.split("\n");
       const nodes = lines.flatMap((line, j) => [
         ...parseInline(line),
@@ -47,6 +92,7 @@ export default function Newsletter({
   content = "Innhold her.",
   unsubscribeUrl = "https://www.milenabua.no/api/unsubscribe?email=test",
   recipientName,
+  headerImageUrl,
 }: NewsletterProps) {
   return (
     <Html lang="no">
@@ -54,6 +100,16 @@ export default function Newsletter({
       <Preview>{subject}</Preview>
       <Body style={body}>
         <Container style={container}>
+
+          {/* Optional header image */}
+          {headerImageUrl && (
+            <Img
+              src={headerImageUrl}
+              alt=""
+              width="580"
+              style={{ display: "block", width: "100%", maxWidth: "580px", borderRadius: "12px 12px 0 0" }}
+            />
+          )}
 
           {/* Header */}
           <Section style={header}>

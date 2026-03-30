@@ -27,7 +27,7 @@ export async function POST(req: Request) {
   }
 
   try {
-    const { template = "standard", subject, content, emails, posts, products } =
+    const { template = "standard", subject, content, emails, posts, products, headerImageUrl } =
       (await req.json()) as {
         template?: Template;
         subject: string;
@@ -35,6 +35,7 @@ export async function POST(req: Request) {
         emails: string[];
         posts?: BlogPostItem[];
         products?: ProductItem[];
+        headerImageUrl?: string;
       };
 
     if (!subject || !content || !emails?.length) {
@@ -59,16 +60,12 @@ export async function POST(req: Request) {
         let reactEl;
         if (template === "blogproducts") {
           reactEl = NewsletterBlogProducts({
-            subject,
-            content,
-            unsubscribeUrl,
-            posts,
-            products,
+            subject, content, unsubscribeUrl, headerImageUrl, posts, products,
           });
         } else if (template === "short") {
-          reactEl = NewsletterShort({ subject, content, unsubscribeUrl });
+          reactEl = NewsletterShort({ subject, content, unsubscribeUrl, headerImageUrl });
         } else {
-          reactEl = Newsletter({ subject, content, unsubscribeUrl });
+          reactEl = Newsletter({ subject, content, unsubscribeUrl, headerImageUrl });
         }
 
         return { from, to: email, subject, react: reactEl };

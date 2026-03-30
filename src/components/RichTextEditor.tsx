@@ -1,5 +1,5 @@
 "use client";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 interface Props {
   value: string;
@@ -10,6 +10,8 @@ interface Props {
 
 export default function RichTextEditor({ value, onChange, rows = 6, placeholder }: Props) {
   const ref = useRef<HTMLTextAreaElement>(null);
+  const imgInputRef = useRef<HTMLInputElement>(null);
+  const [uploadingImg, setUploadingImg] = useState(false);
 
   const wrap = (marker: string) => {
     const el = ref.current;
@@ -26,6 +28,23 @@ export default function RichTextEditor({ value, onChange, rows = 6, placeholder 
     });
   };
 
+  const insertAtCursor = (text: string) => {
+    const el = ref.current;
+    if (!el) return;
+    const start = el.selectionStart;
+    const before = value.slice(0, start);
+    const after = value.slice(start);
+    const prefix = before.length === 0 || before.endsWith("\n\n") ? "" : before.endsWith("\n") ? "\n" : "\n\n";
+    const suffix = after.startsWith("\n") ? "" : "\n\n";
+    const newValue = before + prefix + text + suffix + after;
+    onChange(newValue);
+    requestAnimationFrame(() => {
+      const pos = before.length + prefix.length + text.length + suffix.length;
+      el.selectionStart = el.selectionEnd = pos;
+      el.focus();
+    });
+  };
+
   const insertList = () => {
     const el = ref.current;
     if (!el) return;
@@ -33,7 +52,6 @@ export default function RichTextEditor({ value, onChange, rows = 6, placeholder 
     const end = el.selectionEnd;
 
     if (start === end) {
-      // Ingen markering — legg til nytt punkt på ny linje
       const before = value.slice(0, start);
       const after = value.slice(start);
       const prefix = before.length === 0 || before.endsWith("\n") ? "- " : "\n- ";
@@ -44,7 +62,6 @@ export default function RichTextEditor({ value, onChange, rows = 6, placeholder 
         el.focus();
       });
     } else {
-      // Markering — sett "- " foran hver linje
       const selected = value.slice(start, end);
       const prefixed = selected
         .split("\n")
@@ -57,6 +74,21 @@ export default function RichTextEditor({ value, onChange, rows = 6, placeholder 
         el.selectionEnd = start + prefixed.length;
         el.focus();
       });
+    }
+  };
+
+  const handleImageUpload = async (file: File) => {
+    setUploadingImg(true);
+    try {
+      const fd = new FormData();
+      fd.append("image", file);
+      const res = await fetch("/api/admin/upload-image", { method: "POST", body: fd });
+      const data = await res.json();
+      if (data.url) {
+        insertAtCursor(`![](${data.url})`);
+      }
+    } finally {
+      setUploadingImg(false);
     }
   };
 
@@ -82,6 +114,7 @@ export default function RichTextEditor({ value, onChange, rows = 6, placeholder 
         border: "1px solid var(--faint)",
         borderBottom: "none",
         borderRadius: "8px 8px 0 0",
+        flexWrap: "wrap",
       }}>
         <button type="button" title="Fet skrift (Ctrl+B)"
           onMouseDown={(e) => { e.preventDefault(); wrap("**"); }}
@@ -98,6 +131,25 @@ export default function RichTextEditor({ value, onChange, rows = 6, placeholder 
           onMouseDown={(e) => { e.preventDefault(); insertList(); }}
           style={{ ...btnStyle, letterSpacing: "0.02em" }}>
           • Liste
+        </button>
+        <div style={{ width: 1, background: "var(--faint)", margin: "4px 4px" }} />
+        <input
+          ref={imgInputRef}
+          type="file"
+          accept="image/*"
+          style={{ display: "none" }}
+          onChange={(e) => {
+            const f = e.target.files?.[0];
+            if (f) { handleImageUpload(f); e.target.value = ""; }
+          }}
+        />
+        <button
+          type="button"
+          title="Sett inn bilde"
+          disabled={uploadingImg}
+          onMouseDown={(e) => { e.preventDefault(); imgInputRef.current?.click(); }}
+          style={{ ...btnStyle, opacity: uploadingImg ? 0.5 : 1, color: "var(--blue)" }}>
+          {uploadingImg ? "Laster…" : "📷 Bilde"}
         </button>
       </div>
 
@@ -126,14 +178,12 @@ export default function RichTextEditor({ value, onChange, rows = 6, placeholder 
           if ((e.ctrlKey || e.metaKey) && e.key === "b") { e.preventDefault(); wrap("**"); }
           if ((e.ctrlKey || e.metaKey) && e.key === "i") { e.preventDefault(); wrap("*"); }
 
-          // Enter på en "- "-linje → fortsett listen automatisk
           if (e.key === "Enter") {
             const el = ref.current!;
             const pos = el.selectionStart;
             const lineStart = value.lastIndexOf("\n", pos - 1) + 1;
             const currentLine = value.slice(lineStart, pos);
             if (currentLine === "- ") {
-              // Tom listepunkt → avslutt listen
               e.preventDefault();
               const newValue = value.slice(0, lineStart) + "\n" + value.slice(pos);
               onChange(newValue);
@@ -141,7 +191,6 @@ export default function RichTextEditor({ value, onChange, rows = 6, placeholder 
                 el.selectionStart = el.selectionEnd = lineStart + 1;
               });
             } else if (currentLine.startsWith("- ")) {
-              // Fortsett listen
               e.preventDefault();
               const newValue = value.slice(0, pos) + "\n- " + value.slice(pos);
               onChange(newValue);
@@ -153,7 +202,7 @@ export default function RichTextEditor({ value, onChange, rows = 6, placeholder 
         }}
       />
       <p style={{ fontSize: "0.7rem", color: "var(--mid)", marginTop: 4 }}>
-        <strong>B</strong> fet · <strong>I</strong> kursiv · <strong>• Liste</strong> punktliste · Enter fortsetter listen, dobbelt Enter avslutter · Lim inn YouTube-lenke på egen linje for video
+        <strong>B</strong> fet · <strong>I</strong> kursiv · <strong>• Liste</strong> punktliste · <strong>📷 Bilde</strong> setter inn bilde · Lim inn YouTube-lenke på egen linje (dobbelt Enter) for video
       </p>
     </div>
   );

@@ -32,13 +32,14 @@ export async function POST(req: Request) {
     );
 
   try {
-    const { template, subject, content, posts, products } =
+    const { template, subject, content, posts, products, headerImageUrl } =
       (await req.json()) as {
         template: Template;
         subject: string;
         content: string;
         posts?: BlogPostItem[];
         products?: ProductItem[];
+        headerImageUrl?: string;
       };
 
     if (!subject || !content)
@@ -52,17 +53,11 @@ export async function POST(req: Request) {
 
     let reactEl;
     if (template === "blogproducts") {
-      reactEl = NewsletterBlogProducts({
-        subject,
-        content,
-        unsubscribeUrl,
-        posts,
-        products,
-      });
+      reactEl = NewsletterBlogProducts({ subject, content, unsubscribeUrl, headerImageUrl, posts, products });
     } else if (template === "short") {
-      reactEl = NewsletterShort({ subject, content, unsubscribeUrl });
+      reactEl = NewsletterShort({ subject, content, unsubscribeUrl, headerImageUrl });
     } else {
-      reactEl = Newsletter({ subject, content, unsubscribeUrl });
+      reactEl = Newsletter({ subject, content, unsubscribeUrl, headerImageUrl });
     }
 
     const resend = new Resend(process.env.RESEND_API_KEY);
