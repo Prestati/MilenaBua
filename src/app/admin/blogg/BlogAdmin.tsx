@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import RichTextEditor from "@/components/RichTextEditor";
 import { savePostsAction } from "./actions";
 import { saveCategoriesAction } from "./categoryActions";
 import { generateImageAction } from "./imageActions";
@@ -533,12 +534,10 @@ export default function BlogAdmin({ initial, categories: initialCategories }: { 
                       <label className="block text-[0.72rem] font-semibold mb-1" style={{ color: "var(--mid)" }}>
                         Ingress
                       </label>
-                      <textarea
+                      <RichTextEditor
                         value={p.excerpt}
-                        onChange={(e) => update(p.slug, "excerpt", e.target.value)}
+                        onChange={(v) => update(p.slug, "excerpt", v)}
                         rows={2}
-                        className="w-full px-3 py-2 rounded-[8px] border text-[0.85rem] outline-none resize-none focus:border-[var(--blue)]"
-                        style={{ borderColor: "var(--faint)", background: "var(--bg)", color: "var(--ink)" }}
                       />
                     </div>
 
@@ -546,12 +545,10 @@ export default function BlogAdmin({ initial, categories: initialCategories }: { 
                       <label className="block text-[0.72rem] font-semibold mb-1" style={{ color: "var(--mid)" }}>
                         Hovedinnhold
                       </label>
-                      <textarea
+                      <RichTextEditor
                         value={p.content}
-                        onChange={(e) => update(p.slug, "content", e.target.value)}
-                        rows={8}
-                        className="w-full px-3 py-2 rounded-[8px] border text-[0.85rem] outline-none resize-none focus:border-[var(--blue)]"
-                        style={{ borderColor: "var(--faint)", background: "var(--bg)", color: "var(--ink)" }}
+                        onChange={(v) => update(p.slug, "content", v)}
+                        rows={10}
                       />
                     </div>
 

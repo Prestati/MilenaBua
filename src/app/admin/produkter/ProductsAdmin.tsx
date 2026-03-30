@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
+import RichTextEditor from "@/components/RichTextEditor";
 import { saveProductsAction, uploadProductImageAction, saveShopAction } from "./actions";
 import type { Product } from "@/types";
 
@@ -295,8 +296,11 @@ export default function ProductsAdmin({ initial, initialShopDesc }: { initial: P
               {/* Description */}
               <div>
                 <label style={{ display: "block", fontSize: "0.72rem", fontWeight: 600, color: "var(--mid)", marginBottom: 4 }}>Kortbeskrivelse (vises på kortet)</label>
-                <textarea value={p.description} onChange={(e) => update(p.id, "description", e.target.value)}
-                  rows={2} style={{ ...input, resize: "vertical" as const }} />
+                <RichTextEditor
+                  value={p.description}
+                  onChange={(v) => update(p.id, "description", v)}
+                  rows={2}
+                />
               </div>
 
               {/* Page content */}
@@ -304,9 +308,12 @@ export default function ProductsAdmin({ initial, initialShopDesc }: { initial: P
                 <label style={{ display: "block", fontSize: "0.72rem", fontWeight: 600, color: "var(--mid)", marginBottom: 4 }}>
                   Utfyllende beskrivelse (vises på produktsiden)
                 </label>
-                <textarea value={p.pageContent ?? ""} onChange={(e) => update(p.id, "pageContent", e.target.value)}
-                  rows={5} placeholder={"Skriv mer om produktet her. Hvert avsnitt skilles med linjeskift."}
-                  style={{ ...input, resize: "vertical" as const }} />
+                <RichTextEditor
+                  value={p.pageContent ?? ""}
+                  onChange={(v) => update(p.id, "pageContent", v)}
+                  rows={6}
+                  placeholder="Skriv mer om produktet her. Dobbelt linjeskift = nytt avsnitt."
+                />
               </div>
 
               {/* Type + stock */}

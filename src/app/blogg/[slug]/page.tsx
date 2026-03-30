@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { readContent } from "@/lib/content";
+import { renderMarkdown } from "@/lib/renderMarkdown";
 import type { BlogPost } from "@/types";
 import type { Metadata } from "next";
 
@@ -128,7 +129,7 @@ export default async function BloggPostPage({ params }: Props) {
       )}
 
       <div className="prose prose-gray max-w-none">
-        <p className="text-lg text-gray-600 leading-relaxed">{post.content}</p>
+        {renderMarkdown(post.content, "text-lg text-gray-600 leading-relaxed mb-5")}
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import { readContent } from "@/lib/content";
+import { renderMarkdown } from "@/lib/renderMarkdown";
 import type { Product } from "@/types";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -63,9 +64,9 @@ export default async function ProductPage({ params, searchParams }: Props) {
             {p.name}
           </h1>
 
-          <p className="text-[0.95rem] leading-[1.8] mb-6" style={{ color: "var(--mid)" }}>
-            {p.description}
-          </p>
+          <div className="text-[0.95rem] leading-[1.8] mb-6" style={{ color: "var(--mid)" }}>
+            {renderMarkdown(p.description || "", "mb-3")}
+          </div>
 
           <div className="flex items-baseline gap-2 mb-8">
             <span style={{ fontSize: "2rem", fontWeight: 800, color: "var(--ink)", letterSpacing: "-0.03em" }}>{p.price} kr</span>
@@ -119,11 +120,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
             Om produktet
           </h2>
           <div style={{ maxWidth: 680 }}>
-            {p.pageContent.split("\n").filter(Boolean).map((para, i) => (
-              <p key={i} className="text-[0.95rem] leading-[1.85] mb-4" style={{ color: "var(--mid)" }}>
-                {para}
-              </p>
-            ))}
+            {renderMarkdown(p.pageContent, "text-[0.95rem] leading-[1.85] mb-4")}
           </div>
         </div>
       )}
