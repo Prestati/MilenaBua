@@ -41,8 +41,14 @@ export async function writeContent(file: string, data: unknown): Promise<void> {
       throw new Error(error.message);
     }
   } else {
-    console.warn("[writeContent] supabaseAdmin er null — sjekk SUPABASE_SERVICE_ROLE_KEY");
+    // Ingen Supabase-tilkobling — prøv å skrive lokalt, feiler på Vercel
+    try {
+      writeLocal(file, data);
+    } catch {
+      throw new Error("Kan ikke lagre: SUPABASE_SERVICE_ROLE_KEY mangler i miljøvariablene");
+    }
+    return;
   }
-  // Always write locally too (keeps JSON files in sync for git)
+  // Skriv lokalt også (holder JSON-filer synkronisert i git, feiler stille på Vercel)
   try { writeLocal(file, data); } catch { /* read-only på Vercel — ignorer */ }
 }
