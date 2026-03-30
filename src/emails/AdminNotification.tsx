@@ -30,7 +30,7 @@ export default function AdminNotification({
   return (
     <Html lang="no">
       <Head />
-      <Preview>NY BESTILLING: {productName} — {amount} kr</Preview>
+      <Preview>Ny bestilling: {productName} — {amount} kr</Preview>
       <Body style={body}>
         <Container style={container}>
 
@@ -74,7 +74,7 @@ export default function AdminNotification({
               <Hr style={divider} />
               <Row>
                 <Column style={labelCol}><Text style={label}>Ordre-ID</Text></Column>
-                <Column style={valueCol}><Text style={{ ...value, fontFamily: "monospace", fontSize: "13px" }}>{orderId}</Text></Column>
+                <Column style={valueCol}><Text style={{ ...value, fontFamily: "monospace", fontSize: "13px", color: "#6b7280" }}>{orderId}</Text></Column>
               </Row>
             </Section>
           </Section>
@@ -102,35 +102,37 @@ const container = {
   maxWidth: "520px",
   margin: "40px auto",
   backgroundColor: "#ffffff",
-  borderRadius: "12px",
+  borderRadius: "16px",
   overflow: "hidden" as const,
-  border: "1px solid #e8e6e1",
+  border: "1px solid #e8e6f0",
+  boxShadow: "0 4px 24px rgba(26,26,46,0.06)",
 };
 
 const header = {
-  backgroundColor: "#0f172a",
-  padding: "28px 40px",
+  backgroundColor: "#1a1a2e",
+  padding: "32px 40px",
 };
 
 const badge = {
-  color: "#00ff88",
+  color: "#818cf8",
   fontSize: "11px",
   fontWeight: "700",
   letterSpacing: "0.15em",
-  margin: "0 0 8px",
+  textTransform: "uppercase" as const,
+  margin: "0 0 10px",
 };
 
 const h1 = {
   color: "#ffffff",
   fontSize: "20px",
   fontWeight: "700",
-  margin: "0 0 6px",
+  margin: "0 0 8px",
   letterSpacing: "-0.3px",
 };
 
 const amountText = {
-  color: "#00ff88",
-  fontSize: "28px",
+  color: "#4F46E5",
+  fontSize: "32px",
   fontWeight: "800",
   margin: "0",
   letterSpacing: "-1px",
@@ -141,7 +143,7 @@ const content = {
 };
 
 const sectionLabel = {
-  color: "#999896",
+  color: "#6b7280",
   fontSize: "11px",
   fontWeight: "700",
   textTransform: "uppercase" as const,
@@ -150,18 +152,18 @@ const sectionLabel = {
 };
 
 const box = {
-  backgroundColor: "#f9f8f6",
-  borderRadius: "8px",
+  backgroundColor: "#faf9f7",
+  borderRadius: "10px",
   padding: "4px 20px",
   marginBottom: "20px",
-  border: "1px solid #e8e6e1",
+  border: "1px solid #e8e6f0",
 };
 
 const labelCol = { width: "35%" };
 const valueCol = { width: "65%" };
 
 const label = {
-  color: "#999896",
+  color: "#9ca3af",
   fontSize: "13px",
   margin: "12px 0",
 };
@@ -174,22 +176,22 @@ const value = {
 };
 
 const divider = {
-  borderColor: "#e8e6e1",
+  borderColor: "#e8e6f0",
   margin: "0",
 };
 
 const link = {
-  color: "#3b6fd4",
+  color: "#4F46E5",
   textDecoration: "none",
 };
 
 const footerDivider = {
-  borderColor: "#e8e6e1",
+  borderColor: "#e8e6f0",
   margin: "0 40px",
 };
 
 const footer = {
-  color: "#b8b6b0",
+  color: "#9ca3af",
   fontSize: "12px",
   textAlign: "center" as const,
   padding: "20px 40px",
