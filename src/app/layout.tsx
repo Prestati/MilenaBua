@@ -16,6 +16,10 @@ export const metadata: Metadata = {
   description: "Sideprosjekter som hobby, skaperglede som drivkraft – og i 2026: et åpent eksperiment der AI er daglig leder. Alt deles: tall, valg, feil og suksess.",
   metadataBase: new URL("https://www.milenabua.no"),
   openGraph: { siteName: "milenabua.no", locale: "nb_NO", type: "website" },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
