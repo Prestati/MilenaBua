@@ -153,7 +153,7 @@ export default function RichTextEditor({ value, onChange, rows = 6, placeholder 
         }}
       />
       <p style={{ fontSize: "0.7rem", color: "var(--mid)", marginTop: 4 }}>
-        <strong>B</strong> fet · <strong>I</strong> kursiv · <strong>• Liste</strong> punktliste · Enter fortsetter listen, dobbelt Enter avslutter
+        <strong>B</strong> fet · <strong>I</strong> kursiv · <strong>• Liste</strong> punktliste · Enter fortsetter listen, dobbelt Enter avslutter · Lim inn YouTube-lenke på egen linje for video
       </p>
     </div>
   );

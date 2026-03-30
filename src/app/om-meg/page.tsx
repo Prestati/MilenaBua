@@ -77,25 +77,25 @@ export default async function AboutPage() {
 
         {/* Portrait */}
         {d.portraitUrl ? (
-          <div style={{ position: "relative", width: "100%", aspectRatio: "3/4" }}>
+          <div style={{ position: "relative", width: "100%", paddingTop: "133%", borderRadius: 20, overflow: "hidden", flexShrink: 0 }}>
             <Image
               src={d.portraitUrl}
               alt={d.name}
               fill
               loading="lazy"
               sizes="(max-width: 768px) 100vw, 300px"
-              style={{ objectFit: "cover", objectPosition: "center top", borderRadius: 20 }}
+              style={{ objectFit: "cover", objectPosition: "center top" }}
             />
           </div>
         ) : (
           <div style={{
-            width: "100%", aspectRatio: "3/4", borderRadius: 20,
+            width: "100%", paddingTop: "133%", borderRadius: 20, position: "relative",
             background: "var(--blue-lt)", border: "2px dashed var(--faint)",
-            display: "flex", flexDirection: "column", alignItems: "center",
-            justifyContent: "center", gap: 8,
           }}>
-            <span style={{ fontSize: 32 }}>🖼</span>
-            <span style={{ fontSize: "0.78rem", color: "var(--mid)" }}>Legg til portrettbilde i admin</span>
+            <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8 }}>
+              <span style={{ fontSize: 32 }}>🖼</span>
+              <span style={{ fontSize: "0.78rem", color: "var(--mid)" }}>Legg til portrettbilde i admin</span>
+            </div>
           </div>
         )}
       </div>

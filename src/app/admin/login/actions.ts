@@ -18,5 +18,6 @@ export async function loginAction(
     redirect("/admin");
   }
 
+  await new Promise((resolve) => setTimeout(resolve, 1500));
   return { error: "Feil brukernavn eller passord" };
 }

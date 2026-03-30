@@ -13,7 +13,9 @@ export async function proxy(request: NextRequest) {
     }
 
     try {
-      const secret = new TextEncoder().encode(process.env.AUTH_SECRET ?? "");
+      const authSecret = process.env.AUTH_SECRET;
+      if (!authSecret) throw new Error("AUTH_SECRET mangler");
+      const secret = new TextEncoder().encode(authSecret);
       await jwtVerify(token, secret);
     } catch {
       return NextResponse.redirect(new URL("/admin/login", request.url));

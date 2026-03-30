@@ -8,6 +8,7 @@ import NewsletterForm from "@/components/NewsletterForm";
 
 const spaceMono = Space_Mono({ weight: ["400", "700"], subsets: ["latin"], variable: "--font-mono" });
 import { readContent } from "@/lib/content";
+import { renderMarkdown } from "@/lib/renderMarkdown";
 import type { Project, Product, BlogPost } from "@/types";
 
 interface HeroData {
@@ -98,6 +99,12 @@ export default async function HomePage() {
                     {hero.secondaryBtn}
                   </a>
                 </div>
+                <p className="text-[0.8rem] mt-3">
+                  <a href="#butikk" className="no-underline transition-colors hover:text-[var(--blue)]"
+                    style={{ color: "var(--mid)" }}>
+                    Eller sjekk ressursene jeg bruker →
+                  </a>
+                </p>
               </div>
 
               {/* Høyre: bilde eller stats-kort */}
@@ -271,52 +278,102 @@ export default async function HomePage() {
       {/* ── BUTIKK ── */}
       <div className={wrap}>
         <section id="butikk" className="py-[70px] border-b" style={{ borderColor: "var(--faint)" }}>
-          <SectionHeader tag="Butikk" title="Produkter &amp; ressurser" />
-          {shop.description && (
-            <p className="text-[0.95rem] leading-[1.75] mb-8 max-w-[60ch]" style={{ color: "var(--mid)", marginTop: -16 }}>
-              {shop.description}
-            </p>
-          )}
+          <SectionHeader tag="Butikk" title="Verktøyene jeg bruker" />
+          <p className="text-[0.95rem] leading-[1.75] mb-8 max-w-[60ch]" style={{ color: "var(--mid)", marginTop: -16 }}>
+            Verktøyene jeg bruker — og nå deler med deg
+          </p>
           <FadeIn>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {products.map((p) => (
-                <a key={p.id} href={`/produkter/${p.id}`}
-                  className="flex flex-col rounded-[16px] border no-underline transition-all hover:-translate-y-[3px] hover:shadow-[0_12px_32px_rgba(59,111,212,0.1)] hover:border-[var(--blue)] overflow-hidden"
-                  style={{ background: "var(--white)", borderColor: "var(--faint)" }}>
-                  {p.imageUrl ? (
-                    <div style={{ width: "100%", aspectRatio: "16/9", position: "relative", overflow: "hidden" }}>
-                      <Image
-                        src={p.imageUrl}
-                        alt={p.name}
-                        fill
-                        loading="lazy"
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                        style={{ objectFit: "cover" }}
-                      />
-                    </div>
-                  ) : (
-                    <div style={{ width: "100%", aspectRatio: "16/9", background: "var(--blue-lt)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 36 }}>
-                      {p.type === "pdf" ? "📄" : "📦"}
-                    </div>
-                  )}
-                  <div className="p-[1.4rem] flex flex-col flex-1">
-                    <span className="inline-flex items-center gap-1 text-[0.65rem] font-bold tracking-[0.1em] uppercase px-[0.6rem] py-[0.25rem] rounded-[6px] w-fit mb-[0.9rem]"
-                      style={p.type === "pdf" ? { background: "var(--blue-lt)", color: "var(--blue)" } : { background: "var(--orange-lt)", color: "var(--orange)" }}>
-                      {p.type === "pdf" ? "📄 Digital PDF" : "📦 Fysisk · Post"}
+            {products.length === 1 ? (
+              /* Featured single-product card */
+              <a href={`/produkter/${products[0].id}`}
+                className="flex flex-col md:flex-row rounded-[20px] border overflow-hidden no-underline transition-all hover:-translate-y-[3px] hover:shadow-[0_16px_40px_rgba(59,111,212,0.12)] hover:border-[var(--blue)]"
+                style={{ background: "var(--white)", borderColor: "var(--faint)" }}>
+                {products[0].imageUrl ? (
+                  <div className="md:w-[300px] md:shrink-0" style={{ aspectRatio: "4/3", position: "relative", overflow: "hidden" }}>
+                    <Image
+                      src={products[0].imageUrl}
+                      alt={products[0].name}
+                      fill
+                      loading="lazy"
+                      sizes="(max-width: 768px) 100vw, 300px"
+                      style={{ objectFit: "cover" }}
+                    />
+                  </div>
+                ) : (
+                  <div className="md:w-[260px] md:shrink-0 flex items-center justify-center"
+                    style={{ aspectRatio: "4/3", background: "var(--blue-lt)", fontSize: 56 }}>
+                    {products[0].type === "pdf" ? "📄" : "📦"}
+                  </div>
+                )}
+                <div className="p-8 md:p-10 flex flex-col justify-between flex-1">
+                  <div>
+                    <span className="inline-flex items-center gap-1 text-[0.65rem] font-bold tracking-[0.1em] uppercase px-[0.6rem] py-[0.25rem] rounded-[6px] mb-4"
+                      style={products[0].type === "pdf"
+                        ? { background: "var(--blue-lt)", color: "var(--blue)" }
+                        : { background: "var(--orange-lt)", color: "var(--orange)" }}>
+                      {products[0].type === "pdf" ? "📄 Digital PDF" : "📦 Fysisk · Post"}
                     </span>
-                    <div className="text-[1rem] font-bold leading-[1.3] tracking-[-0.02em] mb-[0.5rem] flex-1" style={{ color: "var(--ink)" }}>{p.name}</div>
-                    <div className="text-[0.8rem] leading-[1.65] mb-[1.2rem]" style={{ color: "var(--mid)" }}>{p.description}</div>
-                    <div className="flex items-center justify-between pt-3 border-t" style={{ borderColor: "var(--faint)" }}>
-                      <span className="text-[1.2rem] font-extrabold tracking-[-0.03em]" style={{ color: "var(--ink)" }}>{p.price} kr</span>
-                      <span className="text-[0.75rem] font-bold px-[0.9rem] py-[0.4rem] rounded-[8px]"
-                        style={{ background: "var(--blue-lt)", color: "var(--blue)" }}>
-                        Se mer →
-                      </span>
+                    <h3 className="text-[1.6rem] font-extrabold tracking-[-0.03em] mb-3 leading-[1.2]"
+                      style={{ color: "var(--ink)" }}>
+                      {products[0].name}
+                    </h3>
+                    <div className="text-[0.92rem] leading-[1.75]" style={{ color: "var(--mid)" }}>
+                      {renderMarkdown(products[0].description)}
                     </div>
                   </div>
-                </a>
-              ))}
-            </div>
+                  <div className="flex items-center gap-5 mt-6 pt-5 border-t" style={{ borderColor: "var(--faint)" }}>
+                    <span className="text-[2rem] font-extrabold tracking-[-0.04em]" style={{ color: "var(--ink)" }}>
+                      {products[0].price} kr
+                    </span>
+                    <span className="inline-flex items-center gap-2 text-[0.88rem] font-bold px-6 py-3 rounded-full text-white"
+                      style={{ background: "var(--blue)", boxShadow: "0 4px 16px rgba(59,111,212,0.25)" }}>
+                      Kjøp nå →
+                    </span>
+                  </div>
+                </div>
+              </a>
+            ) : (
+              /* Grid for multiple products */
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {products.map((p) => (
+                  <a key={p.id} href={`/produkter/${p.id}`}
+                    className="flex flex-col rounded-[16px] border no-underline transition-all hover:-translate-y-[3px] hover:shadow-[0_12px_32px_rgba(59,111,212,0.1)] hover:border-[var(--blue)] overflow-hidden"
+                    style={{ background: "var(--white)", borderColor: "var(--faint)" }}>
+                    {p.imageUrl ? (
+                      <div style={{ width: "100%", aspectRatio: "16/9", position: "relative", overflow: "hidden" }}>
+                        <Image
+                          src={p.imageUrl}
+                          alt={p.name}
+                          fill
+                          loading="lazy"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                          style={{ objectFit: "cover" }}
+                        />
+                      </div>
+                    ) : (
+                      <div style={{ width: "100%", aspectRatio: "16/9", background: "var(--blue-lt)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 36 }}>
+                        {p.type === "pdf" ? "📄" : "📦"}
+                      </div>
+                    )}
+                    <div className="p-[1.4rem] flex flex-col flex-1">
+                      <span className="inline-flex items-center gap-1 text-[0.65rem] font-bold tracking-[0.1em] uppercase px-[0.6rem] py-[0.25rem] rounded-[6px] w-fit mb-[0.9rem]"
+                        style={p.type === "pdf" ? { background: "var(--blue-lt)", color: "var(--blue)" } : { background: "var(--orange-lt)", color: "var(--orange)" }}>
+                        {p.type === "pdf" ? "📄 Digital PDF" : "📦 Fysisk · Post"}
+                      </span>
+                      <div className="text-[1rem] font-bold leading-[1.3] tracking-[-0.02em] mb-[0.5rem] flex-1" style={{ color: "var(--ink)" }}>{p.name}</div>
+                      <div className="text-[0.8rem] leading-[1.65] mb-[1.2rem]" style={{ color: "var(--mid)" }}>{renderMarkdown(p.description)}</div>
+                      <div className="flex items-center justify-between pt-3 border-t" style={{ borderColor: "var(--faint)" }}>
+                        <span className="text-[1.2rem] font-extrabold tracking-[-0.03em]" style={{ color: "var(--ink)" }}>{p.price} kr</span>
+                        <span className="text-[0.75rem] font-bold px-[0.9rem] py-[0.4rem] rounded-[8px]"
+                          style={{ background: "var(--blue-lt)", color: "var(--blue)" }}>
+                          Se mer →
+                        </span>
+                      </div>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            )}
           </FadeIn>
         </section>
       </div>
@@ -412,17 +469,31 @@ export default async function HomePage() {
       </div>
 
       {/* ── NYHETSBREV ── */}
-      <div className={wrap}>
-        <section id="nyhetsbrev" className="py-20 border-b" style={{ borderColor: "var(--faint)" }}>
-          <FadeIn>
-            <NewsletterForm 
-              heading={nl.heading} 
-              description={nl.description} 
-              btnText={nl.btnText} 
-              note={nl.note} 
-            />
-          </FadeIn>
-        </section>
+      <div style={{ background: "var(--blue-lt)" }}>
+        <div className={wrap}>
+          <section id="nyhetsbrev" className="py-20">
+            <FadeIn>
+              <div className="flex flex-wrap gap-x-10 gap-y-2 mb-7">
+                {[
+                  "Innsyn i AI-eksperimentet",
+                  "Verktøy og maler jeg bruker",
+                  "Ærlige oppdateringer — ikke bare suksesshistorier",
+                ].map((point) => (
+                  <div key={point} className="flex items-center gap-2">
+                    <span className="text-[0.85rem] font-bold" style={{ color: "var(--blue)" }}>✓</span>
+                    <span className="text-[0.85rem] font-semibold" style={{ color: "var(--ink)" }}>{point}</span>
+                  </div>
+                ))}
+              </div>
+              <NewsletterForm
+                heading={nl.heading}
+                description={nl.description}
+                btnText={nl.btnText}
+                note={nl.note}
+              />
+            </FadeIn>
+          </section>
+        </div>
       </div>
     </div>
   );

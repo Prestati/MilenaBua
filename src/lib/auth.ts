@@ -37,6 +37,7 @@ export async function setSession(username: string) {
   const jar = await cookies();
   jar.set(COOKIE, token, {
     httpOnly: true,
+    secure: true,
     sameSite: "strict",
     maxAge: 60 * 60 * 24 * 7,
     path: "/",
