@@ -88,11 +88,19 @@ export default function OrderConfirmation({
               </Section>
             )}
 
+            <Text style={warmText}>
+              Tusen takk! Jeg håper du finner god nytte av dette. Ta gjerne kontakt om det er noe på{" "}
+              <a href="mailto:hei@milenabua.no" style={link}>hei@milenabua.no</a>
+            </Text>
+
             <Text style={text}>
-              Har du spørsmål om bestillingen din? Ta kontakt på{" "}
-              <a href="mailto:hei@milenabua.no" style={link}>
-                hei@milenabua.no
-              </a>
+              Det du kjøper her er med på å finansiere nye prosjekter jeg bygger og teknologi jeg vil
+              utforske videre — det setter jeg stor pris på!
+            </Text>
+
+            <Text style={signoff}>
+              Varm hilsen,<br />
+              Milena
             </Text>
           </Section>
 
@@ -230,6 +238,22 @@ const downloadNote = {
   color: "#6b7280",
   fontSize: "12px",
   margin: "12px 0 0",
+};
+
+const warmText = {
+  color: "#1a1a2e",
+  fontSize: "15px",
+  lineHeight: "1.7",
+  margin: "24px 0 16px",
+  fontWeight: "500",
+};
+
+const signoff = {
+  color: "#1a1a2e",
+  fontSize: "15px",
+  lineHeight: "1.7",
+  margin: "20px 0 8px",
+  fontWeight: "600",
 };
 
 const footer = {
