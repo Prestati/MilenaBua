@@ -128,6 +128,7 @@ function buildEmailHtml(
 
   if (template === "short") {
     body = `
+      ${headerImg}
       <div style="padding:28px 40px 8px;">
         <div style="font-size:14px;font-weight:800;color:#1a1a2e;letter-spacing:-0.3px;">Milena Bua</div>
       </div>
@@ -185,32 +186,13 @@ function buildEmailHtml(
       </div>
       ${footer}`;
   } else {
-    // standard — also show header image for short template
-    const shortHeaderImg = headerImageUrl
-      ? `<img src="${headerImageUrl}" alt="" style="display:block;width:100%;max-width:580px;border-radius:12px 12px 0 0;" />`
-      : "";
-    if (template === "short") {
-      body = `
-        ${shortHeaderImg}
-        <div style="padding:28px 40px 20px;">
-          <div style="font-size:14px;font-weight:800;color:#1a1a2e;letter-spacing:-0.3px;">Milena Bua</div>
-        </div>
-        <hr style="border:none;border-top:1px solid #e8e6e1;margin:0 40px 28px;"/>
-        <div style="padding:0 40px 24px;">${contentHtml || '<p style="color:#999;font-size:15px;">Innhold vises her…</p>'}</div>
-        <hr style="border:none;border-top:1px solid #e8e6e1;margin:0 40px;"/>
-        <div style="padding:16px 40px;text-align:center;">
-          <p style="color:#b0aead;font-size:11px;margin:0;">
-            <a href="#" style="color:#b0aead;text-decoration:underline;">Meld deg av</a> · milenabua.no · © ${year} Milena Bua
-          </p>
-        </div>`;
-    } else {
-      body = `
-        ${navyHeader}
-        <div style="padding:36px 40px 24px;">
-          ${contentHtml || '<p style="color:#999;font-size:15px;">Innhold vises her…</p>'}
-        </div>
-        ${footer}`;
-    }
+    // standard
+    body = `
+      ${navyHeader}
+      <div style="padding:36px 40px 24px;">
+        ${contentHtml || '<p style="color:#999;font-size:15px;">Innhold vises her…</p>'}
+      </div>
+      ${footer}`;
   }
 
   return `<!DOCTYPE html><html lang="no"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/></head><body style="margin:0;padding:0;background:#f5f4f2;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;"><div style="max-width:580px;margin:40px auto;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e8e6e1;">${body}</div></body></html>`;
