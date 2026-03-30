@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@next/third-parties": "^16.2.1",
     "@react-email/components": "^1.0.10",
     "@stripe/stripe-js": "^9.0.0",
     "@supabase/supabase-js": "^2.100.0",
