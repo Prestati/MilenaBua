@@ -8,8 +8,7 @@ import NewsletterForm from "@/components/NewsletterForm";
 
 const spaceMono = Space_Mono({ weight: ["400", "700"], subsets: ["latin"], variable: "--font-mono" });
 import { readContent } from "@/lib/content";
-import type { Project, Product } from "@/types";
-import { posts } from "@/data/posts";
+import type { Project, Product, BlogPost } from "@/types";
 
 interface HeroData {
   badge: string; h1Line1: string; h1Highlight: string; h1Line2: string;
@@ -25,7 +24,7 @@ interface NewsletterData {
 
 const wrap = "max-w-[1100px] mx-auto px-6";
 
-function isPublished(post: typeof posts[number]) {
+function isPublished(post: BlogPost) {
   if (post.status !== "published") return false;
   if (!post.visible) return false;
   const now = new Date();
@@ -48,16 +47,18 @@ const SectionHeader = ({ tag, title }: { tag: string; title: string }) => (
 );
 
 export default async function HomePage() {
-  const [hero, escape, nl, allProjects, allProducts, shop] = await Promise.all([
+  const [hero, escape, nl, allProjects, allProducts, shop, allPosts] = await Promise.all([
     readContent<HeroData>("hero.json"),
     readContent<EscapeData>("escape.json"),
     readContent<NewsletterData>("newsletter.json"),
     readContent<Project[]>("projects.json"),
     readContent<Product[]>("products.json"),
     readContent<{ description: string }>("shop.json"),
+    readContent<BlogPost[]>("posts.json"),
   ]);
   const otherProjects = allProjects.filter((p) => p.slug !== "escape-haugesund");
   const products = allProducts.filter((p) => p.visible !== false);
+  const posts = allPosts;
 
   return (
     <div>
