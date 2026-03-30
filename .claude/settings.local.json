@@ -12,7 +12,10 @@
       "Bash(git remote:*)",
       "Bash(git push:*)",
       "Bash(node:*)",
-      "WebFetch(domain:milena-bua-omega.vercel.app)"
+      "WebFetch(domain:milena-bua-omega.vercel.app)",
+      "Bash(git -C /Users/karoline/milenabua/milenabua ls-files .env.local .env .env.*.local)",
+      "Bash(find /Users/karoline/milenabua/milenabua/src -maxdepth 2 -type f -name *.ts)",
+      "Bash(NEXT_DISABLE_TURBOPACK=1 npx next build)"
     ]
   }
 }

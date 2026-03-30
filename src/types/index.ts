@@ -46,6 +46,7 @@ export interface Product {
   description: string;
   price: number;
   imageUrl: string;
+  gallery?: string[];
   category: string;
   inStock: boolean;
   type: "pdf" | "physical";

@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback } from "react";
 import RichTextEditor from "@/components/RichTextEditor";
-import { saveProductsAction, uploadProductImageAction, saveShopAction } from "./actions";
+import { saveProductsAction, saveShopAction } from "./actions";
 import type { Product } from "@/types";
 
 const empty = (): Product => ({
@@ -34,8 +34,10 @@ export default function ProductsAdmin({ initial, initialShopDesc }: { initial: P
   const [shopMsg, setShopMsg] = useState<{ ok?: boolean; text?: string } | null>(null);
   const [uploading, setUploading] = useState<string | null>(null);
   const [uploadingPdf, setUploadingPdf] = useState<string | null>(null);
+  const [uploadingGallery, setUploadingGallery] = useState<string | null>(null);
   const fileRefs = useRef<Record<string, HTMLInputElement | null>>({});
   const pdfRefs = useRef<Record<string, HTMLInputElement | null>>({});
+  const galleryRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
   const save = async () => {
     setSaving(true);
@@ -90,13 +92,47 @@ export default function ProductsAdmin({ initial, initialShopDesc }: { initial: P
     setEditingId(p.id);
   };
 
-  const handleImageUpload = async (id: string, file: File) => {
-    setUploading(id);
+  const uploadImage = async (file: File): Promise<string | null> => {
     const fd = new FormData();
     fd.append("image", file);
-    const res = await uploadProductImageAction(null, fd);
+    const res = await fetch("/api/admin/upload-image", { method: "POST", body: fd });
+    const data = await res.json();
+    if (data.url) return data.url as string;
+    setMsg({ ok: false, text: data.error ?? "Bildeopplasting feilet" });
+    return null;
+  };
+
+  const handleImageUpload = async (id: string, file: File) => {
+    setUploading(id);
+    const url = await uploadImage(file);
     setUploading(null);
-    if (res.url) update(id, "imageUrl", res.url);
+    if (url) update(id, "imageUrl", url);
+  };
+
+  const handleGalleryUpload = async (id: string, file: File) => {
+    setUploadingGallery(id);
+    const url = await uploadImage(file);
+    setUploadingGallery(null);
+    if (url) {
+      setItems((prev) => prev.map((p) =>
+        p.id === id ? { ...p, gallery: [...(p.gallery ?? []), url] } : p
+      ));
+    }
+  };
+
+  const setGalleryImageAsMain = (id: string, url: string) => {
+    setItems((prev) => prev.map((p) => {
+      if (p.id !== id) return p;
+      const newGallery = (p.gallery ?? []).filter((u) => u !== url);
+      if (p.imageUrl) newGallery.push(p.imageUrl);
+      return { ...p, imageUrl: url, gallery: newGallery };
+    }));
+  };
+
+  const removeGalleryImage = (id: string, url: string) => {
+    setItems((prev) => prev.map((p) =>
+      p.id === id ? { ...p, gallery: (p.gallery ?? []).filter((u) => u !== url) } : p
+    ));
   };
 
   const handlePdfUpload = async (id: string, file: File) => {
@@ -227,6 +263,43 @@ export default function ProductsAdmin({ initial, initialShopDesc }: { initial: P
                         Fjern
                       </button>
                     )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Gallery images */}
+              <div>
+                <label style={{ display: "block", fontSize: "0.72rem", fontWeight: 600, color: "var(--mid)", marginBottom: 8 }}>
+                  Galleri (ekstra bilder — vises som miniatyrbilder på produktsiden)
+                </label>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 10, alignItems: "flex-start" }}>
+                  {(p.gallery ?? []).map((url, i) => (
+                    <div key={`${url}-${i}`} style={{ position: "relative", display: "flex", flexDirection: "column", gap: 4, alignItems: "center" }}>
+                      <img src={url} alt="" style={{ width: 72, height: 72, borderRadius: 8, objectFit: "cover", border: "1px solid var(--faint)" }} />
+                      <div style={{ display: "flex", gap: 4 }}>
+                        <button
+                          onClick={() => setGalleryImageAsMain(p.id, url)}
+                          title="Sett som forsidebilde"
+                          style={{ fontSize: "0.62rem", fontWeight: 700, padding: "2px 6px", borderRadius: 4, border: "1px solid var(--blue)", background: "var(--blue-lt)", color: "var(--blue)", cursor: "pointer", fontFamily: "inherit" }}>
+                          Forside
+                        </button>
+                        <button
+                          onClick={() => removeGalleryImage(p.id, url)}
+                          style={{ fontSize: "0.62rem", fontWeight: 700, padding: "2px 6px", borderRadius: 4, border: "none", background: "#fef2f2", color: "#dc2626", cursor: "pointer", fontFamily: "inherit" }}>
+                          Fjern
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                  <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                    <input type="file" accept="image/*" style={{ display: "none" }}
+                      ref={(el) => { galleryRefs.current[p.id] = el; }}
+                      onChange={(e) => { const f = e.target.files?.[0]; if (f) { handleGalleryUpload(p.id, f); e.target.value = ""; } }} />
+                    <button onClick={() => galleryRefs.current[p.id]?.click()}
+                      disabled={uploadingGallery === p.id}
+                      style={{ padding: "8px 14px", borderRadius: 8, border: "1px dashed var(--faint)", background: "var(--white)", color: "var(--mid)", fontSize: "0.82rem", fontWeight: 600, cursor: "pointer", fontFamily: "inherit", height: 72 }}>
+                      {uploadingGallery === p.id ? "Laster…" : "+ Legg til bilde"}
+                    </button>
                   </div>
                 </div>
               </div>

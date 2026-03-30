@@ -2,6 +2,7 @@ import Link from "next/link";
 
 const sections = [
   { href: "/admin/hero", label: "Forside", desc: "Endre tekst, bilde og hero-seksjonen", icon: "🖥" },
+  { href: "/admin/timer", label: "4-timer seksjonen", desc: "Rediger tekst, farger og tabellinnhold", icon: "⏱️" },
   { href: "/admin/escape", label: "Escape Haugesund", desc: "Rediger tekst og mål for Escape-kortet", icon: "🔐" },
   { href: "/admin/produkter", label: "Produkter", desc: "Legg til, endre eller slett produkter", icon: "🛍" },
   { href: "/admin/prosjekter", label: "Prosjekter", desc: "Administrer prosjektene dine", icon: "📁" },

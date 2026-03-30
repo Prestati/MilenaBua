@@ -22,6 +22,13 @@ interface EscapeData {
 interface NewsletterData {
   heading: string; description: string; btnText: string; note: string;
 }
+interface TimerRow { icon: string; label: string; value: string; }
+interface TimerData {
+  sectionTag: string; sectionTitle: string; heading: string; headingAccent: string; body: string;
+  cardHeaderText: string; cardHeaderBg: string;
+  cardFooterLabel: string; cardFooterValue: string; cardFooterBg: string;
+  rows: TimerRow[];
+}
 
 const wrap = "max-w-[1100px] mx-auto px-6";
 
@@ -48,7 +55,7 @@ const SectionHeader = ({ tag, title }: { tag: string; title: string }) => (
 );
 
 export default async function HomePage() {
-  const [hero, escape, nl, allProjects, allProducts, shop, allPosts] = await Promise.all([
+  const [hero, escape, nl, allProjects, allProducts, shop, allPosts, timerRaw] = await Promise.all([
     readContent<HeroData>("hero.json"),
     readContent<EscapeData>("escape.json"),
     readContent<NewsletterData>("newsletter.json"),
@@ -56,7 +63,20 @@ export default async function HomePage() {
     readContent<Product[]>("products.json"),
     readContent<{ description: string }>("shop.json"),
     readContent<BlogPost[]>("posts.json"),
+    readContent<TimerData>("timer.json"),
   ]);
+  const timer: TimerData = timerRaw?.rows ? timerRaw : {
+    sectionTag: "Bakgrunnen", sectionTitle: "Hvorfor la AI bestemme?",
+    heading: "4 timer.", headingAccent: "Hva gjør du med dem?",
+    body: "Du har faktisk nok tid. Alle har 24 timer, og når hverdagen er unnagjort sitter du igjen med rundt 4. Det er mer enn nok til å bygge noe du er stolt av.\n\nHvis du bruker dem på det som faktisk betyr noe. Drømmene dine er ikke for store. De venter bare på at du prioriterer dem!",
+    cardHeaderText: "Et typisk døgn", cardHeaderBg: "#1a1a2e",
+    cardFooterLabel: "→ Fritid igjen", cardFooterValue: "4 timer", cardFooterBg: "#fff1ea",
+    rows: [
+      { icon: "😴", label: "Søvn", value: "8 timer" }, { icon: "💼", label: "Arbeid", value: "8 timer" },
+      { icon: "🚗", label: "Transport", value: "1 time" }, { icon: "🍽️", label: "Matlaging", value: "1 time" },
+      { icon: "🥗", label: "Spising", value: "1 time" }, { icon: "🏠", label: "Husarbeid", value: "1 time" },
+    ],
+  };
   const otherProjects = allProjects.filter((p) => p.slug !== "escape-haugesund");
   const products = allProducts.filter((p) => p.visible !== false);
   const posts = allPosts;
@@ -153,42 +173,38 @@ export default async function HomePage() {
       {/* ── EKSPERIMENT ── */}
       <div className={wrap}>
         <section id="eksperiment" className="py-[70px] border-b" style={{ borderColor: "var(--faint)" }}>
-          <SectionHeader tag="Bakgrunnen" title="Hvorfor la AI bestemme?" />
+          <SectionHeader tag={timer.sectionTag} title={timer.sectionTitle} />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
             <FadeIn>
               <div>
                 <h2 className="font-extrabold tracking-[-0.04em] leading-[1.1] mb-5"
                   style={{ fontSize: "clamp(1.8rem, 3vw, 2.6rem)", color: "var(--ink)" }}>
-                  4 timer.<br /><span style={{ color: "var(--blue)" }}>Hva gjør du med dem?</span>
+                  {timer.heading}<br /><span style={{ color: "var(--blue)" }}>{timer.headingAccent}</span>
                 </h2>
-                <p className="text-[0.93rem] leading-[1.85]" style={{ color: "var(--mid)" }}>
-                  Du har faktisk nok tid. Alle har 24 timer, og når hverdagen er unnagjort sitter du igjen med rundt 4. Det er mer enn nok til å bygge noe du er stolt av.
-                  <br /><br />
-                  Hvis du bruker dem på det som faktisk betyr noe. Drømmene dine er ikke for store. De venter bare på at du prioriterer dem!
-                </p>
+                {timer.body.split(/\n\n+/).filter(Boolean).map((para, i) => (
+                  <p key={i} className="text-[0.93rem] leading-[1.85] mb-4" style={{ color: "var(--mid)" }}>{para}</p>
+                ))}
               </div>
             </FadeIn>
             <FadeIn delay={100}>
               <div className="rounded-[20px] border overflow-hidden" style={{ background: "var(--white)", borderColor: "var(--faint)" }}>
-                <div className="px-[1.6rem] py-[1.2rem] text-[0.75rem] font-bold tracking-[0.08em] uppercase text-white" style={{ background: "var(--ink)" }}>
-                  Et typisk døgn
+                <div className="px-[1.6rem] py-[1.2rem] text-[0.75rem] font-bold tracking-[0.08em] uppercase text-white"
+                  style={{ background: timer.cardHeaderBg }}>
+                  {timer.cardHeaderText}
                 </div>
                 <div className="px-[1.6rem]">
-                  {[
-                    ["😴", "Søvn", "8 timer"], ["💼", "Arbeid", "8 timer"], ["🚗", "Transport", "1 time"],
-                    ["🍽️", "Matlaging", "1 time"], ["🥗", "Spising", "1 time"], ["🏠", "Husarbeid", "1 time"],
-                  ].map(([icon, label, val], i, arr) => (
-                    <div key={label} className={`flex justify-between items-center py-[0.9rem] text-[0.88rem] ${i < arr.length - 1 ? "border-b" : ""}`}
+                  {timer.rows.map((row, i) => (
+                    <div key={i} className={`flex justify-between items-center py-[0.9rem] text-[0.88rem] ${i < timer.rows.length - 1 ? "border-b" : ""}`}
                       style={{ borderColor: "var(--faint)", color: "var(--mid)" }}>
-                      <span>{icon} {label}</span>
-                      <span className="font-bold text-[0.9rem]" style={{ color: "var(--ink)" }}>{val}</span>
+                      <span>{row.icon} {row.label}</span>
+                      <span className="font-bold text-[0.9rem]" style={{ color: "var(--ink)" }}>{row.value}</span>
                     </div>
                   ))}
                 </div>
                 <div className="px-[1.6rem] py-[1.2rem] flex justify-between items-center border-t"
-                  style={{ background: "var(--orange-lt)", borderColor: "rgba(240,123,63,0.15)" }}>
-                  <span className="text-[0.85rem] font-bold" style={{ color: "var(--ink)" }}>→ Fritid igjen</span>
-                  <span className="text-[1.4rem] font-extrabold tracking-[-0.03em]" style={{ color: "var(--orange)" }}>4 timer</span>
+                  style={{ background: timer.cardFooterBg, borderColor: "rgba(0,0,0,0.06)" }}>
+                  <span className="text-[0.85rem] font-bold" style={{ color: "var(--ink)" }}>{timer.cardFooterLabel}</span>
+                  <span className="text-[1.4rem] font-extrabold tracking-[-0.03em]" style={{ color: "var(--orange)" }}>{timer.cardFooterValue}</span>
                 </div>
               </div>
             </FadeIn>

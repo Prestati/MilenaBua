@@ -5,10 +5,10 @@ import { renderMarkdown } from "@/lib/renderMarkdown";
 import ProductJsonLd from "@/components/JsonLd";
 import type { Product } from "@/types";
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import BuyButton from "./BuyButton";
+import ProductGallery from "./ProductGallery";
 
 interface Props { params: Promise<{ id: string }>; searchParams: Promise<{ success?: string }> }
 
@@ -46,25 +46,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
       <div className="grid grid-cols-1 md:grid-cols-[1fr_1.1fr] gap-14 items-start">
         {/* Left: image */}
         <div>
-          {p.imageUrl ? (
-            <Image
-              src={p.imageUrl}
-              alt={p.name}
-              width={600}
-              height={600}
-              priority
-              sizes="(max-width: 768px) 100vw, 50vw"
-              style={{ width: "100%", height: "auto", borderRadius: 20, display: "block", boxShadow: "0 8px 40px rgba(0,0,0,0.1)" }}
-            />
-          ) : (
-            <div style={{
-              width: "100%", aspectRatio: "4/3", borderRadius: 20,
-              background: "var(--blue-lt)", display: "flex", alignItems: "center",
-              justifyContent: "center", fontSize: 56,
-            }}>
-              {p.type === "pdf" ? "📄" : "📦"}
-            </div>
-          )}
+          <ProductGallery mainImage={p.imageUrl} gallery={p.gallery} name={p.name} />
         </div>
 
         {/* Right: details */}
