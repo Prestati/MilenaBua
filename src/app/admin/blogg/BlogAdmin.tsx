@@ -51,10 +51,15 @@ export default function BlogAdmin({ initial, categories: initialCategories }: { 
 
   const save = async () => {
     setSaving(true);
-    const res = await savePostsAction(items);
-    setSaving(false);
-    setMsg(res.success ? { ok: true, text: "Lagret!" } : { ok: false, text: res.error });
-    setTimeout(() => setMsg(null), 3000);
+    try {
+      const res = await savePostsAction(items);
+      setMsg(res.success ? { ok: true, text: "Lagret!" } : { ok: false, text: res.error ?? "Ukjent feil" });
+    } catch (e) {
+      setMsg({ ok: false, text: `Feil: ${e instanceof Error ? e.message : String(e)}` });
+    } finally {
+      setSaving(false);
+      setTimeout(() => setMsg(null), 4000);
+    }
   };
 
   const saveCategories = async () => {
