@@ -49,7 +49,7 @@ export interface Product {
   gallery?: string[];
   category: string;
   inStock: boolean;
-  type: "pdf" | "physical";
+  type: "pdf" | "physical" | "regneark";
   buyUrl?: string;
   pageContent?: string;
   visible?: boolean;

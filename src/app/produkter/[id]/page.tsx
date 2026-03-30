@@ -53,10 +53,10 @@ export default async function ProductPage({ params, searchParams }: Props) {
         <div>
           <span
             className="inline-flex items-center gap-1 text-[0.65rem] font-bold tracking-[0.1em] uppercase px-[0.7rem] py-[0.3rem] rounded-[6px] mb-5"
-            style={p.type === "pdf"
-              ? { background: "var(--blue-lt)", color: "var(--blue)" }
-              : { background: "var(--orange-lt)", color: "var(--orange)" }}>
-            {p.type === "pdf" ? "📄 Digital PDF" : "📦 Fysisk · Post"}
+            style={p.type === "physical"
+              ? { background: "var(--orange-lt)", color: "var(--orange)" }
+              : { background: "var(--blue-lt)", color: "var(--blue)" }}>
+            {p.type === "pdf" ? "📄 Digital PDF" : p.type === "regneark" ? "📊 Regneark" : "📦 Fysisk · Post"}
           </span>
 
           <h1 className="font-extrabold tracking-[-0.03em] leading-[1.1] mb-4"
@@ -81,9 +81,9 @@ export default async function ProductPage({ params, searchParams }: Props) {
                 ✓ Takk for kjøpet!
               </p>
               <p style={{ color: "#15803d", fontWeight: 500, fontSize: "0.88rem", margin: 0 }}>
-                {p.type === "pdf"
-                  ? "Sjekk innboksen din — nedlastingslenken er sendt på e-post."
-                  : "Vi har mottatt bestillingen din og sender den til deg snart."}
+                {p.type === "physical"
+                  ? "Vi har mottatt bestillingen din og sender den til deg snart."
+                  : "Sjekk innboksen din — nedlastingslenken er sendt på e-post."}
               </p>
             </div>
           )}
@@ -91,7 +91,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
           {p.inStock ? (
             <BuyButton
               productId={p.id}
-              label={p.type === "pdf" ? "Kjøp og last ned →" : "Kjøp nå →"}
+              label={p.type === "physical" ? "Kjøp nå →" : "Kjøp og last ned →"}
             />
           ) : (
             <div className="inline-flex items-center gap-2 text-[0.92rem] font-bold px-8 py-4 rounded-full"
@@ -105,7 +105,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
               🚚 Leveres per post til din adresse
             </p>
           )}
-          {p.type === "pdf" && (
+          {(p.type === "pdf" || p.type === "regneark") && (
             <p style={{ fontSize: "0.78rem", color: "var(--mid)", marginTop: 12 }}>
               ⚡ Øyeblikkelig nedlasting etter kjøp
             </p>

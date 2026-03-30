@@ -324,16 +324,16 @@ export default async function HomePage() {
                 ) : (
                   <div className="md:w-[260px] md:shrink-0 flex items-center justify-center"
                     style={{ aspectRatio: "4/3", background: "var(--blue-lt)", fontSize: 56 }}>
-                    {products[0].type === "pdf" ? "📄" : "📦"}
+                    {products[0].type === "regneark" ? "📊" : products[0].type === "pdf" ? "📄" : "📦"}
                   </div>
                 )}
                 <div className="p-8 md:p-10 flex flex-col justify-between flex-1">
                   <div>
                     <span className="inline-flex items-center gap-1 text-[0.65rem] font-bold tracking-[0.1em] uppercase px-[0.6rem] py-[0.25rem] rounded-[6px] mb-4"
-                      style={products[0].type === "pdf"
-                        ? { background: "var(--blue-lt)", color: "var(--blue)" }
-                        : { background: "var(--orange-lt)", color: "var(--orange)" }}>
-                      {products[0].type === "pdf" ? "📄 Digital PDF" : "📦 Fysisk · Post"}
+                      style={products[0].type === "physical"
+                        ? { background: "var(--orange-lt)", color: "var(--orange)" }
+                        : { background: "var(--blue-lt)", color: "var(--blue)" }}>
+                      {products[0].type === "pdf" ? "📄 Digital PDF" : products[0].type === "regneark" ? "📊 Regneark" : "📦 Fysisk · Post"}
                     </span>
                     <h3 className="text-[1.6rem] font-extrabold tracking-[-0.03em] mb-3 leading-[1.2]"
                       style={{ color: "var(--ink)" }}>
@@ -374,13 +374,13 @@ export default async function HomePage() {
                       </div>
                     ) : (
                       <div style={{ width: "100%", aspectRatio: "16/9", background: "var(--blue-lt)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 36 }}>
-                        {p.type === "pdf" ? "📄" : "📦"}
+                        {p.type === "regneark" ? "📊" : p.type === "pdf" ? "📄" : "📦"}
                       </div>
                     )}
                     <div className="p-[1.4rem] flex flex-col flex-1">
                       <span className="inline-flex items-center gap-1 text-[0.65rem] font-bold tracking-[0.1em] uppercase px-[0.6rem] py-[0.25rem] rounded-[6px] w-fit mb-[0.9rem]"
-                        style={p.type === "pdf" ? { background: "var(--blue-lt)", color: "var(--blue)" } : { background: "var(--orange-lt)", color: "var(--orange)" }}>
-                        {p.type === "pdf" ? "📄 Digital PDF" : "📦 Fysisk · Post"}
+                        style={p.type === "physical" ? { background: "var(--orange-lt)", color: "var(--orange)" } : { background: "var(--blue-lt)", color: "var(--blue)" }}>
+                        {p.type === "pdf" ? "📄 Digital PDF" : p.type === "regneark" ? "📊 Regneark" : "📦 Fysisk · Post"}
                       </span>
                       <div className="text-[1rem] font-bold leading-[1.3] tracking-[-0.02em] mb-[0.5rem] flex-1" style={{ color: "var(--ink)" }}>{p.name}</div>
                       <div className="text-[0.8rem] leading-[1.65] mb-[1.2rem]" style={{ color: "var(--mid)" }}>{renderMarkdown(p.description)}</div>

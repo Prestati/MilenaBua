@@ -204,10 +204,10 @@ export default function ProductsAdmin({ initial, initialShopDesc }: { initial: P
                 <img src={p.imageUrl} alt="" style={{ width: 36, height: 36, borderRadius: 6, objectFit: "cover" }} />
               )}
               <span className="text-[0.65rem] font-bold tracking-[0.1em] uppercase px-2 py-0.5 rounded"
-                style={p.type === "pdf"
-                  ? { background: "var(--blue-lt)", color: "var(--blue)" }
-                  : { background: "var(--orange-lt)", color: "var(--orange)" }}>
-                {p.type === "pdf" ? "PDF" : "Fysisk"}
+                style={p.type === "physical"
+                  ? { background: "var(--orange-lt)", color: "var(--orange)" }
+                  : { background: "var(--blue-lt)", color: "var(--blue)" }}>
+                {p.type === "pdf" ? "PDF" : p.type === "regneark" ? "Regneark" : "Fysisk"}
               </span>
               <span className="text-[0.9rem] font-semibold" style={{ color: "var(--ink)" }}>
                 {p.name || <em style={{ color: "var(--mid)" }}>Nytt produkt</em>}
@@ -334,7 +334,7 @@ export default function ProductsAdmin({ initial, initialShopDesc }: { initial: P
               </div>
 
               {/* PDF upload — kun for digitale produkter */}
-              {p.type === "pdf" && (
+              {(p.type === "pdf" || p.type === "regneark") && (
                 <div>
                   <label style={{ display: "block", fontSize: "0.72rem", fontWeight: 600, color: "var(--mid)", marginBottom: 8 }}>
                     PDF-fil (sendes til kunden etter kjøp)
@@ -422,9 +422,10 @@ export default function ProductsAdmin({ initial, initialShopDesc }: { initial: P
               <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
                 <div>
                   <label style={{ display: "block", fontSize: "0.72rem", fontWeight: 600, color: "var(--mid)", marginBottom: 4 }}>Type</label>
-                  <select value={p.type} onChange={(e) => update(p.id, "type", e.target.value as "pdf" | "physical")}
+                  <select value={p.type} onChange={(e) => update(p.id, "type", e.target.value as "pdf" | "physical" | "regneark")}
                     style={{ ...input, width: "auto" }}>
                     <option value="pdf">PDF / Digital</option>
+                    <option value="regneark">Regneark</option>
                     <option value="physical">Fysisk / Post</option>
                   </select>
                 </div>
