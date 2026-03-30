@@ -1,18 +1,17 @@
+export const dynamic = "force-dynamic";
+
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { posts, getPostBySlug } from "@/data/posts";
+import { readContent } from "@/lib/content";
+import type { BlogPost } from "@/types";
 import type { Metadata } from "next";
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateStaticParams() {
-  return posts.map((p) => ({ slug: p.slug }));
-}
-
-function isPublished(post: typeof posts[number]) {
+function isPublished(post: BlogPost) {
   // Innlegg må være marked som publisert
   if (post.status !== "published") {
     return false;
@@ -43,7 +42,8 @@ function isPublished(post: typeof posts[number]) {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const posts = await readContent<BlogPost[]>("posts.json");
+  const post = posts.find((p) => p.slug === slug);
   if (!post || !isPublished(post)) return {};
 
   const title = post.metaTitle || post.title;
@@ -84,7 +84,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BloggPostPage({ params }: Props) {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const posts = await readContent<BlogPost[]>("posts.json");
+  const post = posts.find((p) => p.slug === slug);
 
   if (!post || !isPublished(post)) notFound();
 

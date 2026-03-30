@@ -1,6 +1,9 @@
+export const dynamic = "force-dynamic";
+
 import Link from "next/link";
 import Image from "next/image";
-import { posts } from "@/data/posts";
+import { readContent } from "@/lib/content";
+import type { BlogPost } from "@/types";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,7 +11,7 @@ export const metadata: Metadata = {
   description: "Tanker og erfaringer om webutvikling, design og teknologi.",
 };
 
-function isPublished(post: typeof posts[number]) {
+function isPublished(post: BlogPost) {
   // Innlegg må være marked som publisert
   if (post.status !== "published") {
     return false;
@@ -39,13 +42,14 @@ function isPublished(post: typeof posts[number]) {
   return true;
 }
 
-export default function BloggPage({ searchParams }: { searchParams?: { category?: string } }) {
+export default async function BloggPage({ searchParams }: { searchParams?: Promise<{ category?: string }> }) {
+  const posts = await readContent<BlogPost[]>("posts.json");
+  const { category: selectedCategory = "all" } = (await searchParams) ?? {};
   const publishedPosts = posts
     .filter(isPublished)
     .sort((a, b) => ((a.publishDate || a.date) < (b.publishDate || b.date) ? 1 : -1));
 
   const categories = Array.from(new Set(publishedPosts.map((p) => p.category).filter(Boolean)));
-  const selectedCategory = searchParams?.category || "all";
   const visiblePosts = selectedCategory && selectedCategory !== "all"
     ? publishedPosts.filter((post) => post.category === selectedCategory)
     : publishedPosts;
