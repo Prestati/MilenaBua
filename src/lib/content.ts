@@ -33,12 +33,17 @@ export async function readContent<T>(file: string): Promise<T> {
 
 export async function writeContent(file: string, data: unknown): Promise<void> {
   if (supabaseAdmin) {
-    const { error } = await supabaseAdmin
+    const timeout = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error("Supabase tidsavbrudd etter 10s")), 10000)
+    );
+    const upsert = supabaseAdmin
       .from("content")
       .upsert({ key: key(file), data, updated_at: new Date().toISOString() });
+    const { error } = await Promise.race([upsert, timeout]) as { error: unknown };
     if (error) {
-      console.error(`[writeContent] Supabase upsert feilet for "${file}":`, error.message);
-      throw new Error(error.message);
+      const msg = error instanceof Error ? error.message : String(error);
+      console.error(`[writeContent] Supabase upsert feilet for "${file}":`, msg);
+      throw new Error(msg);
     }
   } else {
     // Ingen Supabase-tilkobling — prøv å skrive lokalt, feiler på Vercel
