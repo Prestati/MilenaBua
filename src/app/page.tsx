@@ -278,10 +278,12 @@ export default async function HomePage() {
       {/* ── BUTIKK ── */}
       <div className={wrap}>
         <section id="butikk" className="py-[70px] border-b" style={{ borderColor: "var(--faint)" }}>
-          <SectionHeader tag="Butikk" title="Verktøyene jeg bruker" />
-          <p className="text-[0.95rem] leading-[1.75] mb-8 max-w-[60ch]" style={{ color: "var(--mid)", marginTop: -16 }}>
-            Verktøyene jeg bruker — og nå deler med deg
-          </p>
+          <SectionHeader tag="Butikk" title="Produkter &amp; ressurser" />
+          {shop.description && (
+            <p className="text-[0.95rem] leading-[1.75] mb-8 max-w-[60ch]" style={{ color: "var(--mid)", marginTop: -16 }}>
+              {shop.description}
+            </p>
+          )}
           <FadeIn>
             {products.length === 1 ? (
               /* Featured single-product card */
