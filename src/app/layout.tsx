@@ -12,12 +12,10 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: {
-    default: "Milena Bua",
-    template: "%s | Milena Bua",
-  },
-  description:
-    "ChatGPT som prosjektleder for tre ekte bedrifter. Et åpent eksperiment 2026.",
+  title: { template: "%s | milenabua.no", default: "milenabua.no" },
+  description: "Din beskrivelse her",
+  metadataBase: new URL("https://www.milenabua.no"),
+  openGraph: { siteName: "milenabua.no", locale: "nb_NO", type: "website" },
 };
 
 export default function RootLayout({
