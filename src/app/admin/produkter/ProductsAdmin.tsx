@@ -248,20 +248,33 @@ export default function ProductsAdmin({ initial, initialShopDesc }: { initial: P
 
               {/* Fields grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {([
-                  ["name", "Navn", "text"],
-                  ["category", "Kategori", "text"],
-                  ["price", "Pris (kr)", "number"],
-                  ["buyUrl", "Stripe / kjøpslenke", "url"],
-                ] as const).map(([field, label, type]) => (
+                {(["name", "category", "buyUrl"] as const).map((field) => (
                   <div key={field}>
-                    <label style={{ display: "block", fontSize: "0.72rem", fontWeight: 600, color: "var(--mid)", marginBottom: 4 }}>{label}</label>
-                    <input type={type}
-                      value={(p as unknown as Record<string, unknown>)[field] as string}
-                      onChange={(e) => update(p.id, field, type === "number" ? Number(e.target.value) : e.target.value)}
-                      style={input} />
+                    <label style={{ display: "block", fontSize: "0.72rem", fontWeight: 600, color: "var(--mid)", marginBottom: 4 }}>
+                      {field === "name" ? "Navn" : field === "category" ? "Kategori" : "Stripe / kjøpslenke"}
+                    </label>
+                    <input
+                      type="text"
+                      value={p[field] ?? ""}
+                      onChange={(e) => update(p.id, field, e.target.value)}
+                      style={input}
+                    />
                   </div>
                 ))}
+                <div>
+                  <label style={{ display: "block", fontSize: "0.72rem", fontWeight: 600, color: "var(--mid)", marginBottom: 4 }}>Pris (kr)</label>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    value={p.price === 0 ? "" : String(p.price)}
+                    onChange={(e) => {
+                      const val = e.target.value.replace(/[^0-9]/g, "");
+                      update(p.id, "price", val === "" ? 0 : Number(val));
+                    }}
+                    placeholder="0"
+                    style={input}
+                  />
+                </div>
               </div>
 
               {/* Description */}
