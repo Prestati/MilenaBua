@@ -46,6 +46,8 @@ export async function POST(req: Request) {
       const product = products.find((p) => p.id === productId);
       const productName = product?.name || productId;
 
+      const newsletterConsent = session.metadata?.newsletterConsent === "true";
+
       // Lagre ordre i Supabase
       if (supabaseAdmin) {
         const { error: dbError } = await supabaseAdmin.from("orders").insert({
@@ -55,8 +57,24 @@ export async function POST(req: Request) {
           amount,
           status: "completed",
           stripe_session_id: session.id,
+          email_consented: newsletterConsent,
         });
         if (dbError) console.error("Supabase insert error:", dbError.message);
+
+        // Lagre nyhetsbrev-samtykke
+        if (newsletterConsent) {
+          const { error: subError } = await supabaseAdmin.from("subscribers").upsert(
+            {
+              email: email.toLowerCase(),
+              name,
+              source: "kjøp",
+              active: true,
+              subscribed_at: new Date().toISOString(),
+            },
+            { onConflict: "email", ignoreDuplicates: false }
+          );
+          if (subError) console.error("Subscriber upsert error:", subError.message);
+        }
       }
 
       // Send e-post til kunde og admin

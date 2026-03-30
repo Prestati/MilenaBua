@@ -11,6 +11,7 @@ interface Props {
 export default function BuyButton({ productId, label, disabled }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [newsletterConsent, setNewsletterConsent] = useState(false);
 
   const handleClick = async () => {
     setLoading(true);
@@ -19,7 +20,7 @@ export default function BuyButton({ productId, label, disabled }: Props) {
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productId }),
+        body: JSON.stringify({ productId, newsletterConsent }),
       });
       const data = await res.json();
       if (data.url) {
@@ -36,6 +37,26 @@ export default function BuyButton({ productId, label, disabled }: Props) {
 
   return (
     <div>
+      {/* GDPR newsletter consent */}
+      <label style={{
+        display: "flex",
+        alignItems: "flex-start",
+        gap: 10,
+        marginBottom: 16,
+        cursor: "pointer",
+        userSelect: "none",
+      }}>
+        <input
+          type="checkbox"
+          checked={newsletterConsent}
+          onChange={(e) => setNewsletterConsent(e.target.checked)}
+          style={{ marginTop: 2, width: 16, height: 16, flexShrink: 0, cursor: "pointer", accentColor: "var(--blue)" }}
+        />
+        <span style={{ fontSize: "0.78rem", color: "var(--mid)", lineHeight: 1.5 }}>
+          Ja, jeg vil gjerne motta nyhetsbrev fra Milena Bua. Du kan melde deg av når som helst.
+        </span>
+      </label>
+
       <button
         onClick={handleClick}
         disabled={disabled || loading}

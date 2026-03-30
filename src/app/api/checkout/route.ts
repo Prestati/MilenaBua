@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     const Stripe = (await import("stripe")).default;
     const stripe = new Stripe(stripeKey);
 
-    const { productId, customerEmail } = await req.json();
+    const { productId, customerEmail, newsletterConsent } = await req.json();
     const products = await readContent<Product[]>("products.json");
     const product = products.find((p) => p.id === productId);
     if (!product) return NextResponse.json({ error: "Produkt ikke funnet" }, { status: 404 });
@@ -38,6 +38,7 @@ export async function POST(req: Request) {
       cancel_url: `${siteUrl}/produkter/${productId}`,
       metadata: {
         productId: productId,
+        newsletterConsent: newsletterConsent ? "true" : "false",
       },
       ...(customerEmail ? { customer_email: customerEmail } : {}),
     });

@@ -17,6 +17,7 @@ const nav = [
   { href: "/admin/produkter", label: "Produkter", icon: "🛍" },
   { href: "/admin/prosjekter", label: "Prosjekter", icon: "📁" },
   { href: "/admin/blogg", label: "Blogg", icon: "✏️" },
+  { href: "/admin/nyhetsbrev", label: "Nyhetsbrev", icon: "📨" },
   { href: "/admin/epost", label: "E-posttekster", icon: "✉️" },
   { href: "/admin/innstillinger", label: "Sosiale medier", icon: "🔗" },
 ];

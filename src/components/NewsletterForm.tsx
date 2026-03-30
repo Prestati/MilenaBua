@@ -12,7 +12,7 @@ export default function NewsletterForm({ heading, description, btnText, note }: 
     setStatus("loading");
 
     try {
-      const response = await fetch("https://formspree.io/f/meepoopl", {
+      const response = await fetch("/api/subscribe", {
         method: "POST",
         body: JSON.stringify({ email }),
         headers: { "Content-Type": "application/json" },
