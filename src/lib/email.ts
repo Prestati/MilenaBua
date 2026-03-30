@@ -42,7 +42,7 @@ export async function sendOrderEmails(props: SendOrderEmailsProps) {
   const results = await Promise.all([
     resend.emails.send({
       from: process.env.EMAIL_FROM!,
-      reply_to: replyTo,
+      replyTo: replyTo,
       to: customerEmail,
       subject: `Takk for kjøpet! – ${productName}`,
       react: OrderConfirmation({ customerName, productName, amount, orderDate, fileUrl, ...emailSettings }),
@@ -77,7 +77,7 @@ export async function sendWelcomeEmail({
 
   const { error } = await resend.emails.send({
     from: process.env.EMAIL_FROM!,
-    reply_to: process.env.EMAIL_TO!,
+    replyTo: process.env.EMAIL_TO!,
     to: recipientEmail,
     subject: settings.welcomeSubject ?? "Velkommen — her er gaven din! 🎁",
     react: WelcomeEmail({
