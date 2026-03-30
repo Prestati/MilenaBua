@@ -1,5 +1,6 @@
 export const dynamic = "force-dynamic";
 
+import Image from "next/image";
 import { readContent } from "@/lib/content";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -34,7 +35,15 @@ export default async function AboutPage() {
       {/* Hero */}
       <div className="flex flex-col sm:flex-row gap-10 items-start mb-16 pb-16 border-b" style={{ borderColor: "var(--faint)" }}>
         {d.imageUrl ? (
-          <img src={d.imageUrl} alt={d.name} style={{ width: 120, height: 120, borderRadius: "50%", objectFit: "cover", flexShrink: 0 }} />
+          <Image
+            src={d.imageUrl}
+            alt={d.name}
+            width={120}
+            height={120}
+            loading="lazy"
+            sizes="120px"
+            style={{ borderRadius: "50%", objectFit: "cover", flexShrink: 0 }}
+          />
         ) : (
           <div style={{ width: 120, height: 120, borderRadius: "50%", background: "var(--blue-lt)", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 40 }}>
             👋
@@ -68,18 +77,14 @@ export default async function AboutPage() {
 
         {/* Portrait */}
         {d.portraitUrl ? (
-          <div style={{ position: "relative" }}>
-            <img
+          <div style={{ position: "relative", width: "100%", aspectRatio: "3/4" }}>
+            <Image
               src={d.portraitUrl}
               alt={d.name}
-              style={{
-                width: "100%",
-                aspectRatio: "3/4",
-                objectFit: "cover",
-                objectPosition: "center top",
-                borderRadius: 20,
-                display: "block",
-              }}
+              fill
+              loading="lazy"
+              sizes="(max-width: 768px) 100vw, 300px"
+              style={{ objectFit: "cover", objectPosition: "center top", borderRadius: 20 }}
             />
           </div>
         ) : (

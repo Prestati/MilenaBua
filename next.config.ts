@@ -11,6 +11,18 @@ const nextConfig: NextConfig = {
     localPatterns: [
       { pathname: "/uploads/**" },
     ],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*.supabase.co",
+        pathname: "/storage/**",
+      },
+      {
+        protocol: "https",
+        hostname: "*.supabase.in",
+        pathname: "/storage/**",
+      },
+    ],
   },
 };
 

@@ -103,7 +103,15 @@ export default async function HomePage() {
               {/* Høyre: bilde eller stats-kort */}
               {hero.imageUrl ? (
                 <div className="w-full md:w-[480px] md:shrink-0">
-                  <img src={hero.imageUrl} alt="Hero" style={{ width: "100%", borderRadius: "16px", display: "block" }} />
+                  <Image
+                    src={hero.imageUrl}
+                    alt="Hero"
+                    width={480}
+                    height={480}
+                    priority
+                    sizes="(max-width: 768px) 100vw, 480px"
+                    style={{ width: "100%", height: "auto", borderRadius: "16px", display: "block" }}
+                  />
                 </div>
               ) : (
                 <div className="w-full md:w-[480px] md:shrink-0">
@@ -276,7 +284,16 @@ export default async function HomePage() {
                   className="flex flex-col rounded-[16px] border no-underline transition-all hover:-translate-y-[3px] hover:shadow-[0_12px_32px_rgba(59,111,212,0.1)] hover:border-[var(--blue)] overflow-hidden"
                   style={{ background: "var(--white)", borderColor: "var(--faint)" }}>
                   {p.imageUrl ? (
-                    <img src={p.imageUrl} alt={p.name} style={{ width: "100%", aspectRatio: "16/9", objectFit: "cover" }} />
+                    <div style={{ width: "100%", aspectRatio: "16/9", position: "relative", overflow: "hidden" }}>
+                      <Image
+                        src={p.imageUrl}
+                        alt={p.name}
+                        fill
+                        loading="lazy"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                        style={{ objectFit: "cover" }}
+                      />
+                    </div>
                   ) : (
                     <div style={{ width: "100%", aspectRatio: "16/9", background: "var(--blue-lt)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 36 }}>
                       {p.type === "pdf" ? "📄" : "📦"}

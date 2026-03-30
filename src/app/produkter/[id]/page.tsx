@@ -5,6 +5,7 @@ import { renderMarkdown } from "@/lib/renderMarkdown";
 import ProductJsonLd from "@/components/JsonLd";
 import type { Product } from "@/types";
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import BuyButton from "./BuyButton";
@@ -46,8 +47,15 @@ export default async function ProductPage({ params, searchParams }: Props) {
         {/* Left: image */}
         <div>
           {p.imageUrl ? (
-            <img src={p.imageUrl} alt={p.name}
-              style={{ width: "100%", borderRadius: 20, display: "block", boxShadow: "0 8px 40px rgba(0,0,0,0.1)" }} />
+            <Image
+              src={p.imageUrl}
+              alt={p.name}
+              width={600}
+              height={600}
+              priority
+              sizes="(max-width: 768px) 100vw, 50vw"
+              style={{ width: "100%", height: "auto", borderRadius: 20, display: "block", boxShadow: "0 8px 40px rgba(0,0,0,0.1)" }}
+            />
           ) : (
             <div style={{
               width: "100%", aspectRatio: "4/3", borderRadius: 20,
