@@ -26,7 +26,7 @@ export async function POST(req: Request) {
             product_data: {
               name: product.name,
               description: product.description || undefined,
-              ...(product.imageUrl ? { images: [`${siteUrl}${product.imageUrl}`] } : {}),
+              ...(product.imageUrl?.startsWith("https://") ? { images: [product.imageUrl] } : {}),
             },
             unit_amount: product.price * 100,
           },

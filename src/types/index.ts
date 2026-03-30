@@ -52,4 +52,5 @@ export interface Product {
   buyUrl?: string;
   pageContent?: string;
   visible?: boolean;
+  file_url?: string;
 }

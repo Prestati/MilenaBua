@@ -17,6 +17,7 @@ interface OrderConfirmationProps {
   productName: string;
   amount: number;
   orderDate: string;
+  fileUrl?: string;
 }
 
 export default function OrderConfirmation({
@@ -24,6 +25,7 @@ export default function OrderConfirmation({
   productName = "Produktnavn",
   amount = 299,
   orderDate = "29. mars 2026",
+  fileUrl,
 }: OrderConfirmationProps) {
   return (
     <Html lang="no">
@@ -73,6 +75,18 @@ export default function OrderConfirmation({
                 </Column>
               </Row>
             </Section>
+
+            {fileUrl && (
+              <Section style={downloadBox}>
+                <Text style={downloadLabel}>Din nedlasting er klar</Text>
+                <a href={fileUrl} style={downloadBtn}>
+                  Last ned PDF →
+                </a>
+                <Text style={downloadNote}>
+                  Linken fungerer alltid — du kan laste ned igjen når som helst.
+                </Text>
+              </Section>
+            )}
 
             <Text style={text}>
               Har du spørsmål om bestillingen din? Ta kontakt på{" "}
@@ -184,6 +198,38 @@ const link = {
 const footerDivider = {
   borderColor: "#e8e6e1",
   margin: "0 40px",
+};
+
+const downloadBox = {
+  backgroundColor: "#eef2fb",
+  borderRadius: "10px",
+  padding: "20px 24px",
+  margin: "24px 0",
+  textAlign: "center" as const,
+};
+
+const downloadLabel = {
+  color: "#1a1a2e",
+  fontSize: "15px",
+  fontWeight: "700",
+  margin: "0 0 14px",
+};
+
+const downloadBtn = {
+  display: "inline-block",
+  backgroundColor: "#4F46E5",
+  color: "#ffffff",
+  fontSize: "15px",
+  fontWeight: "700",
+  padding: "12px 28px",
+  borderRadius: "999px",
+  textDecoration: "none",
+};
+
+const downloadNote = {
+  color: "#6b7280",
+  fontSize: "12px",
+  margin: "12px 0 0",
 };
 
 const footer = {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import { saveProductsAction, uploadProductImageAction, saveShopAction } from "./actions";
 import type { Product } from "@/types";
 
@@ -32,7 +32,9 @@ export default function ProductsAdmin({ initial, initialShopDesc }: { initial: P
   const [msg, setMsg] = useState<{ ok?: boolean; text?: string } | null>(null);
   const [shopMsg, setShopMsg] = useState<{ ok?: boolean; text?: string } | null>(null);
   const [uploading, setUploading] = useState<string | null>(null);
+  const [uploadingPdf, setUploadingPdf] = useState<string | null>(null);
   const fileRefs = useRef<Record<string, HTMLInputElement | null>>({});
+  const pdfRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
   const save = async () => {
     setSaving(true);
@@ -79,6 +81,23 @@ export default function ProductsAdmin({ initial, initialShopDesc }: { initial: P
     const res = await uploadProductImageAction(null, fd);
     setUploading(null);
     if (res.url) update(id, "imageUrl", res.url);
+  };
+
+  const handlePdfUpload = async (id: string, file: File) => {
+    setUploadingPdf(id);
+    const fd = new FormData();
+    fd.append("pdf", file);
+    fd.append("productId", id);
+    const res = await fetch("/api/admin/upload-pdf", { method: "POST", body: fd });
+    const data = await res.json();
+    setUploadingPdf(null);
+    if (data.url) {
+      update(id, "file_url", data.url);
+      setMsg({ ok: true, text: "PDF lastet opp! Husk å trykke Lagre." });
+      setTimeout(() => setMsg(null), 4000);
+    } else {
+      setMsg({ ok: false, text: data.error ?? "PDF-opplasting feilet" });
+    }
   };
 
   return (
@@ -195,6 +214,37 @@ export default function ProductsAdmin({ initial, initialShopDesc }: { initial: P
                   </div>
                 </div>
               </div>
+
+              {/* PDF upload — kun for digitale produkter */}
+              {p.type === "pdf" && (
+                <div>
+                  <label style={{ display: "block", fontSize: "0.72rem", fontWeight: 600, color: "var(--mid)", marginBottom: 8 }}>
+                    PDF-fil (sendes til kunden etter kjøp)
+                  </label>
+                  <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+                    {p.file_url && (
+                      <a href={p.file_url} target="_blank" rel="noopener noreferrer"
+                        style={{ fontSize: "0.78rem", color: "var(--blue)", textDecoration: "none", padding: "6px 12px", borderRadius: 6, border: "1px solid var(--blue-lt)", background: "var(--blue-lt)" }}>
+                        📄 Vis gjeldende PDF ↗
+                      </a>
+                    )}
+                    <input type="file" accept="application/pdf" style={{ display: "none" }}
+                      ref={(el) => { pdfRefs.current[p.id] = el; }}
+                      onChange={(e) => { const f = e.target.files?.[0]; if (f) handlePdfUpload(p.id, f); }} />
+                    <button onClick={() => pdfRefs.current[p.id]?.click()}
+                      disabled={uploadingPdf === p.id}
+                      style={{ padding: "8px 14px", borderRadius: 8, border: "1px solid var(--faint)", background: "var(--white)", color: "var(--ink)", fontSize: "0.82rem", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
+                      {uploadingPdf === p.id ? "Laster opp…" : p.file_url ? "Bytt PDF" : "Last opp PDF"}
+                    </button>
+                    {p.file_url && (
+                      <button onClick={() => update(p.id, "file_url", "")}
+                        style={{ padding: "8px 10px", borderRadius: 8, border: "none", background: "#fef2f2", color: "#dc2626", fontSize: "0.78rem", cursor: "pointer", fontFamily: "inherit" }}>
+                        Fjern
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
 
               {/* Fields grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

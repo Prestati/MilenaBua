@@ -11,17 +11,18 @@ interface SendOrderEmailsProps {
   amount: number;
   orderId: string;
   orderDate: string;
+  fileUrl?: string;
 }
 
 export async function sendOrderEmails(props: SendOrderEmailsProps) {
-  const { customerName, customerEmail, productName, amount, orderId, orderDate } = props;
+  const { customerName, customerEmail, productName, amount, orderId, orderDate, fileUrl } = props;
 
   const results = await Promise.all([
     resend.emails.send({
       from: process.env.EMAIL_FROM!,
       to: customerEmail,
       subject: `Takk for kjøpet! – ${productName}`,
-      react: OrderConfirmation({ customerName, productName, amount, orderDate }),
+      react: OrderConfirmation({ customerName, productName, amount, orderDate, fileUrl }),
     }),
     resend.emails.send({
       from: process.env.EMAIL_FROM!,

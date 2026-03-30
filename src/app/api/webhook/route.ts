@@ -72,6 +72,7 @@ export async function POST(req: Request) {
             month: "long",
             year: "numeric",
           }),
+          fileUrl: product?.file_url || undefined,
         });
       } catch (emailError) {
         console.error("Failed to send order emails:", emailError);
