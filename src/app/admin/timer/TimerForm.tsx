@@ -135,6 +135,9 @@ export default function TimerForm({ data }: { data: TimerData }) {
             style={{ ...inp, resize: "vertical", lineHeight: 1.7 }}
             placeholder="Dobbelt linjeskift = nytt avsnitt"
           />
+          <p style={{ fontSize: "0.7rem", color: "var(--mid)", marginTop: 4 }}>
+            Enter = linjeskift · Dobbelt Enter = nytt avsnitt
+          </p>
         </div>
       </div>
 

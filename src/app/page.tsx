@@ -182,7 +182,11 @@ export default async function HomePage() {
                   {timer.heading}<br /><span style={{ color: "var(--blue)" }}>{timer.headingAccent}</span>
                 </h2>
                 {timer.body.split(/\n\n+/).filter(Boolean).map((para, i) => (
-                  <p key={i} className="text-[0.93rem] leading-[1.85] mb-4" style={{ color: "var(--mid)" }}>{para}</p>
+                  <p key={i} className="text-[0.93rem] leading-[1.85] mb-4" style={{ color: "var(--mid)" }}>
+                    {para.split("\n").map((line, j, arr) => (
+                      <span key={j}>{line}{j < arr.length - 1 && <br />}</span>
+                    ))}
+                  </p>
                 ))}
               </div>
             </FadeIn>
