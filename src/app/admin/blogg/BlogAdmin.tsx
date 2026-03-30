@@ -52,8 +52,13 @@ export default function BlogAdmin({ initial, categories: initialCategories }: { 
   const save = async () => {
     setSaving(true);
     try {
-      const res = await savePostsAction(items);
-      setMsg(res.success ? { ok: true, text: "Lagret!" } : { ok: false, text: res.error ?? "Ukjent feil" });
+      const res = await fetch("/api/admin/save-posts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(items),
+      });
+      const data = await res.json();
+      setMsg(data.success ? { ok: true, text: "Lagret!" } : { ok: false, text: data.error ?? "Ukjent feil" });
     } catch (e) {
       setMsg({ ok: false, text: `Feil: ${e instanceof Error ? e.message : String(e)}` });
     } finally {
