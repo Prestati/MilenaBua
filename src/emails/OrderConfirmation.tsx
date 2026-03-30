@@ -18,6 +18,9 @@ interface OrderConfirmationProps {
   amount: number;
   orderDate: string;
   fileUrl?: string;
+  thankYouMessage?: string;
+  projectMessage?: string;
+  signoff?: string;
 }
 
 export default function OrderConfirmation({
@@ -26,6 +29,9 @@ export default function OrderConfirmation({
   amount = 299,
   orderDate = "29. mars 2026",
   fileUrl,
+  thankYouMessage = "Tusen takk! Jeg håper du finner god nytte av dette. Ta gjerne kontakt om det er noe på hei@milenabua.no",
+  projectMessage = "Det du kjøper her er med på å finansiere nye prosjekter jeg bygger og teknologi jeg vil utforske videre — det setter jeg stor pris på!",
+  signoff = "Varm hilsen,\nMilena",
 }: OrderConfirmationProps) {
   return (
     <Html lang="no">
@@ -88,19 +94,14 @@ export default function OrderConfirmation({
               </Section>
             )}
 
-            <Text style={warmText}>
-              Tusen takk! Jeg håper du finner god nytte av dette. Ta gjerne kontakt om det er noe på{" "}
-              <a href="mailto:hei@milenabua.no" style={link}>hei@milenabua.no</a>
-            </Text>
+            <Text style={warmText}>{thankYouMessage}</Text>
 
-            <Text style={text}>
-              Det du kjøper her er med på å finansiere nye prosjekter jeg bygger og teknologi jeg vil
-              utforske videre — det setter jeg stor pris på!
-            </Text>
+            <Text style={text}>{projectMessage}</Text>
 
-            <Text style={signoff}>
-              Varm hilsen,<br />
-              Milena
+            <Text style={signoffStyle}>
+              {signoff.split("\n").map((line, i) => (
+                <span key={i}>{line}{i < signoff.split("\n").length - 1 && <br />}</span>
+              ))}
             </Text>
           </Section>
 
@@ -248,7 +249,7 @@ const warmText = {
   fontWeight: "500",
 };
 
-const signoff = {
+const signoffStyle = {
   color: "#1a1a2e",
   fontSize: "15px",
   lineHeight: "1.7",
