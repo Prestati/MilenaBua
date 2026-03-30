@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     const product = products.find((p) => p.id === productId);
     if (!product) return NextResponse.json({ error: "Produkt ikke funnet" }, { status: 404 });
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace("http://localhost:3000", "https://www.milenabua.no") ?? "https://www.milenabua.no";
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],

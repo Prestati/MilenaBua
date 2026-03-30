@@ -75,9 +75,14 @@ export default async function ProductPage({ params, searchParams }: Props) {
           </div>
 
           {success === "1" && (
-            <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 12, padding: "14px 18px", marginBottom: 20 }}>
-              <p style={{ color: "#16a34a", fontWeight: 700, fontSize: "0.95rem", margin: 0 }}>
-                ✓ Betaling fullført — takk for kjøpet!
+            <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 12, padding: "16px 20px", marginBottom: 24 }}>
+              <p style={{ color: "#16a34a", fontWeight: 800, fontSize: "1rem", margin: "0 0 4px" }}>
+                ✓ Takk for kjøpet!
+              </p>
+              <p style={{ color: "#15803d", fontWeight: 500, fontSize: "0.88rem", margin: 0 }}>
+                {p.type === "pdf"
+                  ? "Sjekk innboksen din — nedlastingslenken er sendt på e-post."
+                  : "Vi har mottatt bestillingen din og sender den til deg snart."}
               </p>
             </div>
           )}
