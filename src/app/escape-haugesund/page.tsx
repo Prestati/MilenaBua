@@ -126,8 +126,8 @@ export default async function EscapePage() {
           ← TILBAKE
         </Link>
 
-        {/* Header */}
-        <header style={{ textAlign: "center", marginBottom: 60, paddingBottom: 40, borderBottom: `1px solid ${C.border}`, position: "relative" }}>
+        {/* Header — skjules når customHtml er satt */}
+        {!d.customHtml && <header style={{ textAlign: "center", marginBottom: 60, paddingBottom: 40, borderBottom: `1px solid ${C.border}`, position: "relative" }}>
           <div style={{ position: "absolute", top: 0, right: 0, fontFamily: "var(--font-mono)", fontSize: 11, color: C.muted }}>
             Sist oppdatert: {d.lastUpdated}
           </div>
@@ -184,7 +184,7 @@ export default async function EscapePage() {
             />
             Prosjektet er aktivt
           </div>
-        </header>
+        </header>}
 
         <EscapeGate>
         {d.customHtml ? (
