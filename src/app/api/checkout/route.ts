@@ -44,7 +44,8 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ url: session.url });
   } catch (e) {
-    console.error(e);
-    return NextResponse.json({ error: "Noe gikk galt" }, { status: 500 });
+    const msg = e instanceof Error ? e.message : String(e);
+    console.error("[checkout]", msg);
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }
