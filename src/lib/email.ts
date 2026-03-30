@@ -24,6 +24,7 @@ interface EmailSettings {
   welcomeBody?: string;
   welcomePdfUrl?: string;
   welcomePdfButtonText?: string;
+  welcomeHeaderImageUrl?: string;
 }
 
 export async function sendOrderEmails(props: SendOrderEmailsProps) {
@@ -81,6 +82,7 @@ export async function sendWelcomeEmail({
       body: settings.welcomeBody,
       pdfUrl: settings.welcomePdfUrl || undefined,
       pdfButtonText: settings.welcomePdfButtonText,
+      headerImageUrl: settings.welcomeHeaderImageUrl || undefined,
       unsubscribeUrl,
     }),
   });

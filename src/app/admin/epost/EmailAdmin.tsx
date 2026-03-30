@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 interface EmailSettings {
   thankYouMessage: string;
@@ -9,6 +9,7 @@ interface EmailSettings {
   welcomeBody: string;
   welcomePdfUrl: string;
   welcomePdfButtonText: string;
+  welcomeHeaderImageUrl: string;
 }
 
 const labelStyle = {
@@ -52,6 +53,24 @@ export default function EmailAdmin({ initial }: { initial: EmailSettings }) {
   const [settings, setSettings] = useState(initial);
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const [uploadingImg, setUploadingImg] = useState(false);
+  const imgRef = useRef<HTMLInputElement>(null);
+
+  const handleHeaderImageUpload = async (file: File) => {
+    setUploadingImg(true);
+    const fd = new FormData();
+    fd.append("image", file);
+    try {
+      const res = await fetch("/api/admin/upload-image", { method: "POST", body: fd });
+      const data = await res.json();
+      if (data.url) set("welcomeHeaderImageUrl", data.url);
+      else setMsg({ ok: false, text: data.error ?? "Bildeopplasting feilet" });
+    } catch {
+      setMsg({ ok: false, text: "Nettverksfeil ved bildeopplasting" });
+    } finally {
+      setUploadingImg(false);
+    }
+  };
 
   const set = (key: keyof EmailSettings, value: string) =>
     setSettings((prev) => ({ ...prev, [key]: value }));
@@ -117,6 +136,44 @@ export default function EmailAdmin({ initial }: { initial: EmailSettings }) {
         </p>
 
         <div style={{ display: "flex", flexDirection: "column" as const, gap: 20 }}>
+
+          {/* Header image */}
+          <div style={fieldStyle}>
+            <label style={labelStyle}>Headerbilde (vises øverst i e-posten)</label>
+            {settings.welcomeHeaderImageUrl && (
+              <div style={{ position: "relative", marginBottom: 8 }}>
+                <img
+                  src={settings.welcomeHeaderImageUrl}
+                  alt=""
+                  style={{ width: "100%", maxWidth: 400, borderRadius: 8, display: "block", border: "1px solid var(--faint)" }}
+                />
+                <button
+                  type="button"
+                  onClick={() => set("welcomeHeaderImageUrl", "")}
+                  style={{ position: "absolute", top: 8, right: 8, background: "rgba(0,0,0,0.6)", color: "#fff", border: "none", borderRadius: "50%", width: 28, height: 28, cursor: "pointer", fontSize: "0.9rem", display: "flex", alignItems: "center", justifyContent: "center" }}
+                >
+                  ✕
+                </button>
+              </div>
+            )}
+            <input
+              type="file"
+              accept="image/*"
+              ref={imgRef}
+              style={{ display: "none" }}
+              onChange={(e) => { const f = e.target.files?.[0]; if (f) handleHeaderImageUpload(f); }}
+            />
+            <button
+              type="button"
+              onClick={() => imgRef.current?.click()}
+              disabled={uploadingImg}
+              style={{ alignSelf: "flex-start", padding: "8px 18px", borderRadius: 8, border: "1px solid var(--faint)", background: "var(--white)", color: "var(--ink)", fontSize: "0.82rem", fontWeight: 600, cursor: "pointer", fontFamily: "inherit", opacity: uploadingImg ? 0.6 : 1 }}
+            >
+              {uploadingImg ? "Laster opp…" : settings.welcomeHeaderImageUrl ? "Bytt bilde" : "Last opp bilde"}
+            </button>
+            <span style={hintStyle}>Anbefalt bredde: 580px eller bredere. JPG eller PNG.</span>
+          </div>
+
           <div style={fieldStyle}>
             <label style={labelStyle}>Emne</label>
             <input

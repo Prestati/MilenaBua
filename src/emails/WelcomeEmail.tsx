@@ -4,6 +4,7 @@ import {
   Container,
   Head,
   Html,
+  Img,
   Preview,
   Section,
   Text,
@@ -17,6 +18,7 @@ interface WelcomeEmailProps {
   pdfUrl?: string;
   pdfButtonText?: string;
   unsubscribeUrl?: string;
+  headerImageUrl?: string;
 }
 
 function parseInline(text: string): React.ReactNode[] {
@@ -57,6 +59,7 @@ export default function WelcomeEmail({
   pdfUrl,
   pdfButtonText = "Last ned gratis PDF →",
   unsubscribeUrl = "https://www.milenabua.no/api/unsubscribe?email=test",
+  headerImageUrl,
 }: WelcomeEmailProps) {
   const firstName = recipientName?.split(" ")[0];
 
@@ -67,7 +70,17 @@ export default function WelcomeEmail({
       <Body style={bodyStyle}>
         <Container style={container}>
 
-          {/* Header */}
+          {/* Header image — full width above logo bar */}
+          {headerImageUrl && (
+            <Img
+              src={headerImageUrl}
+              alt="Milena Bua"
+              width="580"
+              style={{ display: "block", width: "100%", maxWidth: "580px", borderRadius: "12px 12px 0 0" }}
+            />
+          )}
+
+          {/* Logo bar */}
           <Section style={header}>
             <Text style={logo}>Milena Bua</Text>
             <Text style={tagline}>4 timer om dagen er nok til å bygge noe du er stolt av</Text>

@@ -14,6 +14,7 @@ const defaults = {
     "Tusen takk for at du meldte deg på nyhetsbrevet mitt!\n\nHer er den lovede PDF-en — klikk på knappen under for å laste den ned. Lagre den gjerne på telefonen eller PCen din.\n\nFremover vil du få ærlige oppdateringer fra prosjektene mine, verktøy jeg bruker, og ting jeg lærer underveis. Ingen spam — bare det som faktisk er nyttig.\n\nVarm hilsen,\nMilena",
   welcomePdfUrl: "",
   welcomePdfButtonText: "Last ned gratis PDF →",
+  welcomeHeaderImageUrl: "",
 };
 
 export default async function AdminEpostPage() {
