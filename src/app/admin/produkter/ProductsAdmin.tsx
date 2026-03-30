@@ -38,10 +38,20 @@ export default function ProductsAdmin({ initial, initialShopDesc }: { initial: P
 
   const save = async () => {
     setSaving(true);
-    const res = await saveProductsAction(items);
-    setSaving(false);
-    setMsg(res.success ? { ok: true, text: "Lagret!" } : { ok: false, text: res.error });
-    setTimeout(() => setMsg(null), 3000);
+    try {
+      const res = await fetch("/api/admin/save-products", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(items),
+      });
+      const data = await res.json();
+      setMsg(data.success ? { ok: true, text: "Lagret!" } : { ok: false, text: data.error ?? "Ukjent feil" });
+    } catch (e) {
+      setMsg({ ok: false, text: e instanceof Error ? e.message : "Noe gikk galt" });
+    } finally {
+      setSaving(false);
+      setTimeout(() => setMsg(null), 4000);
+    }
   };
 
   const saveShop = async () => {
@@ -57,12 +67,17 @@ export default function ProductsAdmin({ initial, initialShopDesc }: { initial: P
     const newValue = current === false ? true : false;
     const updated = items.map((p) => (p.id === id ? { ...p, visible: newValue } : p));
     setItems(updated);
-    const res = await saveProductsAction(updated);
-    if (res.error) {
-      setMsg({ ok: false, text: `Kunne ikke lagre: ${res.error}` });
-    } else {
-      setMsg({ ok: true, text: "Lagret!" });
-      setTimeout(() => setMsg(null), 2000);
+    try {
+      const res = await fetch("/api/admin/save-products", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updated),
+      });
+      const data = await res.json();
+      if (!data.success) setMsg({ ok: false, text: data.error ?? "Ukjent feil" });
+      else { setMsg({ ok: true, text: "Lagret!" }); setTimeout(() => setMsg(null), 2000); }
+    } catch (e) {
+      setMsg({ ok: false, text: e instanceof Error ? e.message : "Noe gikk galt" });
     }
   };
 

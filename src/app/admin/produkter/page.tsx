@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { readContent } from "@/lib/content";
 import ProductsAdmin from "./ProductsAdmin";
 import type { Product } from "@/types";
