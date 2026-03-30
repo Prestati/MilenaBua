@@ -35,15 +35,17 @@ export default async function AboutPage() {
       {/* Hero */}
       <div className="flex flex-col sm:flex-row gap-10 items-start mb-16 pb-16 border-b" style={{ borderColor: "var(--faint)" }}>
         {d.imageUrl ? (
-          <Image
-            src={d.imageUrl}
-            alt={d.name}
-            width={120}
-            height={120}
-            loading="lazy"
-            sizes="120px"
-            style={{ borderRadius: "50%", objectFit: "cover", flexShrink: 0 }}
-          />
+          <div style={{ width: 120, height: 120, borderRadius: "50%", overflow: "hidden", flexShrink: 0, flexGrow: 0 }}>
+            <Image
+              src={d.imageUrl}
+              alt={d.name}
+              width={120}
+              height={120}
+              loading="lazy"
+              sizes="120px"
+              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+            />
+          </div>
         ) : (
           <div style={{ width: 120, height: 120, borderRadius: "50%", background: "var(--blue-lt)", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 40 }}>
             👋
