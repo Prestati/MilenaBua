@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { readContent } from "@/lib/content";
 import { renderMarkdown } from "@/lib/renderMarkdown";
+import ProductJsonLd from "@/components/JsonLd";
 import type { Product } from "@/types";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -24,8 +25,17 @@ export default async function ProductPage({ params, searchParams }: Props) {
   const p = products.find((p) => p.id === id);
   if (!p) notFound();
 
+  const siteUrl = "https://www.milenabua.no";
+
   return (
     <div style={{ maxWidth: 1000, margin: "0 auto", padding: "48px 24px 80px" }}>
+      <ProductJsonLd
+        name={p.name}
+        description={p.description}
+        price={p.price}
+        imageUrl={p.imageUrl}
+        url={`${siteUrl}/produkter/${p.id}`}
+      />
       {/* Back */}
       <Link href="/#butikk"
         style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "0.82rem", fontWeight: 600, color: "var(--mid)", textDecoration: "none", marginBottom: 40 }}>
