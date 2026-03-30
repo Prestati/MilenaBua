@@ -35,6 +35,7 @@ export default function ProductsAdmin({ initial, initialShopDesc }: { initial: P
   const [uploading, setUploading] = useState<string | null>(null);
   const [uploadingPdf, setUploadingPdf] = useState<string | null>(null);
   const [uploadingGallery, setUploadingGallery] = useState<string | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const fileRefs = useRef<Record<string, HTMLInputElement | null>>({});
   const pdfRefs = useRef<Record<string, HTMLInputElement | null>>({});
   const galleryRefs = useRef<Record<string, HTMLInputElement | null>>({});
@@ -93,13 +94,31 @@ export default function ProductsAdmin({ initial, initialShopDesc }: { initial: P
   };
 
   const uploadImage = async (file: File): Promise<string | null> => {
+    setUploadError(null);
     const fd = new FormData();
     fd.append("image", file);
-    const res = await fetch("/api/admin/upload-image", { method: "POST", body: fd });
-    const data = await res.json();
-    if (data.url) return data.url as string;
-    setMsg({ ok: false, text: data.error ?? "Bildeopplasting feilet" });
-    return null;
+    try {
+      const res = await fetch("/api/admin/upload-image", { method: "POST", body: fd });
+      let data: { url?: string; error?: string };
+      try {
+        data = await res.json();
+      } catch {
+        const err = `HTTP ${res.status} — klarte ikke lese svar fra server`;
+        setUploadError(err);
+        console.error("[upload-image]", err);
+        return null;
+      }
+      if (data.url) return data.url;
+      const err = data.error ?? `Feil ${res.status}`;
+      setUploadError(err);
+      console.error("[upload-image]", err);
+      return null;
+    } catch (e) {
+      const err = e instanceof Error ? e.message : "Nettverksfeil";
+      setUploadError(err);
+      console.error("[upload-image]", e);
+      return null;
+    }
   };
 
   const handleImageUpload = async (id: string, file: File) => {
@@ -238,6 +257,16 @@ export default function ProductsAdmin({ initial, initialShopDesc }: { initial: P
           {/* Edit form */}
           {editingId === p.id && (
             <div className="px-5 pb-5 pt-3 border-t flex flex-col gap-4" style={{ borderColor: "var(--faint)" }}>
+
+              {/* Upload error banner */}
+              {uploadError && (
+                <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 8, padding: "10px 14px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span style={{ fontSize: "0.82rem", color: "#dc2626", fontWeight: 600 }}>
+                    ✕ Bildeopplasting feilet: {uploadError}
+                  </span>
+                  <button onClick={() => setUploadError(null)} style={{ background: "none", border: "none", color: "#dc2626", cursor: "pointer", fontSize: "1rem", lineHeight: 1, padding: "0 4px" }}>×</button>
+                </div>
+              )}
 
               {/* Image upload */}
               <div>
