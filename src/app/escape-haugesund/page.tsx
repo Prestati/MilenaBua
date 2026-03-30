@@ -44,6 +44,7 @@ interface MonthEntry {
 
 interface EscapePageData {
   lastUpdated: string;
+  customHtml?: string;
   goals: {
     prevYear: { revenue: number; bookings: number; label: string };
     target: { revenue: number; bookings: number; label: string };
@@ -186,6 +187,9 @@ export default async function EscapePage() {
         </header>
 
         <EscapeGate>
+        {d.customHtml ? (
+          <div dangerouslySetInnerHTML={{ __html: d.customHtml }} />
+        ) : (<>
         {/* Goals comparison */}
         <section style={{ marginBottom: 50 }}>
           <div
@@ -454,6 +458,7 @@ export default async function EscapePage() {
           </div>
         </section>
 
+        </>)}
         </EscapeGate>
 
         {/* Footer */}

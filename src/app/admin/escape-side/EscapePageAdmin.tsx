@@ -29,6 +29,7 @@ interface MonthEntry {
 
 interface EscapePageData {
   lastUpdated: string;
+  customHtml?: string;
   goals: {
     prevYear: { revenue: number; bookings: number; label: string };
     target: { revenue: number; bookings: number; label: string };
@@ -157,6 +158,43 @@ export default function EscapePageAdmin({ initial }: { initial: EscapePageData }
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
+
+      {/* Custom HTML override */}
+      <section>
+        <h2 style={{ fontSize: "1rem", fontWeight: 700, marginBottom: 8, color: "var(--ink)" }}>HTML-kode (overstyrer alt innhold)</h2>
+        <p style={{ fontSize: "0.78rem", color: "var(--mid)", marginBottom: 12 }}>
+          Lim inn ferdig HTML her for å overstyre alle tall og seksjoner nedenfor. Når dette feltet er fylt ut, vises kun denne HTML-en på siden (passordbeskyttelsen gjelder fortsatt). Tøm feltet for å gå tilbake til strukturert innhold.
+        </p>
+        <div style={{ background: "var(--white)", border: "1px solid var(--faint)", borderRadius: 12, padding: 20 }}>
+          <textarea
+            style={{ ...inputStyle, resize: "vertical", minHeight: 200, fontFamily: "monospace", fontSize: "0.8rem" }}
+            value={data.customHtml ?? ""}
+            onChange={(e) => updateField(["customHtml"], e.target.value || undefined)}
+            placeholder="<div>...</div>   ← Lim inn HTML her. Tomt = vis strukturert innhold."
+            rows={10}
+          />
+          {data.customHtml && (
+            <button
+              type="button"
+              onClick={() => updateField(["customHtml"], undefined)}
+              style={{
+                marginTop: 8,
+                padding: "6px 14px",
+                borderRadius: 6,
+                border: "none",
+                background: "#fef2f2",
+                color: "#dc2626",
+                fontSize: "0.78rem",
+                fontWeight: 600,
+                cursor: "pointer",
+                fontFamily: "inherit",
+              }}
+            >
+              Fjern HTML-overstyring
+            </button>
+          )}
+        </div>
+      </section>
 
       {/* General settings */}
       <section>
