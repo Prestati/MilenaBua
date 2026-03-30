@@ -5,6 +5,10 @@ interface EmailSettings {
   thankYouMessage: string;
   projectMessage: string;
   signoff: string;
+  welcomeSubject: string;
+  welcomeBody: string;
+  welcomePdfUrl: string;
+  welcomePdfButtonText: string;
 }
 
 const labelStyle = {
@@ -104,6 +108,61 @@ export default function EmailAdmin({ initial }: { initial: EmailSettings }) {
           onChange={(e) => set("signoff", e.target.value)}
         />
         <span style={hintStyle}>Bruk linjeskift for å dele opp (f.eks. «Varm hilsen,» og «Milena» på hver sin linje).</span>
+      </div>
+
+      {/* Divider */}
+      <div style={{ borderTop: "1px solid var(--faint)", paddingTop: 24, marginTop: 8 }}>
+        <p style={{ fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase" as const, letterSpacing: "0.08em", color: "var(--blue)", margin: "0 0 20px" }}>
+          Velkomst-e-post til nye abonnenter
+        </p>
+
+        <div style={{ display: "flex", flexDirection: "column" as const, gap: 20 }}>
+          <div style={fieldStyle}>
+            <label style={labelStyle}>Emne</label>
+            <input
+              type="text"
+              style={{ ...textareaStyle, resize: undefined, padding: "10px 14px" }}
+              value={settings.welcomeSubject}
+              onChange={(e) => set("welcomeSubject", e.target.value)}
+              placeholder="Velkommen — her er gaven din! 🎁"
+            />
+          </div>
+
+          <div style={fieldStyle}>
+            <label style={labelStyle}>Innhold i e-posten</label>
+            <textarea
+              rows={6}
+              style={textareaStyle}
+              value={settings.welcomeBody}
+              onChange={(e) => set("welcomeBody", e.target.value)}
+              placeholder="Tusen takk for at du meldte deg på!&#10;&#10;Dobbelt linjeskift = nytt avsnitt. **Bold** og *kursiv* støttes."
+            />
+            <span style={hintStyle}>Dobbelt linjeskift = nytt avsnitt. **Bold** og *kursiv* støttes.</span>
+          </div>
+
+          <div style={fieldStyle}>
+            <label style={labelStyle}>Gratis PDF — nedlastingslenke</label>
+            <input
+              type="url"
+              style={{ ...textareaStyle, resize: undefined, padding: "10px 14px" }}
+              value={settings.welcomePdfUrl}
+              onChange={(e) => set("welcomePdfUrl", e.target.value)}
+              placeholder="https://... (la stå tom for ingen nedlastingsknapp)"
+            />
+            <span style={hintStyle}>Lim inn lenken til PDF-en. En stor blå knapp vises i e-posten.</span>
+          </div>
+
+          <div style={fieldStyle}>
+            <label style={labelStyle}>Tekst på nedlastingsknappen</label>
+            <input
+              type="text"
+              style={{ ...textareaStyle, resize: undefined, padding: "10px 14px" }}
+              value={settings.welcomePdfButtonText}
+              onChange={(e) => set("welcomePdfButtonText", e.target.value)}
+              placeholder="Last ned gratis PDF →"
+            />
+          </div>
+        </div>
       </div>
 
       <div style={{ display: "flex", alignItems: "center", gap: 16 }}>

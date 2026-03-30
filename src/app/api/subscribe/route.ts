@@ -1,4 +1,5 @@
 import { supabaseAdmin } from "@/lib/supabase";
+import { sendWelcomeEmail } from "@/lib/email";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -24,6 +25,17 @@ export async function POST(req: Request) {
     );
 
     if (error) throw new Error(error.message);
+
+    // Send velkomst-e-post (feiler stille — ikke blokker påmeldingen)
+    try {
+      await sendWelcomeEmail({
+        recipientEmail: email.toLowerCase().trim(),
+        recipientName: name || undefined,
+      });
+    } catch (emailErr) {
+      console.error("[subscribe] Velkomst-e-post feilet:", emailErr);
+    }
+
     return NextResponse.json({ success: true });
   } catch (e) {
     return NextResponse.json(
