@@ -5,6 +5,10 @@ import { jwtVerify } from "jose";
 import { mkdir, writeFile } from "fs/promises";
 import path from "path";
 
+export const maxDuration = 30;
+export const dynamic = "force-dynamic";
+
+// Øk grensen til 10 MB
 export async function POST(req: Request) {
   const cookieStore = await cookies();
   const token = cookieStore.get("mb_admin")?.value;
