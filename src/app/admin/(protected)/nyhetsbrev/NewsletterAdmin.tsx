@@ -33,14 +33,24 @@ interface Product {
   price: number;
 }
 
+interface Campaign {
+  id: string;
+  subject: string;
+  template: string;
+  recipient_count: number;
+  sent_at: string;
+  unique_opens: number;
+}
+
 interface Props {
   subscribers: Subscriber[];
   buyers: Buyer[];
   posts: BlogPost[];
   products: Product[];
+  campaigns?: Campaign[];
 }
 
-type Tab = "subscribers" | "compose";
+type Tab = "subscribers" | "compose" | "analyse";
 type Template = "standard" | "blogproducts" | "short";
 type PreviewMode = "mobile" | "desktop";
 
@@ -264,6 +274,7 @@ export default function NewsletterAdmin({
   buyers,
   posts,
   products,
+  campaigns = [],
 }: Props) {
   const [tab, setTab] = useState<Tab>("subscribers");
 
@@ -504,6 +515,7 @@ export default function NewsletterAdmin({
       >
         {tabBtn("subscribers", `Abonnenter (${activeSubscribers.length})`)}
         {tabBtn("compose", "Send nyhetsbrev")}
+        {tabBtn("analyse", "Analyse")}
       </div>
 
       {/* ── TAB: Abonnenter ──────────────────────────────────────────────────── */}
@@ -1220,6 +1232,117 @@ export default function NewsletterAdmin({
               }}
             >
               Forhåndsvisning oppdateres i sanntid
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* ── TAB: Analyse ─────────────────────────────────────────────────────── */}
+      {tab === "analyse" && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+          {/* Totaltall */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
+            <div style={card}>
+              <div style={{ fontSize: "2rem", fontWeight: 800, color: "var(--ink)", lineHeight: 1 }}>
+                {campaigns.length}
+              </div>
+              <div style={{ fontSize: "0.78rem", color: "var(--mid)", marginTop: 4 }}>Utsendelser totalt</div>
+            </div>
+            <div style={card}>
+              <div style={{ fontSize: "2rem", fontWeight: 800, color: "var(--ink)", lineHeight: 1 }}>
+                {campaigns.reduce((s, c) => s + c.recipient_count, 0)}
+              </div>
+              <div style={{ fontSize: "0.78rem", color: "var(--mid)", marginTop: 4 }}>E-poster sendt totalt</div>
+            </div>
+            <div style={card}>
+              <div style={{ fontSize: "2rem", fontWeight: 800, color: "var(--ink)", lineHeight: 1 }}>
+                {campaigns.reduce((s, c) => s + c.unique_opens, 0)}
+              </div>
+              <div style={{ fontSize: "0.78rem", color: "var(--mid)", marginTop: 4 }}>Unike åpninger totalt</div>
+            </div>
+          </div>
+
+          {/* Kampanjeliste */}
+          <div style={card}>
+            <h3 style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--ink)", margin: "0 0 16px" }}>
+              Kampanjer
+            </h3>
+            {campaigns.length === 0 ? (
+              <p style={{ fontSize: "0.85rem", color: "var(--mid)", margin: 0 }}>
+                Ingen utsendelser ennå. Send ditt første nyhetsbrev for å se statistikk her.
+              </p>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                {campaigns.map((c) => {
+                  const openRate = c.recipient_count > 0
+                    ? Math.round((c.unique_opens / c.recipient_count) * 100)
+                    : 0;
+                  const templateLabel: Record<string, string> = {
+                    standard: "Standard",
+                    short: "Kort",
+                    blogproducts: "Blogg + Produkter",
+                  };
+                  const date = new Date(c.sent_at).toLocaleDateString("nb-NO", {
+                    day: "numeric", month: "short", year: "numeric",
+                  });
+                  return (
+                    <div
+                      key={c.id}
+                      style={{
+                        border: "1px solid var(--faint)",
+                        borderRadius: 10,
+                        padding: "16px 20px",
+                      }}
+                    >
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, marginBottom: 10 }}>
+                        <div>
+                          <div style={{ fontSize: "0.9rem", fontWeight: 700, color: "var(--ink)", marginBottom: 3 }}>
+                            {c.subject}
+                          </div>
+                          <div style={{ fontSize: "0.75rem", color: "var(--mid)" }}>
+                            {date} · {templateLabel[c.template] ?? c.template}
+                          </div>
+                        </div>
+                        <div style={{ display: "flex", gap: 20, flexShrink: 0 }}>
+                          <div style={{ textAlign: "right" }}>
+                            <div style={{ fontSize: "1.2rem", fontWeight: 800, color: "var(--ink)", lineHeight: 1 }}>
+                              {c.recipient_count}
+                            </div>
+                            <div style={{ fontSize: "0.7rem", color: "var(--mid)" }}>sendt</div>
+                          </div>
+                          <div style={{ textAlign: "right" }}>
+                            <div style={{ fontSize: "1.2rem", fontWeight: 800, color: "var(--blue)", lineHeight: 1 }}>
+                              {c.unique_opens}
+                            </div>
+                            <div style={{ fontSize: "0.7rem", color: "var(--mid)" }}>åpnet</div>
+                          </div>
+                          <div style={{ textAlign: "right" }}>
+                            <div style={{ fontSize: "1.2rem", fontWeight: 800, color: openRate >= 30 ? "#16a34a" : openRate >= 15 ? "var(--orange)" : "var(--mid)", lineHeight: 1 }}>
+                              {openRate}%
+                            </div>
+                            <div style={{ fontSize: "0.7rem", color: "var(--mid)" }}>åpningsrate</div>
+                          </div>
+                        </div>
+                      </div>
+                      {/* Åpningsrate-stolpe */}
+                      <div style={{ background: "var(--faint)", borderRadius: 4, height: 6, overflow: "hidden" }}>
+                        <div
+                          style={{
+                            height: "100%",
+                            width: `${Math.min(openRate, 100)}%`,
+                            background: openRate >= 30 ? "#16a34a" : openRate >= 15 ? "var(--orange)" : "var(--blue)",
+                            borderRadius: 4,
+                            transition: "width 0.4s ease",
+                          }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+            <p style={{ fontSize: "0.72rem", color: "var(--mid)", margin: "14px 0 0" }}>
+              Åpningssporing fungerer ved hjelp av en usynlig piksel i e-posten. Noen e-postklienter blokkerer dette, så tallene er et minimumstall.
             </p>
           </div>
         </div>

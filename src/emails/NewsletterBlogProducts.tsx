@@ -29,6 +29,7 @@ interface Props {
   unsubscribeUrl: string;
   recipientName?: string;
   headerImageUrl?: string;
+  trackingPixelUrl?: string;
   posts?: BlogPostItem[];
   products?: ProductItem[];
 }
@@ -99,6 +100,7 @@ export default function NewsletterBlogProducts({
   unsubscribeUrl = `${SITE}/api/unsubscribe?email=test`,
   recipientName,
   headerImageUrl,
+  trackingPixelUrl,
   posts = [],
   products = [],
 }: Props) {
@@ -183,6 +185,11 @@ export default function NewsletterBlogProducts({
               © {new Date().getFullYear()} Milena Bua · milenabua.no
             </Text>
           </Section>
+
+          {/* Tracking pixel */}
+          {trackingPixelUrl && (
+            <Img src={trackingPixelUrl} width="1" height="1" alt="" style={{ display: "block", width: "1px", height: "1px", border: "none" }} />
+          )}
         </Container>
       </Body>
     </Html>

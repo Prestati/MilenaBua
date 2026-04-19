@@ -21,7 +21,7 @@ interface RawProduct {
 }
 
 export default async function AdminNyhetsbrevPage() {
-  const [subscribersRes, buyersRes, postsRaw, productsRaw] = await Promise.all([
+  const [subscribersRes, buyersRes, postsRaw, productsRaw, campaignsRes, eventsRes] = await Promise.all([
     supabaseAdmin
       ?.from("subscribers")
       .select("id, email, name, subscribed_at, active, source")
@@ -33,6 +33,14 @@ export default async function AdminNyhetsbrevPage() {
       .order("created_at", { ascending: false }),
     readContent<RawPost[]>("posts").catch(() => [] as RawPost[]),
     readContent<RawProduct[]>("products").catch(() => [] as RawProduct[]),
+    supabaseAdmin
+      ?.from("email_campaigns")
+      .select("id, subject, template, recipient_count, sent_at")
+      .order("sent_at", { ascending: false })
+      .limit(50),
+    supabaseAdmin
+      ?.from("email_events")
+      .select("campaign_id, email, event_type"),
   ]);
 
   const subscribers = (subscribersRes?.data ?? []) as {
@@ -68,6 +76,20 @@ export default async function AdminNyhetsbrevPage() {
     .filter((p) => p.inStock !== false)
     .map((p) => ({ id: p.id, name: p.name, price: p.price }));
 
+  // Kampanjestatistikk
+  const events = eventsRes?.data ?? [];
+  const opensByCampaign = new Map<string, Set<string>>();
+  for (const ev of events) {
+    if (ev.event_type === "open") {
+      if (!opensByCampaign.has(ev.campaign_id)) opensByCampaign.set(ev.campaign_id, new Set());
+      opensByCampaign.get(ev.campaign_id)!.add(ev.email);
+    }
+  }
+  const campaigns = (campaignsRes?.data ?? []).map((c: { id: string; subject: string; template: string; recipient_count: number; sent_at: string }) => ({
+    ...c,
+    unique_opens: opensByCampaign.get(c.id)?.size ?? 0,
+  }));
+
   return (
     <div className="p-8">
       <h1
@@ -84,6 +106,7 @@ export default async function AdminNyhetsbrevPage() {
         buyers={buyers}
         posts={posts}
         products={products}
+        campaigns={campaigns}
       />
     </div>
   );

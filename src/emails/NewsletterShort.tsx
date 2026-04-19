@@ -16,6 +16,7 @@ interface Props {
   unsubscribeUrl: string;
   recipientName?: string;
   headerImageUrl?: string;
+  trackingPixelUrl?: string;
 }
 
 function parseInline(text: string): React.ReactNode[] {
@@ -82,6 +83,7 @@ export default function NewsletterShort({
   unsubscribeUrl = "https://www.milenabua.no/api/unsubscribe?email=test",
   recipientName,
   headerImageUrl,
+  trackingPixelUrl,
 }: Props) {
   return (
     <Html lang="no">
@@ -119,6 +121,11 @@ export default function NewsletterShort({
               · milenabua.no · © {new Date().getFullYear()} Milena Bua
             </Text>
           </Section>
+
+          {/* Tracking pixel */}
+          {trackingPixelUrl && (
+            <Img src={trackingPixelUrl} width="1" height="1" alt="" style={{ display: "block", width: "1px", height: "1px", border: "none" }} />
+          )}
         </Container>
       </Body>
     </Html>

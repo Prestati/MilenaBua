@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
 import { Resend } from "resend";
+import { supabaseAdmin } from "@/lib/supabase";
 import Newsletter from "@/emails/Newsletter";
 import NewsletterBlogProducts from "@/emails/NewsletterBlogProducts";
 import NewsletterShort from "@/emails/NewsletterShort";
@@ -49,6 +50,17 @@ export async function POST(req: Request) {
     const siteUrl = "https://www.milenabua.no";
     const from = process.env.EMAIL_FROM!;
 
+    // Opprett kampanje for sporing
+    let campaignId: string | null = null;
+    if (supabaseAdmin) {
+      const { data: campaign } = await supabaseAdmin
+        .from("email_campaigns")
+        .insert({ subject, template, recipient_count: emails.length })
+        .select("id")
+        .single();
+      campaignId = campaign?.id ?? null;
+    }
+
     let sent = 0;
     let failed = 0;
 
@@ -56,16 +68,19 @@ export async function POST(req: Request) {
       const batch = emails.slice(i, i + BATCH_SIZE);
       const messages = batch.map((email) => {
         const unsubscribeUrl = `${siteUrl}/api/unsubscribe?email=${encodeURIComponent(email)}`;
+        const trackingPixelUrl = campaignId
+          ? `${siteUrl}/api/track/open?c=${campaignId}&e=${Buffer.from(email).toString("base64url")}`
+          : undefined;
 
         let reactEl;
         if (template === "blogproducts") {
           reactEl = NewsletterBlogProducts({
-            subject, content, unsubscribeUrl, headerImageUrl, posts, products,
+            subject, content, unsubscribeUrl, headerImageUrl, trackingPixelUrl, posts, products,
           });
         } else if (template === "short") {
-          reactEl = NewsletterShort({ subject, content, unsubscribeUrl, headerImageUrl });
+          reactEl = NewsletterShort({ subject, content, unsubscribeUrl, headerImageUrl, trackingPixelUrl });
         } else {
-          reactEl = Newsletter({ subject, content, unsubscribeUrl, headerImageUrl });
+          reactEl = Newsletter({ subject, content, unsubscribeUrl, headerImageUrl, trackingPixelUrl });
         }
 
         return { from, to: email, subject, react: reactEl };
