@@ -1,0 +1,796 @@
+/* ==========================================================
+   Escape Haugesund – stilark
+   Profil: svart, hvit Montserrat, oransje aksent (#F99B22)
+   ========================================================== */
+
+:root {
+  --bg: #000;
+  --bg-2: #0a0a0a;
+  --surface: #121212;
+  --surface-2: #1b1b1b;
+  --line: rgba(255, 255, 255, 0.1);
+  --text: #fff;
+  --muted: rgba(255, 255, 255, 0.66);
+  --faint: rgba(255, 255, 255, 0.4);
+  --accent: #f99b22;
+  --accent-soft: rgba(249, 155, 34, 0.14);
+
+  --font: "Montserrat", system-ui, -apple-system, sans-serif;
+
+  --radius: 18px;
+  --wrap: 1180px;
+  --header-h: 76px;
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-h) + 8px); }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img, video { max-width: 100%; display: block; }
+a { color: inherit; }
+p a, .fine a, dd a { color: var(--accent); text-underline-offset: 3px; }
+h1, h2, h3 { margin: 0; line-height: 1.12; font-weight: 800; }
+h2 { font-size: clamp(2rem, 4.4vw, 3.2rem); letter-spacing: -0.01em; }
+
+.wrap { width: min(100% - 32px, var(--wrap)); margin-inline: auto; }
+.center { text-align: center; margin-inline: auto; }
+.accent { color: var(--accent); }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+.skip {
+  position: absolute; left: -9999px; top: 8px; z-index: 200;
+  background: var(--accent); color: #000; padding: 8px 14px; border-radius: 8px;
+}
+.skip:focus { left: 8px; }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* ---------- Knapper ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 56px; padding: 0 34px;
+  border: 2px solid transparent; border-radius: 999px;
+  font: 700 15px/1 var(--font);
+  letter-spacing: 0.04em; text-transform: uppercase;
+  text-decoration: none; cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+}
+.btn:active { transform: translateY(1px); }
+.btn-sm { min-height: 44px; padding: 0 22px; font-size: 13px; }
+.btn-primary { background: #fff; color: #000; }
+.btn-primary:hover { background: var(--accent); color: #000; }
+.btn-ghost { border-color: rgba(255, 255, 255, 0.45); background: transparent; color: #fff; }
+.btn-ghost:hover { border-color: #fff; background: rgba(255, 255, 255, 0.08); }
+
+/* ---------- Header ---------- */
+.site-header {
+  position: fixed; inset: 0 0 auto; z-index: 50;
+  height: var(--header-h);
+  transition: background 0.3s;
+}
+.site-header.scrolled {
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.header-inner { height: 100%; display: flex; align-items: center; gap: 32px; }
+.logo img { height: 40px; width: auto; }
+.nav { display: flex; gap: 28px; margin-left: auto; }
+.nav a {
+  text-decoration: none; font-size: 14px; font-weight: 600; color: var(--muted);
+  transition: color 0.2s;
+}
+.nav a:hover, .nav a.active, .nav a[aria-current="page"] { color: #fff; }
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative;
+  min-height: min(100svh, 960px);
+  display: flex; flex-direction: column; justify-content: center;
+  padding: calc(var(--header-h) + 40px) 0 0;
+  overflow: hidden;
+  isolation: isolate;
+}
+.hero-video {
+  position: absolute; inset: 0; z-index: -3;
+  width: 100%; height: 100%; max-width: none; object-fit: cover;
+}
+.hero-shade {
+  position: absolute; inset: 0; z-index: -2;
+  background:
+    radial-gradient(45% 55% at 82% 45%, rgba(249, 155, 34, 0.22), transparent 70%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.6) 55%, rgba(0, 0, 0, 0.45) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, transparent 30%, rgba(0, 0, 0, 0.95) 100%);
+}
+.hero-inner {
+  position: relative;
+  display: grid; grid-template-columns: 1fr auto; align-items: center; gap: clamp(24px, 4vw, 56px);
+}
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  margin: 0 0 24px; padding: 8px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 999px;
+  background: rgba(0, 0, 0, 0.35);
+  font-size: 13px; font-weight: 600; color: rgba(255, 255, 255, 0.85);
+}
+.dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+  box-shadow: 0 0 12px var(--accent);
+  animation: pulse 1.6s infinite;
+}
+@keyframes pulse { 50% { opacity: 0.3; } }
+.hero-title {
+  font-size: clamp(2.4rem, 5.6vw, 5rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  line-height: 0.98;
+}
+.hero-lead { margin: 24px 0 36px; max-width: 520px; font-size: clamp(1.05rem, 1.6vw, 1.25rem); color: rgba(255, 255, 255, 0.8); }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 14px; }
+
+/* Stoppeklokke i hero */
+.stopwatch { width: clamp(150px, 15vw, 200px); filter: drop-shadow(0 0 50px rgba(249, 155, 34, 0.3)); }
+.stopwatch svg { display: block; width: 100%; height: auto; overflow: visible; }
+.sw-metal { fill: #d9d4cc; }
+.sw-face { fill: rgba(8, 6, 4, 0.72); stroke: #fff; stroke-width: 6; }
+.sw-tick { stroke: rgba(255, 255, 255, 0.35); stroke-width: 2; stroke-linecap: round; }
+.sw-tick-long { stroke: #fff; stroke-width: 3.5; }
+.sw-track { fill: none; stroke: rgba(255, 255, 255, 0.08); stroke-width: 9; }
+.sw-arc { fill: none; stroke: var(--accent); stroke-width: 9; stroke-linecap: round; transition: stroke-dashoffset 1s linear; }
+.sw-min { fill: #fff; font: 800 46px var(--font); text-anchor: middle; font-variant-numeric: tabular-nums; }
+.sw-unit { fill: var(--muted); font: 700 11px var(--font); letter-spacing: 0.2em; text-anchor: middle; text-transform: uppercase; }
+.sw-hand { transform-origin: 120px 160px; transform-box: view-box; transition: transform 0.3s cubic-bezier(0.4, 2.3, 0.6, 1); }
+.sw-hand line { stroke: var(--accent); stroke-width: 3; stroke-linecap: round; }
+.sw-cap { fill: var(--accent); }
+.sw-pin { fill: #000; }
+
+.facts {
+  list-style: none; padding: 0; margin: 72px auto 0;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+}
+.facts li { padding: 22px 0 28px; display: flex; align-items: baseline; gap: 10px; color: var(--muted); font-size: 14px; font-weight: 500; }
+.facts strong { color: #fff; font-size: 1.8rem; font-weight: 800; line-height: 1.1; }
+.facts strong { white-space: nowrap; }
+
+.video-toggle {
+  position: absolute; right: 16px; bottom: 16px;
+  width: 40px; height: 40px; border-radius: 50%;
+  display: grid; place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.3); background: rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
+.video-toggle svg { width: 16px; height: 16px; fill: #fff; }
+.video-toggle .i-play { display: none; }
+.video-toggle.paused .i-play { display: block; }
+.video-toggle.paused .i-pause { display: none; }
+
+/* ---------- Seksjoner ---------- */
+.section { padding: clamp(80px, 10vw, 130px) 0; }
+.section-tight { padding-bottom: clamp(40px, 6vw, 80px); }
+.section-alt { background: var(--bg-2); }
+.section-head { margin-bottom: 52px; max-width: 720px; }
+.kicker {
+  margin: 0 0 12px;
+  font-size: 13px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--accent);
+}
+.section-lead { margin: 16px 0 0; color: var(--muted); font-size: 1.1rem; }
+.fine { font-size: 14px; color: var(--muted); }
+
+/* ---------- Hvordan det virker ---------- */
+.steps {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px;
+  text-align: center;
+}
+.step-icon {
+  display: grid; place-items: center;
+  width: 150px; height: 150px; margin: 0 auto 26px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  transition: background 0.3s, transform 0.3s;
+}
+.steps li:hover .step-icon { background: var(--accent-soft); transform: scale(1.04); }
+.step-icon svg { width: 64px; height: 64px; fill: none; stroke: #fff; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.steps h3 { font-size: 1.25rem; margin-bottom: 8px; }
+.steps p { margin: 0 auto; max-width: 280px; color: var(--muted); }
+.how-note {
+  margin: 56px auto 0; max-width: 640px; text-align: center;
+  padding: 18px 24px; border-radius: 999px;
+  background: var(--surface); color: var(--muted); font-size: 15px;
+}
+
+/* ---------- Spillene ---------- */
+.rooms {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  width: min(100% - 32px, 1400px); margin-inline: auto;
+}
+.room {
+  position: relative; isolation: isolate;
+  min-height: 680px;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface);
+}
+.room-video {
+  position: absolute; inset: 0; z-index: -2;
+  width: 100%; height: 100%; max-width: none; object-fit: cover;
+  transform: scale(1.02);
+  transition: transform 1.2s ease;
+}
+.room::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.35) 35%, rgba(0, 0, 0, 0.92) 72%, #000 100%);
+  transition: opacity 0.4s;
+}
+.room:hover .room-video { transform: scale(1.07); }
+.room-content { padding: 32px; }
+.tag {
+  display: inline-block; margin-bottom: 14px;
+  padding: 6px 14px; border-radius: 999px;
+  background: var(--accent); color: #000;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.04em;
+}
+.tag-outline { background: rgba(0, 0, 0, 0.4); color: #fff; border: 1px solid rgba(255, 255, 255, 0.4); }
+.room h3 { font-size: clamp(2rem, 2.8vw, 2.5rem); letter-spacing: -0.015em; }
+.room-content > p { margin: 12px 0 24px; color: rgba(255, 255, 255, 0.78); font-size: 15.5px; }
+.room-meta {
+  list-style: none; padding: 20px 0 0; margin: 0 0 24px;
+  display: grid; grid-template-columns: repeat(3, auto); justify-content: space-between; gap: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+}
+.room-meta li { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.room-meta strong { font-size: 1.15rem; line-height: 1; }
+.room-meta small { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); }
+.room .btn { width: 100%; }
+
+.extras { margin-top: clamp(72px, 9vw, 120px); }
+@media (min-width: 1081px) {
+  /* Færre enn tre kort: hold dem midtstilt i stedet for å strekke dem */
+  .rooms:has(> .room:only-child) { grid-template-columns: minmax(0, 560px); justify-content: center; }
+  .rooms:has(> .room:nth-child(2):last-child) { grid-template-columns: repeat(2, minmax(0, 560px)); justify-content: center; }
+}
+
+.dots { display: inline-flex; gap: 5px; height: 18px; align-items: center; }
+.dots i { width: 11px; height: 11px; border-radius: 50%; background: rgba(255, 255, 255, 0.25); }
+.dots i.on { background: var(--accent); }
+
+/* Hele kortet er klikkbart: lenken i tittelen strekkes over kortet */
+.room-link { color: inherit; text-decoration: none; }
+.room-link::after { content: ""; position: absolute; inset: 0; z-index: 1; }
+.room:has(.room-link) { cursor: pointer; }
+.room:has(.room-link:hover) .room-video { transform: scale(1.07); }
+.room:has(.room-link:hover) .btn-primary { background: var(--accent); }
+.room:has(.room-link:focus-visible) { outline: 2px solid var(--accent); outline-offset: 4px; }
+.room-link:focus-visible { outline: none; }
+
+.card-kampanje { margin: -8px 0 20px; font-size: 13px; font-weight: 700; color: var(--accent); }
+
+/* ---------- Gavekort ---------- */
+.gift-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
+.gift-option { padding: clamp(20px, 3vw, 28px); border-radius: var(--radius); background: var(--surface); border: 2px solid transparent; }
+.gift-option-featured { border-color: var(--accent); }
+.gift-label { margin: 0 0 6px; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+.gift-price { margin: 0 0 10px; font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; line-height: 1.1; }
+.gift-price span { font-size: 1rem; font-weight: 600; color: var(--muted); }
+.gift-option p:last-child { margin: 0; color: var(--muted); }
+/* Resova-skjemaet er hvitt og kan ikke fargelegges fra vår side, så det får en egen ramme */
+.gift-widget { max-width: 760px; margin: 0 auto 16px; padding: 12px; border-radius: var(--radius); background: #fff; overflow: hidden; min-height: 300px; }
+
+/* ---------- Spill-oversikt ---------- */
+.page-intro { padding: calc(var(--header-h) + 64px) 0 24px; }
+.page-intro .room-title { margin-bottom: 4px; }
+.page-intro .section-lead { max-width: 640px; }
+.category-links { margin-top: 28px; }
+.category-links a {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 11px 18px; border: 2px solid var(--line); border-radius: 999px;
+  font-weight: 700; font-size: 15px; text-decoration: none;
+}
+.category-links a:hover { border-color: var(--accent); }
+.category-links span {
+  display: inline-grid; place-items: center; min-width: 24px; height: 24px; padding: 0 6px;
+  border-radius: 999px; background: var(--accent); color: #000; font-size: 12px; font-weight: 800;
+}
+.rooms-grid { width: min(100% - 32px, var(--wrap)); }
+.rooms-grid .room { min-height: 600px; }
+.game-group .section-head { margin-bottom: 36px; }
+
+/* ---------- Romside ---------- */
+.room-hero {
+  position: relative; isolation: isolate; overflow: hidden;
+  min-height: min(68svh, 640px);
+  display: flex; align-items: flex-end;
+  padding: calc(var(--header-h) + 40px) 0 64px;
+}
+.room-hero .hero-shade {
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.45) 60%, rgba(0, 0, 0, 0.25) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, transparent 35%, rgba(0, 0, 0, 0.95) 100%);
+}
+.room-hero-inner { max-width: var(--wrap); }
+.back-link {
+  display: inline-block; margin-bottom: 28px;
+  color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 600;
+}
+.back-link:hover { color: #fff; }
+.room-hero-inner > .tag { display: table; }
+.room-title {
+  font-size: clamp(2.8rem, 7vw, 5.6rem); font-weight: 900;
+  text-transform: uppercase; letter-spacing: -0.03em; line-height: 0.98;
+}
+.room-hero .hero-lead { margin: 18px 0 28px; }
+.room-meta-hero { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 14px clamp(24px, 5vw, 48px); max-width: 620px; margin-bottom: 32px; }
+.room-hero-inner > .kicker { margin: 4px 0 8px; }
+.kampanje-strip {
+  display: inline-flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline;
+  margin: 28px 0 0; padding: 14px 20px; border-radius: 12px;
+  background: var(--accent); color: #000; font-size: 15px;
+}
+.kampanje-strip strong { font-weight: 900; text-transform: uppercase; letter-spacing: 0.02em; }
+
+.room-about { display: grid; grid-template-columns: 1.5fr 1fr; gap: clamp(32px, 6vw, 80px); align-items: start; }
+.room-story h2 { margin-bottom: 20px; }
+.story-text p { margin: 0 0 18px; font-size: 1.1rem; color: rgba(255, 255, 255, 0.82); }
+.gm-note {
+  margin-top: 32px; padding: 20px 24px;
+  border-left: 4px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0;
+  background: var(--surface); color: var(--muted);
+}
+.gm-note strong { display: block; color: #fff; margin-bottom: 4px; }
+.room-facts {
+  position: sticky; top: calc(var(--header-h) + 24px);
+  padding: 28px; border-radius: var(--radius); background: var(--surface);
+}
+.facts-title { margin: 0 0 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); }
+.room-facts dl { margin: 0 0 24px; }
+.room-facts dl div { padding: 14px 0; border-bottom: 1px solid var(--line); }
+.room-facts dt { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); margin-bottom: 4px; }
+.room-facts dd { margin: 0; font-weight: 600; }
+.room-facts .btn { width: 100%; }
+
+/* Booking på romsiden: kort overskrift og kalenderen i full bredde */
+.room-booking { padding: 40px 0 56px; }
+.booking-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 24px; margin-bottom: 18px; }
+.booking-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); }
+.booking-head .fine { margin: 0; }
+.booking-panel-compact { grid-template-columns: 1fr; }
+.booking-terms { margin: 14px 0 0; }
+
+.not-found { min-height: 70svh; display: grid; place-items: center; padding-top: calc(var(--header-h) + 60px); }
+.not-found h1 { font-size: clamp(2.4rem, 5vw, 3.6rem); margin-bottom: 8px; }
+.not-found .btn { margin-top: 28px; }
+
+/* ---------- Bedriftsside ---------- */
+.page-hero { min-height: min(80svh, 760px); }
+.options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.option {
+  display: flex; flex-direction: column;
+  padding: 32px; border-radius: var(--radius);
+  background: var(--surface); border: 2px solid transparent;
+}
+.option-featured { border-color: var(--accent); }
+.option-num { font-size: 14px; font-weight: 800; color: var(--accent); }
+.option h3 { font-size: 1.4rem; margin: 12px 0 10px; }
+.option p { margin: 0 0 18px; color: var(--muted); }
+.option ul { list-style: none; margin: 0 0 24px; padding: 0; display: grid; gap: 6px; font-weight: 600; font-size: 15px; }
+.option li::before { content: "✓"; color: var(--accent); margin-right: 10px; }
+.text-link { margin-top: auto; color: #fff; font-weight: 700; text-decoration: none; }
+.text-link:hover { color: var(--accent); }
+
+.form-wrap { max-width: 820px; }
+.inquiry { display: grid; gap: 18px; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.field { display: grid; gap: 8px; border: 0; padding: 0; margin: 0; min-width: 0; }
+.field[hidden] { display: none; }
+.field > span, .field > legend { font-size: 13px; font-weight: 700; letter-spacing: 0.04em; color: rgba(255, 255, 255, 0.8); padding: 0; margin-bottom: 8px; }
+.field input, .field select, .field textarea {
+  width: 100%; min-height: 54px; padding: 14px 18px;
+  border: 2px solid var(--line); border-radius: 12px;
+  background: var(--surface); color: #fff;
+  font: 500 16px var(--font);
+  color-scheme: dark;
+}
+.field textarea { resize: vertical; min-height: 130px; }
+.field :is(input, select, textarea):focus { outline: none; border-color: var(--accent); }
+.field textarea::placeholder { color: var(--faint); }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chips label {
+  position: relative; cursor: pointer;
+  padding: 12px 18px; border: 2px solid var(--line); border-radius: 999px;
+  background: var(--surface); font-weight: 600; font-size: 15px;
+}
+.chips input { position: absolute; opacity: 0; pointer-events: none; }
+.chips label:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+.chips label:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 3px; }
+.inquiry > .btn { justify-self: start; margin-top: 6px; }
+.hidden-field { position: absolute; left: -9999px; }
+.form-status { margin: 0; padding: 16px 20px; border-radius: 12px; }
+.form-status.ok { background: rgba(22, 163, 74, 0.15); border: 1px solid rgba(22, 163, 74, 0.5); }
+.form-status.error { background: var(--accent-soft); border: 1px solid rgba(249, 155, 34, 0.5); }
+
+.nav a[aria-current="page"] { color: #fff; }
+
+/* ---------- Quiz ---------- */
+.quiz-wrap { max-width: 860px; }
+.quiz { display: grid; gap: 30px; }
+.quiz fieldset { border: 0; padding: 0; margin: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.quiz legend {
+  width: 100%; margin-bottom: 14px;
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  font-weight: 700; font-size: 1.15rem;
+}
+.quiz legend span {
+  display: inline-grid; place-items: center;
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--accent); color: #000;
+  font-size: 14px; font-weight: 800;
+}
+.quiz label {
+  position: relative; cursor: pointer;
+  padding: 13px 22px;
+  border: 2px solid var(--line); border-radius: 999px;
+  background: var(--surface);
+  font-weight: 600; font-size: 15px;
+  transition: border-color 0.2s, background 0.2s;
+}
+.quiz label:hover { border-color: rgba(255, 255, 255, 0.35); }
+.quiz input { position: absolute; opacity: 0; pointer-events: none; }
+.quiz label:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+.quiz label:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 3px; }
+.quiz > .btn { justify-self: center; }
+
+.quiz-result {
+  display: grid; grid-template-columns: 180px 1fr; gap: 28px; align-items: center;
+  padding: 18px;
+  border: 2px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--surface);
+  animation: rise 0.45s ease-out;
+}
+.quiz-result[hidden] { display: none; }
+.quiz-result img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 12px; }
+.quiz-result h3 { font-size: 2rem; margin: 4px 0 8px; }
+.quiz-result p { margin: 0 0 18px; color: var(--muted); }
+.quiz-result .why { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } }
+
+/* ---------- Booking ---------- */
+.booking-tabs {
+  display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+  margin-bottom: 24px;
+}
+.booking-tabs button {
+  padding: 13px 24px;
+  border: 2px solid var(--line); border-radius: 999px;
+  background: transparent; color: var(--muted);
+  font: 700 15px var(--font); cursor: pointer;
+  transition: all 0.2s;
+}
+.booking-tabs button:hover { color: #fff; border-color: rgba(255, 255, 255, 0.35); }
+.booking-tabs button[aria-selected="true"] { color: #000; background: #fff; border-color: #fff; }
+
+.booking-panel {
+  display: grid; grid-template-columns: 320px 1fr;
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: clip; /* ikke «hidden»: det ville stoppet sticky-kolonnen */
+}
+.booking-panel[hidden] { display: none; }
+.booking-info {
+  position: relative; isolation: isolate;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  min-height: 460px; padding: 30px;
+  align-self: start;
+  position: sticky; top: calc(var(--header-h) + 16px);
+}
+.booking-info::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: var(--poster) center / cover;
+}
+.booking-info::after {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.92) 70%);
+}
+.booking-info h3 { font-size: 1.9rem; margin: 0 0 14px; }
+.booking-info ul { list-style: none; margin: 0 0 18px; padding: 0; display: grid; gap: 6px; color: rgba(255, 255, 255, 0.8); font-size: 15px; }
+.booking-info li::before { content: "•"; color: var(--accent); margin-right: 10px; }
+.booking-info .fine { margin: 0; }
+.booking-widget { padding: 24px; min-height: 420px; background: var(--surface); }
+
+/* Bookero i Escape Haugesund-farger. Widgeten bygger på --bw-variabler,
+   så vi overstyrer dem her i stedet for å endre selve widgeten. */
+.booking-widget .bw-widget {
+  --bw-primary-color: #f99b22;
+  --bw-primary-hover: #ffb04a;
+  --bw-primary-light: rgba(249, 155, 34, 0.18);
+  --bw-primary-50: rgba(249, 155, 34, 0.1);
+  --bw-primary-100: rgba(249, 155, 34, 0.18);
+  --bw-primary-300: rgba(249, 155, 34, 0.5);
+  --bw-primary-500: #f99b22;
+  --bw-primary-600: #f99b22;
+  --bw-primary-700: #ffb04a;
+  --bw-primary-900: #ffd8a3;
+  --bw-background: var(--surface);
+  --bw-surface: #1b1b1b;
+  --bw-surface-100: #222;
+  --bw-surface-hover: #262626;
+  --bw-input-background: #1b1b1b;
+  --bw-text-color: #fff;
+  --bw-text-muted: rgba(255, 255, 255, 0.62);
+  --bw-text-light: rgba(255, 255, 255, 0.4);
+  --bw-text-700: rgba(255, 255, 255, 0.85);
+  --bw-border-color: rgba(255, 255, 255, 0.12);
+  --bw-border-100: rgba(255, 255, 255, 0.06);
+  --bw-error-bg: rgba(220, 38, 38, 0.15);
+  --bw-success-bg: rgba(22, 163, 74, 0.15);
+  --bw-warning-bg: rgba(250, 204, 21, 0.12);
+  --bw-warning-text: #fde68a;
+  --bw-closed-bg: #1f1f1f;
+  --bw-font-family: var(--font);
+  --bw-border-radius-sm: 8px;
+  --bw-border-radius: 10px;
+  --bw-border-radius-md: 10px;
+  --bw-border-radius-lg: 14px;
+  --bw-border-radius-xl: 18px;
+  --bw-shadow-xs: none;
+  --bw-shadow-sm: none;
+  color-scheme: dark;
+}
+/* Noen få farger er skrevet direkte inn i widgeten og må overstyres hver for seg */
+.booking-widget .bw-widget :is(.bw-calendar-nav-btn, .bw-variant-toggle, .bw-rs-reset-btn):is(:hover, :focus):not(:disabled),
+.booking-widget .bw-widget .bw-variant-option:is(:hover, :focus),
+.booking-widget .bw-widget .bw-variant-checkbox-toggle:focus { background: #262626; }
+.booking-widget .bw-widget .bw-btn-primary,
+.booking-widget .bw-widget .bw-btn-primary:hover:not(:disabled):not(.bw-btn-disabled) { color: #000; font-weight: 700; }
+.booking-widget .bw-widget .bw-btn-primary:is(:disabled, .bw-btn-disabled) { color: rgba(255, 255, 255, 0.4); background: #262626; }
+.booking-widget .bw-widget .bw-day-selected { color: #000; }
+.booking-widget .bw-widget :is(.bw-variant-dropdown-trigger, .bw-variant-dropdown-menu) { background: #1b1b1b; border-color: rgba(255, 255, 255, 0.14); }
+.booking-widget .bw-widget .bw-variant-dropdown-trigger:hover { border-color: rgba(255, 255, 255, 0.3); box-shadow: none; }
+.booking-widget .bw-widget :is(.bw-calendar-unavailable-notice, .bw-contact-required) { background: rgba(249, 155, 34, 0.12); color: #ffd8a3; }
+/* Valgt antall personer og pris: Bookero bruker mørk tekst her, så den må gjøres lys og tydelig */
+.booking-widget .bw-widget .bw-variant-trigger-name { color: #fff; font-size: 17px; font-weight: 700; }
+.booking-widget .bw-widget .bw-variant-trigger-price { color: var(--accent); font-size: 14px; font-weight: 700; }
+.booking-widget .bw-widget .bw-variant-dropdown-trigger { border-width: 2px; border-color: rgba(249, 155, 34, 0.5); }
+.booking-widget .bw-widget :is(.bw-variant-option-name, .bw-variant-option-price) { color: rgba(255, 255, 255, 0.85); }
+.booking-widget .bw-widget .bw-variant-option-selected :is(.bw-variant-option-name, .bw-variant-option-price) { color: var(--accent); }
+.booking-widget .bw-widget :is(.bw-variant-label, .bw-calendar-legend-label) { color: var(--muted); }
+.booking-fallback {
+  display: grid; place-content: center; text-align: center; gap: 12px;
+  padding: 40px 28px; min-height: 360px;
+}
+.booking-fallback h4 { margin: 0; font-size: 1.6rem; font-weight: 800; }
+.booking-fallback p { margin: 0 auto; color: var(--muted); max-width: 420px; }
+.booking-fallback .actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 10px; }
+
+/* ---------- Priser ---------- */
+.price-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+.calc { padding: 30px; border-radius: var(--radius); background: var(--surface); border: 2px solid var(--accent); }
+.calc-label { margin: 0 0 16px; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); }
+.calc-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); font-weight: 600; }
+.stepper { display: flex; align-items: center; gap: 4px; }
+.stepper button {
+  width: 42px; height: 42px; border-radius: 50%;
+  border: 2px solid var(--line); background: transparent; color: #fff;
+  font: 600 20px var(--font); cursor: pointer;
+}
+.stepper button:hover:not(:disabled) { border-color: var(--accent); }
+.stepper button:disabled { opacity: 0.3; cursor: not-allowed; }
+.stepper output { min-width: 44px; text-align: center; font-size: 1.4rem; font-weight: 800; }
+.seg { display: flex; padding: 4px; border-radius: 999px; background: var(--surface-2); }
+.seg input { position: absolute; opacity: 0; }
+.seg span { display: block; padding: 8px 16px; border-radius: 999px; font-size: 14px; font-weight: 700; color: var(--muted); cursor: pointer; }
+.seg input:checked + span { background: #fff; color: #000; }
+.seg input:focus-visible + span { outline: 2px solid var(--accent); }
+.calc-check { display: flex; gap: 10px; align-items: center; padding: 16px 0 0; cursor: pointer; color: var(--muted); font-weight: 500; }
+.calc-check input { accent-color: var(--accent); width: 18px; height: 18px; }
+.calc-total { display: flex; flex-direction: column; margin-top: 22px; }
+.calc-sum { font-size: 3.2rem; font-weight: 800; line-height: 1; letter-spacing: -0.02em; }
+.calc-pp { color: var(--muted); font-size: 14px; font-weight: 500; margin-top: 8px; }
+
+.price-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.price-table th, .price-table td { padding: 16px 18px; text-align: left; border-bottom: 1px solid var(--line); }
+.price-table th { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); }
+.price-table td { color: var(--muted); }
+.price-table td:not(:first-child) { font-weight: 700; color: #fff; }
+.price-table tr.hl td { background: var(--accent-soft); color: #fff; }
+.price-table tr.hl td:first-child { box-shadow: inset 4px 0 0 var(--accent); }
+.prices > .fine { margin-top: 32px; }
+
+/* ---------- Bedrift / gavekort ---------- */
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.promo {
+  position: relative; isolation: isolate; overflow: hidden;
+  min-height: 460px;
+  display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start;
+  padding: clamp(28px, 4vw, 48px);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.promo::before {
+  content: ""; position: absolute; inset: 0; z-index: -2;
+  background: var(--photo) center / cover;
+  transition: transform 1.2s ease;
+}
+.promo::after {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.92) 70%);
+}
+.promo:hover::before { transform: scale(1.05); }
+.promo h2 { font-size: clamp(1.8rem, 3vw, 2.4rem); }
+.promo p:not(.kicker) { color: rgba(255, 255, 255, 0.78); margin: 14px 0 26px; max-width: 460px; }
+
+/* ---------- FAQ ---------- */
+.faq-wrap { max-width: 860px; }
+.faq-search input {
+  width: 100%; min-height: 58px; padding: 0 22px 0 52px;
+  border: 2px solid var(--line); border-radius: 999px;
+  background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='none' stroke='%23999' stroke-width='2'%3E%3Ccircle cx='9' cy='9' r='6'/%3E%3Cpath d='m14 14 4 4'/%3E%3C/svg%3E") no-repeat 20px center;
+  color: #fff; font: 500 16px var(--font);
+}
+.faq-search input:focus { border-color: var(--accent); outline: none; }
+.faq-search input::placeholder { color: var(--faint); }
+.faq { margin-top: 20px; }
+.faq-group {
+  margin: 40px 0 6px; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent);
+}
+.faq details { border-bottom: 1px solid var(--line); }
+.faq summary {
+  display: flex; align-items: center; gap: 16px;
+  padding: 20px 0; cursor: pointer; list-style: none;
+  font-weight: 600; font-size: 1.05rem;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::before {
+  content: "+"; flex: none;
+  width: 18px; text-align: center;
+  color: #fff; font-weight: 500; font-size: 22px; line-height: 1;
+  transition: transform 0.25s, color 0.25s;
+}
+.faq details[open] summary::before { transform: rotate(45deg); color: var(--accent); }
+.faq details p { margin: 0 0 22px 34px; color: var(--muted); max-width: 680px; }
+.faq-empty { color: var(--muted); }
+
+/* ---------- Kontakt ---------- */
+.contact { display: grid; grid-template-columns: 1fr 1.2fr; gap: 56px; align-items: stretch; }
+.contact address { font-style: normal; margin: 28px 0; }
+.contact address p { margin: 0 0 18px; color: var(--muted); }
+.contact address strong { color: #fff; }
+.big-link { font-size: 1.5rem; font-weight: 800; line-height: 1.5; text-decoration: none; color: #fff; }
+.big-link:hover { color: var(--accent); }
+.hours { padding: 24px; border-radius: var(--radius); background: var(--surface); }
+.hours-title { margin: 0 0 12px; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); }
+.hours dl { margin: 0; display: grid; gap: 10px; }
+.hours dl div { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 12px; }
+.hours dt { color: var(--muted); }
+.hours dd { margin: 0; font-weight: 700; font-size: 14px; font-variant-numeric: tabular-nums; }
+.hours .fine { margin: 12px 0 0; }
+.map { min-height: 400px; border-radius: var(--radius); overflow: hidden; }
+.map iframe { width: 100%; height: 100%; min-height: 400px; border: 0; filter: grayscale(1) invert(0.92) contrast(0.9); }
+
+/* ---------- Avslutning ---------- */
+.final {
+  padding: clamp(80px, 10vw, 120px) 0;
+  background: radial-gradient(50% 80% at 50% 100%, rgba(249, 155, 34, 0.18), transparent 70%);
+}
+.final h2 { font-size: clamp(2.2rem, 5vw, 3.8rem); margin-bottom: 32px; }
+
+/* ---------- Footer ---------- */
+.site-footer { padding: 44px 0 110px; border-top: 1px solid var(--line); }
+.footer-inner { display: flex; flex-wrap: wrap; align-items: center; gap: 24px 40px; }
+.footer-inner .fine { margin: 0 0 0 auto; }
+.social { display: flex; gap: 22px; }
+.social a { text-decoration: none; color: var(--muted); font-size: 14px; font-weight: 600; }
+.social a:hover { color: #fff; }
+
+/* ---------- Mobil bookingknapp ---------- */
+.mobile-book { display: none; }
+
+/* ---------- Scroll-animasjon ---------- */
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.in { opacity: 1; transform: none; }
+
+/* ==========================================================
+   Responsivt
+   ========================================================== */
+@media (max-width: 1080px) {
+  .stopwatch { width: clamp(130px, 18vw, 170px); }
+  /* Nettbrett og smalt vindu: to kort side om side */
+  .rooms { grid-template-columns: repeat(2, 1fr); }
+  .room { min-height: 560px; }
+  .room-content { padding: 24px; }
+  .room h3 { font-size: 1.8rem; }
+}
+
+@media (max-width: 960px) {
+  /* Menyen blir en egen rad under logoen, så den alltid er synlig */
+  :root { --header-h: 112px; }
+  .site-header { height: auto; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+  .header-inner { flex-wrap: wrap; gap: 0; height: auto; }
+  .logo { padding: 12px 0; }
+  .header-cta { margin-left: auto; }
+  .nav {
+    order: 3; width: 100%; margin: 0;
+    gap: 24px; padding: 10px 0 12px;
+    border-top: 1px solid var(--line);
+    overflow-x: auto; scrollbar-width: none;
+  }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { flex: none; font-size: 14px; white-space: nowrap; }
+
+  .steps { grid-template-columns: 1fr; gap: 48px; }
+  .booking-panel { grid-template-columns: 1fr; }
+  .booking-info { min-height: 260px; position: relative; top: auto; }
+  .price-grid, .split, .contact, .room-about, .options { grid-template-columns: 1fr; }
+  .room-facts { position: static; }
+}
+
+@media (max-width: 640px) {
+  body { font-size: 16px; }
+  .logo img { height: 34px; }
+  .header-cta { min-height: 36px; padding: 0 16px; font-size: 12px; }
+  .nav { gap: 14px; }
+  .nav a { font-size: 13px; }
+  .room-title { font-size: clamp(2rem, 9.5vw, 2.8rem); }
+  .hero-title { font-size: clamp(2rem, 9vw, 2.6rem); }
+  .btn { padding: 0 26px; }
+  .facts { grid-template-columns: repeat(2, 1fr); margin-top: 48px; }
+  /* Mobil: klokka står til høyre for «Book nå»-knappen */
+  .hero-inner { display: block; }
+  .hero-actions { padding-right: 112px; }
+  .hero-actions .btn { flex: 1 1 auto; }
+  .stopwatch { position: absolute; right: 0; bottom: -14px; width: 96px; }
+  .facts li { padding: 16px 0; }
+  .step-icon { width: 120px; height: 120px; }
+  .step-icon svg { width: 52px; height: 52px; }
+  .how-note { border-radius: var(--radius); }
+  .rooms { grid-template-columns: 1fr; }
+  .room { min-height: 520px; }
+  .quiz label { padding: 11px 18px; }
+  .quiz-result { grid-template-columns: 1fr; }
+  .field-row, .gift-options { grid-template-columns: 1fr; }
+  .inquiry > .btn { justify-self: stretch; }
+  .quiz-result img { aspect-ratio: 16 / 9; }
+  .calc-row { flex-wrap: wrap; }
+  .calc-sum { font-size: 2.6rem; }
+  .booking-widget { padding: 8px; }
+  .promo { min-height: 400px; }
+  .footer-inner .fine { margin-left: 0; }
+
+  .mobile-book {
+    display: flex; align-items: center; justify-content: center;
+    position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 60;
+    min-height: 56px; border-radius: 999px;
+    background: #fff; color: #000;
+    font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; text-decoration: none;
+    box-shadow: 0 10px 30px -6px rgba(0, 0, 0, 0.8);
+    transform: translateY(140%); transition: transform 0.3s;
+  }
+  .mobile-book.show { transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; }
+}

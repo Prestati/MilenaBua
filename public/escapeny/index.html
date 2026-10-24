@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Escape Haugesund – Løs mysteriet før tiden renner ut</title>
+  <meta name="description" content="Tre escape rooms midt i Haugesund. 60 minutter, anbefalt 3–6 spillere og en gamemaster som hjelper dere hele veien. Book online.">
+  <meta name="theme-color" content="#000000">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <a class="skip" href="#rom">Hopp til innhold</a>
+
+  <!-- ============ HEADER ============ -->
+  <header class="site-header" id="top">
+    <div class="wrap header-inner">
+      <a href="#top" class="logo" aria-label="Escape Haugesund – til toppen">
+        <img src="https://cdn.prod.website-files.com/5f438b911eaa0d8c91983ad3/5f43957b3e7f978c9146ca34_Escape%20Haugesund%20v3%20-%20White.svg" alt="Escape Haugesund" width="150" height="40">
+      </a>
+      <nav class="nav" id="nav" aria-label="Hovedmeny">
+        <a href="spill.html">Spillene</a>
+        <a href="gavekort.html">Gavekort</a>
+        <a href="bedrift.html">Bedrift</a>
+        <a href="index.html#faq">Ofte stilte spørsmål</a>
+      </nav>
+      <a href="#booking" class="btn btn-primary btn-sm header-cta">Book nå</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+      <!-- Bytt til egne filmer: legg filene i assets/media/ og endre src/poster under -->
+      <video class="hero-video" autoplay muted loop playsinline
+        poster="https://cdn.prod.website-files.com/5f438b911eaa0d8c91983ad3/5f450b1eca2e9861b952ba66_header_v3-poster-00001.jpg">
+        <source src="https://cdn.prod.website-files.com/5f438b911eaa0d8c91983ad3/5f450b1eca2e9861b952ba66_header_v3-transcode.webm" type="video/webm">
+        <source src="https://cdn.prod.website-files.com/5f438b911eaa0d8c91983ad3/5f450b1eca2e9861b952ba66_header_v3-transcode.mp4" type="video/mp4">
+      </video>
+      <div class="hero-shade" aria-hidden="true"></div>
+
+      <div class="wrap hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="dot"></span> Strandgata 130 · Haugesund sentrum</p>
+          <h1 class="hero-title">Klarer dere å<br>komme ut på<br><span class="accent">60 minutter?</span></h1>
+          <p class="hero-lead">Tre rom, tre historier og en gamemaster som hjelper dere hele veien. Klokken tikker!</p>
+          <div class="hero-actions">
+            <a href="#booking" class="btn btn-primary">Book nå</a>
+          </div>
+        </div>
+
+        <!-- Stoppeklokke: viseren tikker hvert sekund, den oransje buen viser minuttene som er igjen -->
+        <div class="stopwatch" role="img" aria-label="Stoppeklokke som teller ned fra 60 minutter">
+          <svg viewBox="0 0 240 280" aria-hidden="true">
+            <rect class="sw-metal" x="104" y="2" width="32" height="16" rx="5"/>
+            <rect class="sw-metal" x="112" y="16" width="16" height="18"/>
+            <rect class="sw-metal" x="190" y="44" width="24" height="12" rx="4" transform="rotate(45 202 50)"/>
+            <rect class="sw-metal" x="26" y="44" width="24" height="12" rx="4" transform="rotate(-45 38 50)"/>
+            <circle class="sw-face" cx="120" cy="160" r="112"/>
+            <g id="sw-ticks"></g>
+            <circle class="sw-track" cx="120" cy="160" r="76"/>
+            <circle class="sw-arc" id="sw-arc" cx="120" cy="160" r="76" transform="rotate(-90 120 160)"/>
+            <text class="sw-min" id="sw-min" x="120" y="166">60</text>
+            <text class="sw-unit" x="120" y="192">minutter</text>
+            <g class="sw-hand" id="sw-hand">
+              <line x1="120" y1="178" x2="120" y2="58"/>
+              <circle class="sw-cap" cx="120" cy="160" r="7"/>
+              <circle class="sw-pin" cx="120" cy="160" r="2.5"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <ul class="facts wrap" aria-label="Kort om opplevelsen">
+        <li><strong data-count="rom">3</strong> unike rom</li>
+        <li><strong>60</strong> minutter</li>
+        <li><strong>3–6</strong> spillere anbefalt</li>
+        <li><strong>10–80</strong> år</li>
+      </ul>
+
+      <button class="video-toggle" id="video-toggle" aria-label="Sett filmen på pause">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-pause" d="M7 5h3v14H7zM14 5h3v14h-3z"/><path class="i-play" d="M8 5v14l11-7z"/></svg>
+      </button>
+    </section>
+
+    <!-- ============ SPILLENE ============ -->
+    <!-- Kortene lages av main.js fra content/produkter.json (redigeres i /admin) -->
+    <section class="section" id="rom">
+      <div class="wrap">
+        <header class="section-head center">
+          <h2>Velg spill</h2>
+          <p class="section-lead" id="rooms-lead">Tre rom, tre historier. Alle varer i 60 minutter.</p>
+        </header>
+      </div>
+      <div class="rooms" id="rooms"></div>
+
+      <div class="extras" id="extras" hidden>
+        <div class="wrap">
+          <header class="section-head center">
+            <h2>Flere opplevelser</h2>
+            <p class="section-lead">Nyhet! Portable escape-spill vi tar med til julebordet, firmafesten eller selskapet. Eller spill hos oss. <a href="bedrift.html">Les mer om bedrift og grupper</a>.</p>
+          </header>
+        </div>
+        <div class="rooms" id="extras-list"></div>
+      </div>
+    </section>
+
+    <!-- ============ FINN RIKTIG ROM ============ -->
+    <section class="section section-alt" id="finn-rom">
+      <div class="wrap quiz-wrap">
+        <header class="section-head center">
+          <p class="kicker">Usikre?</p>
+          <h2>Finn spillet som passer dere</h2>
+          <p class="section-lead">Tre raske spørsmål, så foreslår vi et rom.</p>
+        </header>
+
+        <form class="quiz" id="quiz">
+          <fieldset>
+            <legend><span>1</span> Har dere spilt escape room før?</legend>
+            <label><input type="radio" name="erfaring" value="ny" required> Nei, første gang</label>
+            <label><input type="radio" name="erfaring" value="litt"> Ja, en gang eller to</label>
+            <label><input type="radio" name="erfaring" value="mye"> Ja, vi er erfarne</label>
+          </fieldset>
+          <fieldset>
+            <legend><span>2</span> Hva frister mest?</legend>
+            <label><input type="radio" name="stemning" value="mysterium" required> Et mysterium å nøste opp</label>
+            <label><input type="radio" name="stemning" value="skrekk"> Skrekk og hjertebank</label>
+            <label><input type="radio" name="stemning" value="tempo"> Høyt tempo og kappløp mot klokka</label>
+          </fieldset>
+          <fieldset>
+            <legend><span>3</span> Hvor mange er dere?</legend>
+            <label><input type="radio" name="antall" value="3" required> 2–3</label>
+            <label><input type="radio" name="antall" value="5"> 4–5</label>
+            <label><input type="radio" name="antall" value="6"> 6</label>
+          </fieldset>
+          <button type="submit" class="btn btn-primary">Vis vårt forslag</button>
+
+          <div class="quiz-result" id="quiz-result" hidden aria-live="polite"></div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ============ HVORDAN DET VIRKER ============ -->
+    <section class="section how" id="slik">
+      <div class="wrap">
+        <header class="section-head center">
+          <h2>Hvordan det virker</h2>
+        </header>
+        <ol class="steps">
+          <li>
+            <span class="step-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48"><rect x="11" y="21" width="26" height="20" rx="3"/><path d="M16 21v-6a8 8 0 0 1 16 0v6"/><circle cx="24" cy="30" r="2.5"/><path d="M24 32.5V36"/></svg>
+            </span>
+            <h3>Dere blir innelåst</h3>
+            <p>Dere får ikke ta med noe inn, men rommet er fullt av nyttige ting.</p>
+          </li>
+          <li>
+            <span class="step-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48"><circle cx="21" cy="21" r="11"/><path d="m29 29 10 10"/><circle cx="21" cy="21" r="4"/></svg>
+            </span>
+            <h3>Løs mysteriet</h3>
+            <p>Finn spor og løs oppgaver for å slippe ut av rommet.</p>
+          </li>
+          <li>
+            <span class="step-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48"><circle cx="24" cy="27" r="14"/><path d="M24 27V19M20 7h8M24 7v6M35 14l3-3"/></svg>
+            </span>
+            <h3>Klokken tikker!</h3>
+            <p>Klarer dere å løse mysteriet og rømme innen 60 minutter?</p>
+          </li>
+        </ol>
+        <p class="how-note">En gamemaster følger med hele tiden og gir dere så mange hint dere trenger.</p>
+      </div>
+    </section>
+
+    <!-- ============ PRISER ============ -->
+    <section class="section section-alt" id="priser">
+      <div class="wrap prices">
+        <header class="section-head center">
+          <p class="kicker">Priser</p>
+          <h2>Pris per lag</h2>
+          <p class="section-lead">Prisen gjelder hele laget, uansett spill. Studenter får 20&nbsp;% rabatt mot gyldig studentbevis.</p>
+        </header>
+
+        <div class="price-grid">
+          <div class="calc" id="calc">
+            <p class="calc-label">Regn ut prisen</p>
+            <div class="calc-row">
+              <span>Antall spillere</span>
+              <div class="stepper">
+                <button type="button" data-step="-1" aria-label="Færre spillere">−</button>
+                <output id="calc-players">4</output>
+                <button type="button" data-step="1" aria-label="Flere spillere">+</button>
+              </div>
+            </div>
+            <div class="calc-row">
+              <span>Dag</span>
+              <div class="seg" role="radiogroup" aria-label="Dag">
+                <label><input type="radio" name="dag" value="ukedag" checked><span>Man–tor</span></label>
+                <label><input type="radio" name="dag" value="helg"><span>Fre–søn</span></label>
+              </div>
+            </div>
+            <label class="calc-check"><input type="checkbox" id="calc-student"> Vi er studenter (−20&nbsp;%)</label>
+            <div class="calc-total">
+              <span class="calc-sum" id="calc-sum">1 500 kr</span>
+              <span class="calc-pp" id="calc-pp">375 kr per person</span>
+            </div>
+          </div>
+
+          <table class="price-table">
+            <caption class="sr-only">Prisliste per lag</caption>
+            <thead>
+              <tr><th scope="col">Spillere</th><th scope="col">Man–tor</th><th scope="col">Fre–søn</th></tr>
+            </thead>
+            <tbody id="price-body"></tbody>
+          </table>
+        </div>
+        <p class="fine center">Betal med kort eller Vipps ved oppmøte, eller PayPal ved booking. Vi tar ikke kontanter. Bedrifter kan få faktura.</p>
+      </div>
+    </section>
+
+    <!-- ============ BOOKING ============ -->
+    <section class="section" id="booking">
+      <div class="wrap">
+        <header class="section-head center">
+          <p class="kicker">Booking</p>
+          <h2>Book tid</h2>
+          <p class="section-lead">Velg spill, så ser du ledige tider. Online booking må gjøres minst 24 timer før. Skal dere spille i dag eller i morgen? Ring <a href="tel:+4752711111">52 71 11 11</a>.</p>
+        </header>
+
+        <div class="booking-tabs" role="tablist" aria-label="Velg spill" id="booking-tabs"></div>
+
+        <div class="booking-panels" id="booking-panels">
+          <!-- Paneler fylles inn av main.js ut fra BOOKING_WIDGETS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ BEDRIFT + GAVEKORT ============ -->
+    <section class="section section-alt" id="bedrift">
+      <div class="wrap split">
+        <article class="promo" style="--photo: url('https://assets.website-files.com/5f438b911eaa0d8c91983ad3/5f450c13f0b12830767e8ab5_contagion_v2-poster-00001.jpg')">
+          <p class="kicker">Bedrift & grupper</p>
+          <h2>Teambuilding som faktisk er gøy</h2>
+          <p>Vi lager opplegg for større grupper: flere rom samtidig, mobile spill vi tar med til dere, eller et eget selskapsrom hos oss for opptil 12 personer.</p>
+          <a href="bedrift.html" class="btn btn-ghost">Se mulighetene</a>
+        </article>
+        <article class="promo" id="gavekort" style="--photo: url('https://assets.website-files.com/5f438b911eaa0d8c91983ad3/5f450d14917dc459aec62b89_cold_fusion_v1-poster-00001.jpg')">
+          <p class="kicker">Gavekort</p>
+          <h2>Gi bort 60 minutter de husker</h2>
+          <p>Perfekt til bursdag, jul eller som takk til kollegaene. Mottakeren velger selv spill og tidspunkt.</p>
+          <a href="gavekort.html" class="btn btn-primary">Kjøp gavekort</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ FAQ ============ -->
+    <section class="section" id="faq">
+      <div class="wrap faq-wrap">
+        <header class="section-head center">
+          <h2>Vanlige spørsmål</h2>
+        </header>
+
+        <label class="faq-search">
+          <span class="sr-only">Søk i spørsmål</span>
+          <input type="search" id="faq-search" placeholder="Finn spørsmål og svar, f.eks. «betaling» eller «barn»">
+        </label>
+
+        <div class="faq" id="faq-list">
+          <h3 class="faq-group">Før dere kommer</h3>
+          <details><summary>Hva er et escape room?</summary><p>Dere blir låst inne i et rom og må finne gjenstander, løse gåter og samarbeide for å komme ut før tiden går ut. Det krever ingen forkunnskaper, bare nysgjerrighet.</p></details>
+          <details><summary>Hvem passer det for?</summary><p>De fleste mellom 10 og 80 år. Grupper med deltakere under 14 år må ha med en voksen. Barn under 10 kan være med hvis foreldrene mener de er klare for det.</p></details>
+          <details><summary>Hvilket spill passer for nybegynnere?</summary><p>Vi anbefaler Cold Fusion hvis det er første gang. Usikre? Ta <a href="#finn-rom">romtesten</a>.</p></details>
+          <details><summary>Er det vanskelig?</summary><p>Det varierer, men dere står aldri fast lenge. Gamemasteren følger med og gir så mange hint dere trenger.</p></details>
+          <details><summary>Hvilket språk er spillet på?</summary><p>Oppgavene er på engelsk. Introduksjon og hint får dere på norsk eller engelsk. Trenger dere engelsktalende gamemaster, si fra på forhånd.</p></details>
+          <details><summary>Hvor ligger dere?</summary><p>Strandgata 130 i Haugesund, ved siden av Dattera til Lothe, like ved Risøybrua. Vi holder til i 2. etasje.</p></details>
+          <details><summary>Er det tilgjengelig med rullestol?</summary><p>Dessverre ikke. Rommene ligger i 2. etasje uten heis.</p></details>
+          <details><summary>Har dere toalett og venterom?</summary><p>Ja. Det er toalett, og hvert spill har sitt eget venterom.</p></details>
+          <details><summary>Kan vi ta med mat og drikke?</summary><p>Nei, mat og drikke er ikke tillatt i lokalene. Spør oss om rabattkort: 10&nbsp;% hos MM eller Il Forno samme dag. Beruset eller forstyrrende oppførsel gir bortvisning uten refusjon.</p></details>
+
+          <h3 class="faq-group">Booking og betaling</h3>
+          <details><summary>Hva koster det?</summary><p>Fra 1&nbsp;100 kr for hele laget. Se <a href="#priser">prislisten og priskalkulatoren</a>. Studenter får 20&nbsp;% rabatt.</p></details>
+          <details><summary>Når er Escape Haugesund åpent?</summary><p>Man–fre kl. 16, 18 og 20. Lør–søn kl. 11, 13, 15, 17 og 19. Andre tider kan avtales, så ta kontakt.</p></details>
+          <details><summary>Kan vi booke samme dag?</summary><p>Online booking stenger 24 timer før. Ring <a href="tel:+4752711111">52 71 11 11</a>, send e-post eller melding på Facebook, så finner vi ofte en løsning.</p></details>
+          <details><summary>Hvordan betaler vi?</summary><p>PayPal ved booking, eller kort og Vipps ved oppmøte. Vi tar ikke kontanter.</p></details>
+          <details><summary>Hva om vi blir flere eller færre enn vi booket?</summary><p>Dere betaler for antallet som faktisk spiller. Vi anbefaler ikke å være flere enn maks for spillet, da blir opplevelsen dårligere for alle.</p></details>
+          <details><summary>Kan bedrifter få faktura?</summary><p>Ja. Send fakturainformasjon på forhånd til <a href="mailto:post@escapehaugesund.no">post@escapehaugesund.no</a>.</p></details>
+          <details><summary>Hvordan avbestiller jeg?</summary><p>Avbestilling må skje senest 12 timer før spilletid.</p></details>
+          <details><summary>Selger dere gavekort?</summary><p>Ja, se <a href="gavekort.html">gavekortsiden</a>. Du får gavekortet på e-post.</p></details>
+
+          <h3 class="faq-group">Under spillet</h3>
+          <details><summary>Hva skjer om vi ikke rekker det på 60 minutter?</summary><p>Dere kan få ekstra tid. Gamemasteren hjelper dere mot slutten, så få går herfra misfornøyde.</p></details>
+          <details><summary>Hva om noen må ut underveis?</summary><p>Alle rom har en nødutgang som kan brukes når som helst. I Contagion henger nødnøkkelen ved døren.</p></details>
+          <details><summary>Har dere flere lag rett etter hverandre?</summary><p>Det går an, men rommet må gjøres klart mellom hvert lag. Kontakt oss for grupper. Vi har «stresskofferter» som pauseaktivitet.</p></details>
+
+          <p class="faq-empty" id="faq-empty" hidden>Fant ingen spørsmål som passer. Ring <a href="tel:+4752711111">52 71 11 11</a> eller send e-post, så svarer vi.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ KONTAKT ============ -->
+    <section class="section section-alt" id="kontakt">
+      <div class="wrap contact">
+        <div>
+          <p class="kicker">Kontakt</p>
+          <h2>Finn oss</h2>
+          <address>
+            <p><strong>Escape Haugesund AS</strong><br>Strandgata 130, 2. etasje<br>5527 Haugesund</p>
+            <p><a href="tel:+4752711111" class="big-link">52 71 11 11</a><br><a href="mailto:post@escapehaugesund.no" class="big-link">post@escapehaugesund.no</a></p>
+          </address>
+          <div class="hours">
+            <p class="hours-title">Spilletider</p>
+            <dl>
+              <div><dt>Mandag–fredag</dt><dd>16:00 · 18:00 · 20:00</dd></div>
+              <div><dt>Lørdag–søndag</dt><dd>11:00 · 13:00 · 15:00 · 17:00 · 19:00</dd></div>
+            </dl>
+            <p class="fine">Andre tider etter avtale.</p>
+          </div>
+        </div>
+        <div class="map">
+          <iframe title="Kart: Strandgata 130, Haugesund" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+            src="https://maps.google.com/maps?q=Strandgata%20130%2C%205527%20Haugesund&z=16&output=embed"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ AVSLUTNING ============ -->
+    <section class="final">
+      <div class="wrap center">
+        <h2>Tar dere utfordringen<span class="accent">?</span></h2>
+        <a href="#booking" class="btn btn-primary">Book nå</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <img src="https://cdn.prod.website-files.com/5f438b911eaa0d8c91983ad3/5f43957b3e7f978c9146ca34_Escape%20Haugesund%20v3%20-%20White.svg" alt="Escape Haugesund" width="120" height="32">
+      <nav class="social" aria-label="Sosiale medier">
+        <a href="https://www.facebook.com/Escape-Haugesund-413664825790089">Facebook</a>
+        <a href="https://www.instagram.com/escapehaugesund/">Instagram</a>
+        <a href="https://no.tripadvisor.com/Attraction_Review-g226925-d8436727-Reviews-Escape_Haugesund-Haugesund_Rogaland_Western_Norway.html">Tripadvisor</a>
+      </nav>
+      <p class="fine">© <span id="year">2026</span> Escape Haugesund AS · <a href="#">Personvern og cookies</a></p>
+    </div>
+  </footer>
+
+  <!-- Fast bookingknapp på mobil -->
+  <a href="#booking" class="mobile-book" id="mobile-book">Book nå</a>
+
+  <script src="assets/common.js"></script>
+  <script src="assets/main.js"></script>
+</body>
+</html>

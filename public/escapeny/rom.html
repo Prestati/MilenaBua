@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Tittel og beskrivelse settes av rom.js ut fra hvilket rom som vises -->
+  <title>Escape Haugesund</title>
+  <meta name="description" content="Escape room i Haugesund sentrum. 60 minutter, gamemaster og hint underveis. Book online.">
+  <meta name="theme-color" content="#000000">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body class="room-page">
+  <a class="skip" href="#om-rommet">Hopp til innhold</a>
+
+  <!-- ============ HEADER ============ -->
+  <header class="site-header" id="top">
+    <div class="wrap header-inner">
+      <a href="index.html" class="logo" aria-label="Escape Haugesund – til forsiden">
+        <img src="https://cdn.prod.website-files.com/5f438b911eaa0d8c91983ad3/5f43957b3e7f978c9146ca34_Escape%20Haugesund%20v3%20-%20White.svg" alt="Escape Haugesund" width="150" height="40">
+      </a>
+      <nav class="nav" id="nav" aria-label="Hovedmeny">
+        <a href="spill.html">Spillene</a>
+        <a href="gavekort.html">Gavekort</a>
+        <a href="bedrift.html">Bedrift</a>
+        <a href="index.html#faq">Ofte stilte spørsmål</a>
+      </nav>
+      <a href="#booking" class="btn btn-primary btn-sm header-cta">Book nå</a>
+    </div>
+  </header>
+
+  <main id="room-main">
+    <!-- ============ ROM-TOPP ============ -->
+    <section class="room-hero" id="room-hero">
+      <div class="hero-shade" aria-hidden="true"></div>
+      <div class="wrap room-hero-inner" id="room-hero-content">
+        <a href="spill.html" class="back-link">← Alle spill</a>
+      </div>
+    </section>
+
+    <!-- ============ BOOKING ============ -->
+    <!-- Rett under toppen, så man ser kalenderen uten å scrolle langt -->
+    <section class="section section-alt room-booking" id="booking">
+      <div class="wrap">
+        <header class="booking-head">
+          <h2 id="booking-title">Book tid</h2>
+          <p class="fine">Velg antall og tidspunkt · Online senest 24 t før · I dag eller i morgen? Ring <a href="tel:+4752711111">52 71 11 11</a></p>
+        </header>
+        <div class="booking-panels" id="booking-panels"></div>
+        <p class="fine booking-terms">Møt opp 10 min før. Avbestilling senest 12 timer før. Dere betaler for antallet som faktisk spiller.</p>
+      </div>
+    </section>
+
+    <!-- ============ OM ROMMET ============ -->
+    <section class="section" id="om-rommet">
+      <div class="wrap room-about">
+        <div class="room-story" id="room-story"></div>
+        <aside class="room-facts" id="room-facts" aria-label="Praktisk informasjon"></aside>
+      </div>
+    </section>
+
+    <!-- ============ ANDRE SPILL ============ -->
+    <section class="section section-alt" id="andre">
+      <div class="wrap">
+        <header class="section-head center">
+          <h2>Prøv også</h2>
+        </header>
+      </div>
+      <div class="rooms" id="other-rooms"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <img src="https://cdn.prod.website-files.com/5f438b911eaa0d8c91983ad3/5f43957b3e7f978c9146ca34_Escape%20Haugesund%20v3%20-%20White.svg" alt="Escape Haugesund" width="120" height="32">
+      <nav class="social" aria-label="Sosiale medier">
+        <a href="https://www.facebook.com/Escape-Haugesund-413664825790089">Facebook</a>
+        <a href="https://www.instagram.com/escapehaugesund/">Instagram</a>
+        <a href="https://no.tripadvisor.com/Attraction_Review-g226925-d8436727-Reviews-Escape_Haugesund-Haugesund_Rogaland_Western_Norway.html">Tripadvisor</a>
+      </nav>
+      <p class="fine">© <span id="year">2026</span> Escape Haugesund AS · Strandgata 130, 5527 Haugesund · <a href="#">Personvern og cookies</a></p>
+    </div>
+  </footer>
+
+  <a href="#booking" class="mobile-book" id="mobile-book">Book nå</a>
+
+  <script src="assets/common.js"></script>
+  <script src="assets/rom.js"></script>
+</body>
+</html>

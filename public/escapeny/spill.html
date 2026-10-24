@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spillene – escape rooms og portable escape-spill i Haugesund | Escape Haugesund</title>
+  <meta name="description" content="Alle spillene hos Escape Haugesund: escape rooms i Strandgata 130 og portable escape-spill vi tar med til julebordet, firmafesten eller selskapet.">
+  <meta name="theme-color" content="#000000">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <a class="skip" href="#alle-spill">Hopp til innhold</a>
+
+  <!-- ============ HEADER ============ -->
+  <header class="site-header" id="top">
+    <div class="wrap header-inner">
+      <a href="index.html" class="logo" aria-label="Escape Haugesund – til forsiden">
+        <img src="https://cdn.prod.website-files.com/5f438b911eaa0d8c91983ad3/5f43957b3e7f978c9146ca34_Escape%20Haugesund%20v3%20-%20White.svg" alt="Escape Haugesund" width="150" height="40">
+      </a>
+      <nav class="nav" id="nav" aria-label="Hovedmeny">
+        <a href="spill.html" aria-current="page">Spillene</a>
+        <a href="gavekort.html">Gavekort</a>
+        <a href="bedrift.html">Bedrift</a>
+        <a href="index.html#faq">Ofte stilte spørsmål</a>
+      </nav>
+      <a href="index.html#booking" class="btn btn-primary btn-sm header-cta">Book nå</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============ INTRO ============ -->
+    <section class="page-intro" id="page-intro">
+      <div class="wrap">
+        <p class="eyebrow"><span class="dot"></span> Strandgata 130 · Haugesund sentrum</p>
+        <h1 class="room-title">Spillene</h1>
+        <p class="section-lead">Escape rooms hos oss, og portable escape-spill vi tar med til dere. Klikk på et spill for å lese mer og booke.</p>
+        <!-- Snarveier til kategoriene, lages av spill.js -->
+        <nav class="chips category-links" id="category-links" aria-label="Kategorier"></nav>
+      </div>
+    </section>
+
+    <!-- ============ ALLE SPILL ============ -->
+    <!-- Kategoriene og kortene lages av spill.js fra content/produkter.json -->
+    <div id="alle-spill"></div>
+
+    <!-- ============ USIKKER ============ -->
+    <section class="final">
+      <div class="wrap center">
+        <h2>Usikre på hvilket rom<span class="accent">?</span></h2>
+        <p class="section-lead">Tre raske spørsmål, så foreslår vi et rom som passer dere.</p>
+        <a href="index.html#finn-rom" class="btn btn-primary">Ta romtesten</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <img src="https://cdn.prod.website-files.com/5f438b911eaa0d8c91983ad3/5f43957b3e7f978c9146ca34_Escape%20Haugesund%20v3%20-%20White.svg" alt="Escape Haugesund" width="120" height="32">
+      <nav class="social" aria-label="Sosiale medier">
+        <a href="https://www.facebook.com/Escape-Haugesund-413664825790089">Facebook</a>
+        <a href="https://www.instagram.com/escapehaugesund/">Instagram</a>
+        <a href="https://no.tripadvisor.com/Attraction_Review-g226925-d8436727-Reviews-Escape_Haugesund-Haugesund_Rogaland_Western_Norway.html">Tripadvisor</a>
+      </nav>
+      <p class="fine">© <span id="year">2026</span> Escape Haugesund AS · Strandgata 130, 5527 Haugesund · <a href="#">Personvern og cookies</a></p>
+    </div>
+  </footer>
+
+  <script src="assets/common.js"></script>
+  <script src="assets/spill.js"></script>
+</body>
+</html>

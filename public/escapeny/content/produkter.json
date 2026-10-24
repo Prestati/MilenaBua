@@ -1,0 +1,123 @@
+{
+  "produkter": [
+    {
+      "id": "dexters-dungeon",
+      "navn": "Dexter’s Dungeon",
+      "type": "Escape room",
+      "synlig": true,
+      "merkelapp": "Skrekk",
+      "fremhevet": false,
+      "beskrivelse": "Dere våkner i en kjeller dere aldri har sett før. Døren er låst fra utsiden, og noen kommer snart tilbake. Finn veien ut før han gjør det.",
+      "kort_beskrivelse": "Låst inne i en ukjent kjeller. Noen kommer snart tilbake.",
+      "min_spillere": 3,
+      "maks_spillere": 6,
+      "varighet": 60,
+      "vanskelighet": 5,
+      "bilde": "https://assets.website-files.com/5f438b911eaa0d8c91983ad3/62a08ac10cdf82c8b06ebf39_Video%20placeholder-poster-00001.jpg",
+      "film": "https://assets.website-files.com/5f438b911eaa0d8c91983ad3/62a08ac10cdf82c8b06ebf39_Video%20placeholder-transcode.mp4",
+      "bookero_widget_id": "",
+      "romtest_stemning": "skrekk",
+      "nybegynnervennlig": false
+    },
+    {
+      "id": "cold-fusion",
+      "navn": "Cold Fusion",
+      "type": "Escape room",
+      "synlig": true,
+      "merkelapp": "Anbefalt for nybegynnere",
+      "fremhevet": true,
+      "beskrivelse": "Professoren var bare dager unna et gjennombrudd som kunne forandret verden. Så forsvant han sporløst. Laboratoriet hans er det eneste sporet dere har.",
+      "kort_beskrivelse": "Professoren er sporløst forsvunnet. Laboratoriet hans er det eneste sporet.",
+      "min_spillere": 3,
+      "maks_spillere": 6,
+      "varighet": 60,
+      "vanskelighet": 4,
+      "bilde": "https://assets.website-files.com/5f438b911eaa0d8c91983ad3/5f450d14917dc459aec62b89_cold_fusion_v1-poster-00001.jpg",
+      "film": "https://assets.website-files.com/5f438b911eaa0d8c91983ad3/5f450d14917dc459aec62b89_cold_fusion_v1-transcode.mp4",
+      "bookero_widget_id": "3f6485e1-109b-45b0-af1e-51275b1a60ed",
+      "romtest_stemning": "mysterium",
+      "nybegynnervennlig": true
+    },
+    {
+      "id": "contagion",
+      "navn": "Contagion",
+      "type": "Escape room",
+      "synlig": true,
+      "merkelapp": "Kappløp mot klokka",
+      "fremhevet": false,
+      "beskrivelse": "Et ukjent virus sprer seg raskere enn noen hadde fryktet. Et sted i laboratoriet ligger oppskriften på vaksinen. Dere er de eneste som kan finne den.",
+      "kort_beskrivelse": "Et virus sprer seg. Finn oppskriften på vaksinen før det er for sent.",
+      "min_spillere": 3,
+      "maks_spillere": 5,
+      "varighet": 60,
+      "vanskelighet": 4,
+      "bilde": "https://assets.website-files.com/5f438b911eaa0d8c91983ad3/5f450c13f0b12830767e8ab5_contagion_v2-poster-00001.jpg",
+      "film": "https://assets.website-files.com/5f438b911eaa0d8c91983ad3/5f450c13f0b12830767e8ab5_contagion_v2-transcode.mp4",
+      "bookero_widget_id": "",
+      "romtest_stemning": "tempo",
+      "nybegynnervennlig": false
+    },
+    {
+      "type": "Mobilt spill",
+      "synlig": true,
+      "merkelapp": "Nyhet",
+      "fremhevet": true,
+      "varighet": 60,
+      "vanskelighet": 0,
+      "film": "",
+      "bookero_widget_id": "",
+      "romtest_stemning": "ingen",
+      "nybegynnervennlig": false,
+      "kampanje": "Forhåndsbestill nå – klar til spill fra 12. november",
+      "id": "pirate-legends",
+      "navn": "Pirate Legends",
+      "kort_beskrivelse": "Fem kister. Ett skjelett. Én skatt som ingen har funnet – ennå.",
+      "beskrivelse": "Fire legendariske piratkapteiner gjemte skatten sin i gamle trekister, beskyttet av kart, symboler, labyrinter og magiske talismaner. Løs gåtene sammen og ta skatten!",
+      "historie": "Fire legendariske piratkapteiner gjemte skatten sin i gamle trekister, beskyttet av kart, symboler, labyrinter og magiske talismaner. Løs gåtene sammen og ta skatten!\n\nPerfekt til firmafest og julebord, bursdager og private selskap. Vi kommer til dere med alt utstyret, eller dere spiller hos oss i selskapsrommet vårt i Strandgaten.",
+      "min_spillere": 3,
+      "maks_spillere": 12,
+      "ekstra_fakta": [
+        {
+          "verdi": "23",
+          "tekst": "gåter"
+        },
+        {
+          "verdi": "Inne",
+          "tekst": "eller ute"
+        }
+      ],
+      "bilde": "assets/media/pirate-legends.jpg"
+    },
+    {
+      "type": "Mobilt spill",
+      "synlig": true,
+      "merkelapp": "Nyhet",
+      "fremhevet": true,
+      "varighet": 60,
+      "vanskelighet": 0,
+      "film": "",
+      "bookero_widget_id": "",
+      "romtest_stemning": "ingen",
+      "nybegynnervennlig": false,
+      "kampanje": "Forhåndsbestill nå – klar til spill fra 12. november",
+      "id": "legacy-of-nicolas-flamel",
+      "navn": "Legacy of Nicolas Flamel",
+      "kort_beskrivelse": "Finn De vises stein. Hent frem tryllestavene – eventyret starter nå.",
+      "beskrivelse": "Alkymisten Nicolas Flamel gjemte livsverket sitt i en kiste full av skuffer, hemmelige rom og trollformler. Med staver og hatter bryter dere forbannelsene – sammen.",
+      "historie": "Alkymisten Nicolas Flamel gjemte livsverket sitt i en kiste full av skuffer, hemmelige rom og trollformler. Med staver og hatter bryter dere forbannelsene – sammen.\n\nPerfekt til firmafest og julebord, bursdager og private selskap. Vi kommer til dere, eller dere spiller hos oss i selskapsrommet vårt i Strandgaten.",
+      "min_spillere": 2,
+      "maks_spillere": 6,
+      "ekstra_fakta": [
+        {
+          "verdi": "15",
+          "tekst": "gåter"
+        },
+        {
+          "verdi": "Alle",
+          "tekst": "aldre"
+        }
+      ],
+      "bilde": "assets/media/legacy-of-nicolas-flamel.jpg"
+    }
+  ]
+}
