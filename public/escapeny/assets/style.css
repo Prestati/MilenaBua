@@ -374,7 +374,10 @@ h2 { font-size: clamp(2rem, 4.4vw, 3.2rem); letter-spacing: -0.01em; }
 .booking-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 24px; margin-bottom: 18px; }
 .booking-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); }
 .booking-head .fine { margin: 0; }
-.booking-panel-compact { grid-template-columns: 1fr; }
+/* Dobbel klasse: må slå .booking-panel sitt to-kolonne-oppsett, som står lenger ned i filen */
+.booking-panel.booking-panel-compact { grid-template-columns: 1fr; }
+/* Kalenderen blir uoversiktlig når den er for bred, så bookingdelen holdes smal og midtstilt */
+.room-booking .wrap { max-width: 860px; }
 .booking-terms { margin: 14px 0 0; }
 
 .not-found { min-height: 70svh; display: grid; place-items: center; padding-top: calc(var(--header-h) + 60px); }
