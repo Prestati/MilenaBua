@@ -4,7 +4,7 @@
 
 const PRODUCTS_URL = "content/produkter.json";
 const BOOKERO_BASE_URL = "https://app.bookero.no";
-const BOOKERO_SCRIPT = "https://app.bookero.no/build/widget.js?v=1792678666";
+const BOOKERO_SCRIPT = "https://app.bookero.no/build/widget.js?v=1792819627";
 
 // Pris per lag: [man–tor, fre–søn]
 const PRICES = {
