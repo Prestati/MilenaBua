@@ -32,10 +32,12 @@ function renderRoom(p, all) {
   const level = Number(p.vanskelighet) || 0;
   const isRoom = p.type === "Escape room";
   const mobile = isMobileGame(p);
-  // Mobile spill uten egen Bookero-widget bestilles via skjemaet på bedriftssiden
+  // Mobile spill uten egen Bookero-widget bestilles via skjemaet på bedriftssiden.
+  // Med widget kan de bookes i spillrommet hos oss, og «vi kommer til dere» går via skjemaet.
   const viaSkjema = mobile && !p.bookero_widget_id;
+  const spillrom = mobile && !viaSkjema;
   const bestillUrl = viaSkjema ? inquiryUrl(p) : "#booking";
-  const bestillTekst = viaSkjema ? "Send forespørsel" : `Book ${esc(p.navn)}`;
+  const bestillTekst = viaSkjema ? "Send forespørsel" : spillrom ? "Book i spillrommet" : `Book ${esc(p.navn)}`;
 
   document.title = `${p.navn} – ${isRoom ? "escape room i Haugesund" : mobile ? "portabelt escape-spill | Escape Haugesund" : "Escape Haugesund"}`;
   $('meta[name="description"]').setAttribute("content", p.kort_beskrivelse || p.beskrivelse || "");
@@ -60,7 +62,9 @@ function renderRoom(p, all) {
     <ul class="room-meta room-meta-hero">${metaItems(p).join("")}</ul>
     <div class="hero-actions">
       <a href="${bestillUrl}" class="btn btn-primary">${bestillTekst}</a>
-      <a href="#om-rommet" class="btn btn-ghost">Les mer</a>
+      ${spillrom
+        ? `<a href="${inquiryUrl(p)}" class="btn btn-ghost">Vi kommer til dere</a>`
+        : `<a href="#om-rommet" class="btn btn-ghost">Les mer</a>`}
     </div>
     ${p.kampanje ? `<p class="kampanje-strip"><strong>${esc(p.kampanje.split(" – ")[0])}</strong>${p.kampanje.includes(" – ") ? ` <span>${esc(p.kampanje.split(" – ").slice(1).join(" – "))}</span>` : ""}</p>` : ""}`
   );
@@ -104,7 +108,10 @@ function renderRoom(p, all) {
     $(".header-cta").href = bestillUrl;
     $(".header-cta").textContent = "Send forespørsel";
   } else {
-    $("#booking-title").textContent = `Book ${p.navn}`;
+    $("#booking-title").textContent = spillrom ? `Book ${p.navn} i spillrommet` : `Book ${p.navn}`;
+    if (spillrom) {
+      $("#booking-lead").innerHTML = `Spill hos oss i Strandgata 130, opptil 12 personer. Skal vi komme til dere i stedet? <a href="${inquiryUrl(p)}">Send forespørsel</a>`;
+    }
     $("#booking-panels").innerHTML = bookingPanelHTML(p, { compact: true });
     if (p.bookero_widget_id) loadBookero();
   }

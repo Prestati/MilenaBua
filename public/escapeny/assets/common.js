@@ -90,7 +90,7 @@ function productCard(p) {
         <p>${esc(p.beskrivelse)}</p>
         ${meta ? `<ul class="room-meta">${meta}</ul>` : ""}
         ${p.kampanje ? `<p class="card-kampanje">${esc(p.kampanje)}</p>` : ""}
-        <span class="btn btn-primary" aria-hidden="true">${isMobileGame(p) ? "Les mer" : "Les mer og book"}</span>
+        <span class="btn btn-primary" aria-hidden="true">${isMobileGame(p) && !p.bookero_widget_id ? "Les mer" : "Les mer og book"}</span>
       </div>
     </article>`;
 }
