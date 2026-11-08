@@ -340,6 +340,13 @@ h2 { font-size: clamp(2rem, 4.4vw, 3.2rem); letter-spacing: -0.01em; }
   text-transform: uppercase; letter-spacing: -0.03em; line-height: 0.98;
 }
 .room-hero .hero-lead { margin: 18px 0 28px; }
+.room-subtitle {
+  margin: 14px 0 0;
+  font-size: clamp(1.05rem, 2.2vw, 1.5rem); font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.02em; color: var(--accent);
+}
+.room-hero .hero-lead p { margin: 0 0 12px; }
+.room-hero .hero-lead p:last-child { margin-bottom: 0; }
 .room-meta-hero { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 14px clamp(24px, 5vw, 48px); max-width: 620px; margin-bottom: 32px; }
 .room-hero-inner > .kicker { margin: 4px 0 8px; }
 .kampanje-strip {
@@ -352,6 +359,16 @@ h2 { font-size: clamp(2rem, 4.4vw, 3.2rem); letter-spacing: -0.01em; }
 .room-about { display: grid; grid-template-columns: 1.5fr 1fr; gap: clamp(32px, 6vw, 80px); align-items: start; }
 .room-story h2 { margin-bottom: 20px; }
 .story-text p { margin: 0 0 18px; font-size: 1.1rem; color: rgba(255, 255, 255, 0.82); }
+.story-subtitle { margin: 28px 0 12px; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); }
+.story-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.story-list li { position: relative; padding-left: 30px; font-size: 1.05rem; color: rgba(255, 255, 255, 0.85); }
+.story-list li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--accent); font-weight: 800; }
+.read-more {
+  display: inline-flex; align-items: center; gap: 8px; margin-top: 20px;
+  color: #fff; font-weight: 700; text-decoration: underline; text-decoration-color: var(--accent);
+  text-underline-offset: 5px; text-decoration-thickness: 2px;
+}
+.read-more:hover { color: var(--accent); }
 .gm-note {
   margin-top: 32px; padding: 20px 24px;
   border-left: 4px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0;
@@ -383,6 +400,60 @@ h2 { font-size: clamp(2rem, 4.4vw, 3.2rem); letter-spacing: -0.01em; }
 .not-found { min-height: 70svh; display: grid; place-items: center; padding-top: calc(var(--header-h) + 60px); }
 .not-found h1 { font-size: clamp(2.4rem, 5vw, 3.6rem); margin-bottom: 8px; }
 .not-found .btn { margin-top: 28px; }
+
+/* «To måter å spille på»: høyere kort og mørkere bunn, så teksten ikke havner oppå bildet */
+.ways .promo { min-height: 600px; }
+.ways .promo::after { background: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.45) 38%, rgba(0, 0, 0, 0.94) 62%, #000 100%); }
+
+/* ---------- «Vi kommer til dere»-skjema ---------- */
+.link-button {
+  padding: 0; border: 0; background: none; cursor: pointer;
+  color: var(--accent); font: inherit; text-decoration: underline; text-underline-offset: 3px;
+}
+.inquiry-dialog {
+  width: min(100% - 24px, 640px); max-height: calc(100dvh - 24px);
+  padding: 0; border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--surface); color: #fff;
+  overflow: auto;
+}
+.inquiry-dialog::backdrop { background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(4px); }
+.inquiry-body { padding: clamp(24px, 4vw, 36px); }
+.inquiry-body h2 { font-size: clamp(1.5rem, 3vw, 2rem); margin-bottom: 8px; padding-right: 36px; }
+.inquiry-body > .fine { margin: 0 0 22px; }
+.inquiry-body .field input, .inquiry-body .field textarea { background: var(--surface-2); }
+.inquiry-body .inquiry > .btn { justify-self: stretch; }
+.dialog-close {
+  position: sticky; top: 12px; float: right; margin: 12px 12px 0 0; z-index: 1;
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 1px solid var(--line); background: var(--surface-2); color: #fff;
+  font-size: 24px; line-height: 1; cursor: pointer;
+}
+.dialog-close:hover { border-color: var(--accent); }
+.inquiry-done h2 { margin: 6px 0 12px; }
+.inquiry-done p:not(.kicker) { color: var(--muted); }
+.inquiry-done .btn { margin-top: 12px; }
+
+/* Skjema for portable spill (vinduet på spillsiden og bedrift.html?spill=<id>) */
+.pinq .pinq-title {
+  margin: 4px 0 14px; padding-right: 40px;
+  font-size: clamp(1.7rem, 3.6vw, 2.6rem); font-weight: 900;
+  text-transform: uppercase; letter-spacing: -0.02em; line-height: 1.05;
+}
+.pinq-intro p { margin: 0 0 12px; max-width: 640px; color: var(--muted); }
+.pinq-form { margin-top: 26px; }
+.pinq-fields-title {
+  margin: 0 0 2px; font-size: 12px; font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent);
+}
+.field > span em { font-style: normal; font-weight: 500; color: var(--faint); }
+.pinq-form > .btn { justify-self: stretch; }
+.pinq-note { margin: -6px 0 0; text-align: center; }
+.contact-fallback { margin-top: 24px; }
+.contact-fallback > p:not(.fine) { color: var(--muted); max-width: 620px; }
+.contact-fallback .actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0 14px; }
+.pinq-holder { padding: clamp(24px, 4vw, 40px); border-radius: var(--radius); background: var(--surface); }
+.pinq-holder .field :is(input, select, textarea) { background: var(--surface-2); }
+.inquiry-done h2 { text-transform: uppercase; }
 
 /* ---------- Bedriftsside ---------- */
 .page-hero { min-height: min(80svh, 760px); }
@@ -654,7 +725,7 @@ h2 { font-size: clamp(2rem, 4.4vw, 3.2rem); letter-spacing: -0.01em; }
 }
 .promo::before {
   content: ""; position: absolute; inset: 0; z-index: -2;
-  background: var(--photo) center / cover;
+  background: var(--photo) var(--photo-pos, center) / var(--photo-size, cover) no-repeat;
   transition: transform 1.2s ease;
 }
 .promo::after {
@@ -785,7 +856,7 @@ h2 { font-size: clamp(2rem, 4.4vw, 3.2rem); letter-spacing: -0.01em; }
   .facts { grid-template-columns: repeat(2, 1fr); margin-top: 48px; }
   /* Mobil: klokka står til høyre for «Book nå»-knappen */
   .hero-inner { display: block; }
-  .hero-actions { padding-right: 112px; }
+  .hero .hero-actions { padding-right: 112px; }
   .hero-actions .btn { flex: 1 1 auto; }
   .stopwatch { position: absolute; right: 0; bottom: -14px; width: 96px; }
   .facts li { padding: 16px 0; }

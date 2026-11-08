@@ -15,15 +15,50 @@ loadProducts().then((all) => {
   observeRoomVideos($("#mobile-spill"));
 
   spillSelect.insertAdjacentHTML("beforeend", games.map((g) => `<option value="${esc(g.navn)}">${esc(g.navn)}</option>`).join(""));
-  spillSelect.closest(".field").hidden = games.length === 0;
 
-  // Kommer man fra et spill (bedrift.html?spill=<id>#kontakt), velges det på forhånd
+  // Kommer man fra et portabelt spill (bedrift.html?spill=<id>#kontakt), vises skjemaet for det spillet:
+  // spillet er forhåndsvalgt, og kunden slipper å velge interesse og spill.
   const valgt = games.find((g) => g.id === new URLSearchParams(location.search).get("spill"));
-  if (valgt) spillSelect.value = valgt.navn;
+  if (valgt) {
+    $("#kontakt .section-head").hidden = true;
+    const holder = document.createElement("div");
+    holder.className = "pinq-holder";
+    holder.innerHTML = productInquiryHTML(valgt);
+    form.replaceWith(holder);
+    setupProductInquiry(holder, valgt);
+  } else if (!INQUIRY_ENABLED) {
+    // Generelt skjema er av til mottaket finnes: vis e-post og telefon i stedet
+    const holder = document.createElement("div");
+    holder.className = "pinq-holder";
+    holder.innerHTML = contactFallbackHTML(
+      "Forespørsel fra bedriftssiden",
+      "Fortell oss hvor mange dere er, når dere vil spille og hva dere er interessert i: escape rooms, spillrommet eller at vi kommer til dere med et portabelt spill. Vi svarer så raskt vi kan, vanligvis innen én arbeidsdag.",
+      ["Navn", "Bedrift / organisasjon", "Telefon", "Antall personer", "Ønsket dato", "Hva er dere interessert i?", "Om arrangementet"]
+    );
+    form.replaceWith(holder);
+  } else {
+    setupSmartFields(games.length > 0);
+  }
 
   setupReveal(".section-head, .option, .room, .steps li, .inquiry");
   restoreHashScroll();
 });
+
+/* ---------- Generelt skjema: vis bare relevante felt ---------- */
+function setupSmartFields(hasGames) {
+  const spillField = $("#spill-field");
+  const stedField = $("#sted-field");
+  const checked = (value) => $(`input[name=interesse][value="${value}"]`, form).checked;
+  const update = () => {
+    const hosDere = checked("Portabelt spill hos dere");
+    const spillrom = checked("Spillrommet hos oss (opptil 12)");
+    spillField.hidden = !hasGames || !(hosDere || spillrom);
+    stedField.hidden = !hosDere;
+  };
+  $$("input[name=interesse]", form).forEach((c) => c.addEventListener("change", update));
+  form.addEventListener("reset", () => setTimeout(update));
+  update();
+}
 
 /* ---------- Skjema ---------- */
 form.addEventListener("submit", (e) => {
@@ -32,14 +67,8 @@ form.addEventListener("submit", (e) => {
   btn.disabled = true;
   status.hidden = true;
 
-  // Netlify Forms forventer vanlig skjemadata postet til siden selv
-  fetch("/", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams(new FormData(form)).toString(),
-  })
-    .then((r) => {
-      if (!r.ok) throw new Error(r.status);
+  sendInquiry(form)
+    .then(() => {
       form.reset();
       status.className = "form-status ok";
       status.innerHTML = "<strong>Takk!</strong> Vi har fått forespørselen og svarer så raskt vi kan.";
@@ -47,7 +76,7 @@ form.addEventListener("submit", (e) => {
     .catch(() => {
       status.className = "form-status error";
       status.innerHTML =
-        'Skjemaet kunne ikke sendes akkurat nå. Send oss en e-post på <a href="mailto:post@escapehaugesund.no">post@escapehaugesund.no</a> eller ring <a href="tel:+4752711111">52 71 11 11</a>.';
+        '<strong>Forespørselen ble ikke sendt.</strong> Sjekk tilkoblingen og prøv igjen. Fungerer det fortsatt ikke, send e-post til <a href="mailto:post@escapehaugesund.no">post@escapehaugesund.no</a> eller ring <a href="tel:+4752711111">52 71 11 11</a>.';
     })
     .finally(() => {
       status.hidden = false;

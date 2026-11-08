@@ -37,7 +37,7 @@ function renderRoom(p, all) {
   const viaSkjema = mobile && !p.bookero_widget_id;
   const spillrom = mobile && !viaSkjema;
   const bestillUrl = viaSkjema ? inquiryUrl(p) : "#booking";
-  const bestillTekst = viaSkjema ? "Send forespørsel" : spillrom ? "Book i spillrommet" : `Book ${esc(p.navn)}`;
+  const bestillTekst = viaSkjema ? "Send forespørsel" : spillrom ? "Book spill hos oss" : `Book ${esc(p.navn)}`;
 
   document.title = `${p.navn} – ${isRoom ? "escape room i Haugesund" : mobile ? "portabelt escape-spill | Escape Haugesund" : "Escape Haugesund"}`;
   $('meta[name="description"]').setAttribute("content", p.kort_beskrivelse || p.beskrivelse || "");
@@ -58,27 +58,32 @@ function renderRoom(p, all) {
     ${p.merkelapp ? `<span class="tag ${p.fremhevet ? "" : "tag-outline"}">${esc(p.merkelapp)}</span>` : ""}
     ${mobile ? `<p class="kicker">Portabelt escape-spill</p>` : ""}
     <h1 class="room-title">${esc(p.navn)}</h1>
-    <p class="hero-lead">${esc(p.kort_beskrivelse || p.beskrivelse)}</p>
+    ${p.undertittel ? `<p class="room-subtitle">${esc(p.undertittel)}</p>` : ""}
+    <div class="hero-lead">${p.ingress ? paragraphs(p.ingress) : `<p>${esc(p.kort_beskrivelse || p.beskrivelse)}</p>`}</div>
     <ul class="room-meta room-meta-hero">${metaItems(p).join("")}</ul>
     <div class="hero-actions">
       <a href="${bestillUrl}" class="btn btn-primary">${bestillTekst}</a>
       ${spillrom
-        ? `<a href="${inquiryUrl(p)}" class="btn btn-ghost">Vi kommer til dere</a>`
+        ? `<button type="button" class="btn btn-ghost" data-open-inquiry>Vi kommer til dere – send forespørsel</button>`
         : `<a href="#om-rommet" class="btn btn-ghost">Les mer</a>`}
     </div>
+    ${spillrom ? `<a href="#om-rommet" class="read-more">Les mer om spillet <span aria-hidden="true">↓</span></a>` : ""}
     ${p.kampanje ? `<p class="kampanje-strip"><strong>${esc(p.kampanje.split(" – ")[0])}</strong>${p.kampanje.includes(" – ") ? ` <span>${esc(p.kampanje.split(" – ").slice(1).join(" – "))}</span>` : ""}</p>` : ""}`
   );
 
   // Historien
   $("#room-story").innerHTML = `
     <p class="kicker">${isRoom ? "Historien" : mobile ? "Om spillet" : "Om opplevelsen"}</p>
-    <h2>${esc(p.navn)}</h2>
+    <h2>${mobile ? `Hva er ${esc(p.navn)}?` : esc(p.navn)}</h2>
     <div class="story-text">${paragraphs(p.historie || p.beskrivelse)}</div>
-    <div class="gm-note">
+    ${p.om_spillet?.length ? `
+      <h3 class="story-subtitle">Slik fungerer det</h3>
+      <ul class="story-list">${p.om_spillet.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}
+    ${spillrom ? "" /* «To måter å spille på» forklarer gamemaster og hvor man spiller */ : `<div class="gm-note">
       ${mobile
         ? "<strong>Vi hjelper dere på veien.</strong> En gamemaster kan bli med og hjelpe dere ved behov."
         : "<strong>Dere er aldri alene.</strong> En gamemaster følger med hele tiden og gir dere så mange hint dere trenger."}
-    </div>`;
+    </div>`}`;
 
   // Praktisk info. Prisen gjelder escape rooms (pris per lag)
   const minPris = isRoom ? PRICES[Math.max(2, Number(p.min_spillere) || 2)]?.[0] : null;
@@ -95,9 +100,10 @@ function renderRoom(p, all) {
     minPris && ["Pris", `Fra ${kr(minPris)} per lag · <a href="index.html#priser">se alle priser</a>`, true],
     isRoom && ["Alder", "10–80 år. Under 14 år må ha med en voksen."],
     isRoom && ["Språk", "Oppgavene er på engelsk. Hint på norsk eller engelsk."],
-    mobile && ["Hvor", p.hvor || "Vi kommer til dere, eller dere spiller hos oss i Strandgaten (opptil 12 personer)."],
+    // Hvor og gamemaster står i «To måter å spille på» for spill som kan bookes hos oss
+    mobile && !spillrom && ["Hvor", p.hvor || "Vi kommer til dere, eller dere spiller hos oss i Strandgaten (opptil 12 personer)."],
     mobile && ["Passer for", "Firmafest og julebord, bursdager og private selskap."],
-    mobile && ["Gamemaster", "Blir med og hjelper dere på veien ved behov."],
+    mobile && !spillrom && ["Gamemaster", "Blir med og hjelper dere på veien ved behov."],
     mobile && ["Faktura", "Bedrifter kan få faktura."],
     !mobile && ["Oppmøte", "10 minutter før. Strandgata 130, 2. etasje."],
   ].filter(Boolean);
@@ -114,12 +120,38 @@ function renderRoom(p, all) {
     $(".header-cta").href = bestillUrl;
     $(".header-cta").textContent = "Send forespørsel";
   } else {
-    $("#booking-title").textContent = spillrom ? `Book ${p.navn} i spillrommet` : `Book ${p.navn}`;
+    $("#booking-title").textContent = spillrom ? `Book ${p.navn} hos oss` : `Book ${p.navn}`;
     if (spillrom) {
-      $("#booking-lead").innerHTML = `Spill hos oss i Strandgata 130, opptil 12 personer. Skal vi komme til dere i stedet? <a href="${inquiryUrl(p)}">Send forespørsel</a>`;
+      $("#booking-lead").innerHTML = `Spill i et eget rom hos oss i Strandgata 130, for opptil 12 personer. Velg dato og tidspunkt i kalenderen. Vil dere heller at vi kommer til dere? <button type="button" class="link-button" data-open-inquiry>Send forespørsel</button>`;
     }
     $("#booking-panels").innerHTML = bookingPanelHTML(p, { compact: true });
     if (p.bookero_widget_id) loadBookero();
+  }
+
+  // To måter å spille på (portable spill som også kan bookes hos oss)
+  if (spillrom) {
+    const ways = $("#to-maater");
+    ways.innerHTML = `
+      <div class="wrap">
+        <header class="section-head center"><h2>To måter å spille på</h2></header>
+        <div class="split ways">
+          <article class="promo" style="--photo: url('${esc(absUrl(p.bilde))}'); --photo-pos: 30% 70%">
+            <p class="kicker">Hos Escape Haugesund</p>
+            <h2>Spill hos oss</h2>
+            <p>Kom til Escape Haugesund og spill ${esc(p.navn)} i et eget rom. Her er det ikke rommet dere skal rømme fra, men mysteriet dere skal løse! Book ledig tid direkte i kalenderen.</p>
+            <a href="#booking" class="btn btn-primary">Book spill hos oss</a>
+          </article>
+          <article class="promo" style="--photo: url('${esc(absUrl(p.bilde))}'); --photo-pos: 90% 20%; --photo-size: 230%">
+            <p class="kicker">Hjemme, på jobben eller på arrangement</p>
+            <h2>Vi kommer til dere</h2>
+            <p>Vil dere spille hjemme, på arbeidsplassen eller på et arrangement? Vi tar med spillet og en gamemaster som leder dere gjennom opplevelsen. Send oss en forespørsel, så finner vi en løsning sammen.</p>
+            <button type="button" class="btn btn-ghost" data-open-inquiry>Send forespørsel</button>
+          </article>
+        </div>
+      </div>`;
+    ways.hidden = false;
+    $("#andre").classList.remove("section-alt");
+    setupInquiryDialog(p);
   }
 
   // Andre spill
@@ -130,6 +162,19 @@ function renderRoom(p, all) {
 
   setupMobileBook($("#room-hero"), viaSkjema ? $("#andre") : $("#booking"));
   setupReveal(".room-story, .room-facts, #andre .room, .section-head");
+}
+
+/* ---------- «Vi kommer til dere»-skjemaet ---------- */
+function setupInquiryDialog(p) {
+  const dialog = $("#inquiry-dialog");
+  const body = $("#inquiry-body");
+  body.innerHTML = productInquiryHTML(p);
+  setupProductInquiry(body, p, { closeButton: true });
+
+  document.addEventListener("click", (e) => {
+    if (e.target.closest("[data-open-inquiry]")) dialog.showModal();
+    if (e.target.closest("[data-close-inquiry]") || e.target === dialog) dialog.close();
+  });
 }
 
 loadProducts().then((all) => {

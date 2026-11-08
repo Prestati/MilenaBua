@@ -62,6 +62,10 @@
       </div>
     </section>
 
+    <!-- ============ TO MÅTER Å SPILLE PÅ ============ -->
+    <!-- Bare for portable spill som kan bookes hos oss. Fylles av rom.js -->
+    <section class="section section-alt" id="to-maater" hidden></section>
+
     <!-- ============ ANDRE SPILL ============ -->
     <section class="section section-alt" id="andre">
       <div class="wrap">
@@ -86,6 +90,14 @@
   </footer>
 
   <a href="#booking" class="mobile-book" id="mobile-book">Book nå</a>
+
+  <!-- ============ FORESPØRSEL: VI KOMMER TIL DERE ============ -->
+  <!-- Åpnes av knapper med data-open-inquiry. Sendes til INQUIRY_ENDPOINT (se common.js) -->
+  <dialog class="inquiry-dialog" id="inquiry-dialog" aria-labelledby="inquiry-title">
+    <button type="button" class="dialog-close" data-close-inquiry aria-label="Lukk">×</button>
+    <!-- Skjemaet bygges av productInquiryHTML() i common.js, så det er likt på bedriftssiden -->
+    <div class="inquiry-body" id="inquiry-body"></div>
+  </dialog>
 
   <script src="assets/common.js"></script>
   <script src="assets/rom.js"></script>

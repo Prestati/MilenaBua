@@ -3,6 +3,28 @@
    ========================================================== */
 
 const PRODUCTS_URL = "content/produkter.json";
+// Mottaket for forespørsler (bedriftsskjemaet og «Vi kommer til dere»).
+// Må finnes der siden ligger, ellers viser skjemaet feilmelding i stedet for «mottatt».
+const INQUIRY_ENDPOINT = "api/foresporsel";
+// Skru på når mottaket finnes. Til da viser skjemaene «Send e-post» og «Ring» i stedet,
+// så ingen kunder sender forespørsler som ikke kommer frem.
+const INQUIRY_ENABLED = false;
+
+// Midlertidig erstatning for skjemaene: ferdig utfylt e-post + telefon
+function contactFallbackHTML(subject, intro, fields) {
+  const body = `Hei!\n\n${fields.map((f) => `${f}: `).join("\n")}\n\nHilsen`;
+  const mail = `mailto:post@escapehaugesund.no?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  return `
+    <div class="contact-fallback">
+      <h3 class="pinq-fields-title">Ta kontakt</h3>
+      <p>${intro}</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="${mail}">Send e-post</a>
+        <a class="btn btn-ghost" href="tel:+4752711111">Ring 52 71 11 11</a>
+      </div>
+      <p class="fine">Dette er en uforpliktende forespørsel, ikke en bekreftet booking. Vi tar kontakt for å avtale detaljene.</p>
+    </div>`;
+}
 const BOOKERO_BASE_URL = "https://app.bookero.no";
 const BOOKERO_SCRIPT = "https://app.bookero.no/build/widget.js?v=1792819627";
 
@@ -158,6 +180,111 @@ function loadBookero() {
   document.body.appendChild(s);
 }
 
+/* ---------- Forespørsler ---------- */
+// Sender et skjema til mottaket. Lykkes bare når mottaket svarer { ok: true },
+// så kunden aldri får bekreftelse på noe som ikke er sendt.
+function sendInquiry(form) {
+  return fetch(INQUIRY_ENDPOINT, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams(new FormData(form)).toString(),
+  })
+    .then((r) => r.json())
+    .then((data) => {
+      if (!data.ok) throw new Error(data.error || "Ikke sendt");
+      return data;
+    });
+}
+
+/* ---------- «Vi kommer til dere»-skjema for portable spill ---------- */
+// Brukes i vinduet på spillsiden og på bedriftssiden (bedrift.html?spill=<id>).
+// Spillet er forhåndsvalgt og følger med i innsendingen, så kunden slipper å velge.
+function productInquiryHTML(p) {
+  const navn = esc(p.navn);
+  const field = (label, input, required) =>
+    `<label class="field"><span>${label}${required ? " *" : " <em>(valgfritt)</em>"}</span>${input}</label>`;
+  return `
+    <div class="pinq">
+      <p class="kicker">${navn}</p>
+      <h2 class="pinq-title" id="inquiry-title">Vi tar spillet med til dere!</h2>
+      <div class="pinq-intro">
+        <p>Planlegger dere en bursdag, firmafest, teambuilding eller en annen samling? Vi tar med ${navn} og en gamemaster som sørger for en spennende opplevelse der dere er.</p>
+        <p>${INQUIRY_ENABLED
+          ? "Fyll ut skjemaet, så tar vi kontakt for å avklare muligheter, praktiske detaljer og pris. Helt uforpliktende!"
+          : "Ta kontakt, så avklarer vi muligheter, praktiske detaljer og pris sammen. Helt uforpliktende!"}</p>
+      </div>
+      ${!INQUIRY_ENABLED ? contactFallbackHTML(
+        `Forespørsel: ${p.navn} hos oss`,
+        "Send oss en e-post med litt om arrangementet – antall deltakere, ønsket dato og tid, og hvor dere vil at vi skal komme. Eller ring oss, så tar vi det derfra.",
+        ["Navn", "Bedrift / organisasjon", "Telefonnummer", "Antall deltakere", "Ønsket dato", "Ønsket tidspunkt", "Hvor skal vi komme?", "Om arrangementet"]
+      ) : `
+      <form class="inquiry pinq-form" method="POST">
+        <h3 class="pinq-fields-title">Fortell oss litt om arrangementet</h3>
+        <input type="hidden" name="form-name" value="vi-kommer-til-dere">
+        <input type="hidden" name="spill" value="${navn}">
+        <input type="hidden" name="type" value="Vi kommer til dere: ${navn} med gamemaster, gjennomføres hos kunden">
+        <p class="hidden-field"><label>Ikke fyll ut: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+        <div class="field-row">
+          ${field("Navn", `<input name="navn" required autocomplete="name">`, true)}
+          ${field("Bedrift / organisasjon", `<input name="bedrift" autocomplete="organization">`)}
+        </div>
+        <div class="field-row">
+          ${field("E-post", `<input type="email" name="epost" required autocomplete="email">`, true)}
+          ${field("Telefonnummer", `<input type="tel" name="telefon" required autocomplete="tel">`, true)}
+        </div>
+        <div class="field-row">
+          ${field("Antall deltakere", `<input type="number" name="antall" required min="1" inputmode="numeric">`, true)}
+          ${field("Ønsket dato", `<input type="date" name="dato">`)}
+        </div>
+        <div class="field-row">
+          ${field("Ønsket tidspunkt", `<input type="time" name="tidspunkt" step="900">`)}
+          ${field("Hvor skal vi komme?", `<input name="sted" autocomplete="street-address" placeholder="Adresse eller sted">`)}
+        </div>
+        ${field("Fortell litt om arrangementet", `<textarea name="melding" rows="5" placeholder="F.eks. Vi planlegger en firmafest for 12 personer og ønsker ${navn} på kontoret vårt."></textarea>`)}
+        <button type="submit" class="btn btn-primary">Send forespørsel</button>
+        <p class="fine pinq-note">Dette er en uforpliktende forespørsel, ikke en bekreftet booking. Vi tar kontakt for å avtale detaljene.</p>
+        <p class="form-status" role="alert" hidden></p>
+      </form>`}
+    </div>`;
+}
+
+function setupProductInquiry(root, p, { closeButton = false } = {}) {
+  const form = $("form", root);
+  if (!form) return; // skjemaet er av (INQUIRY_ENABLED), e-post/telefon vises i stedet
+  const status = $(".form-status", form);
+  const btn = $("button[type=submit]", form);
+  // Datoer i fortiden kan ikke velges (lokal dato, ikke UTC)
+  const now = new Date();
+  form.dato.min = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    btn.disabled = true;
+    btn.textContent = "Sender …";
+    status.hidden = true;
+
+    sendInquiry(form)
+      .then(() => {
+        // Bekreftelsen vises bare når mottaket har sagt ok
+        root.innerHTML = `
+          <div class="inquiry-done" role="status">
+            <p class="kicker">${esc(p.navn)}</p>
+            <h2>Takk for forespørselen!</h2>
+            <p>Vi har mottatt henvendelsen din og tar kontakt for å se på mulighetene. ${esc(p.foresporsel_takk || "Vi gleder oss til å planlegge opplevelsen sammen med dere!")}</p>
+            ${closeButton ? `<button type="button" class="btn btn-primary" data-close-inquiry>Lukk</button>` : ""}
+          </div>`;
+      })
+      .catch(() => {
+        status.className = "form-status error";
+        status.innerHTML =
+          '<strong>Forespørselen ble ikke sendt.</strong> Sjekk tilkoblingen og prøv igjen. Fungerer det fortsatt ikke, send e-post til <a href="mailto:post@escapehaugesund.no">post@escapehaugesund.no</a> eller ring <a href="tel:+4752711111">52 71 11 11</a>.';
+        status.hidden = false;
+        btn.disabled = false;
+        btn.textContent = "Prøv igjen";
+      });
+  });
+}
+
 /* ---------- Mobil bookingknapp ---------- */
 function setupMobileBook(topEl, bookingEl) {
   const btn = $("#mobile-book");
@@ -175,7 +302,7 @@ function setupMobileBook(topEl, bookingEl) {
 function restoreHashScroll() {
   if (!/^#[\w-]+$/.test(location.hash)) return;
   const target = document.getElementById(location.hash.slice(1));
-  if (target) requestAnimationFrame(() => target.scrollIntoView({ behavior: "instant" }));
+  if (target) setTimeout(() => target.scrollIntoView({ behavior: "instant" }));
 }
 
 /* ---------- Animasjon ved scroll ---------- */

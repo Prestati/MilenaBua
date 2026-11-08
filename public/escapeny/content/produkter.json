@@ -17,7 +17,11 @@
       "film": "assets/media/dexters-dungeon.mp4",
       "bookero_widget_id": "d8948099-79c8-4804-a84b-be43a31e6b12",
       "romtest_stemning": "skrekk",
-      "nybegynnervennlig": false
+      "nybegynnervennlig": false,
+      "undertittel": "",
+      "ingress": "",
+      "foresporsel_takk": "",
+      "om_spillet": []
     },
     {
       "id": "cold-fusion",
@@ -36,7 +40,11 @@
       "film": "assets/media/cold-fusion.mp4",
       "bookero_widget_id": "3f6485e1-109b-45b0-af1e-51275b1a60ed",
       "romtest_stemning": "mysterium",
-      "nybegynnervennlig": false
+      "nybegynnervennlig": false,
+      "undertittel": "",
+      "ingress": "",
+      "foresporsel_takk": "",
+      "om_spillet": []
     },
     {
       "id": "contagion",
@@ -55,7 +63,11 @@
       "film": "assets/media/contagion.mp4",
       "bookero_widget_id": "57ad02f7-4a1d-4281-86e6-dd534a27f94a",
       "romtest_stemning": "tempo",
-      "nybegynnervennlig": false
+      "nybegynnervennlig": false,
+      "undertittel": "",
+      "ingress": "",
+      "foresporsel_takk": "",
+      "om_spillet": []
     },
     {
       "type": "Mobilt spill",
@@ -73,7 +85,7 @@
       "navn": "Pirate Legends",
       "kort_beskrivelse": "Fem kister. Ett skjelett. Én skatt som ingen har funnet – ennå.",
       "beskrivelse": "Fire legendariske piratkapteiner gjemte skatten sin i gamle trekister, beskyttet av kart, symboler, labyrinter og magiske talismaner. Løs gåtene sammen og ta skatten!",
-      "historie": "Fire legendariske piratkapteiner gjemte skatten sin i gamle trekister, beskyttet av kart, symboler, labyrinter og magiske talismaner. Løs gåtene sammen og ta skatten!\n\nPerfekt til firmafest og julebord, bursdager og private selskap. Vi kommer til dere med alt utstyret, eller dere spiller hos oss i spillrommet vårt i Strandgaten.",
+      "historie": "Fire legendariske piratkapteiner gjemte skatten sin i gamle trekister, beskyttet av kart, symboler, labyrinter og magiske talismaner. Løs gåtene sammen og ta skatten!",
       "min_spillere": 3,
       "maks_spillere": 12,
       "ekstra_fakta": [
@@ -86,7 +98,17 @@
           "tekst": "eller ute"
         }
       ],
-      "bilde": "assets/media/pirate-legends.jpg"
+      "bilde": "assets/media/pirate-legends.jpg",
+      "undertittel": "Fem kister. 23 gåter. Én skjult skatt.",
+      "ingress": "Klarer dere å løse mysteriet før tiden renner ut? Samarbeid, knekk kodene og finn piratskatten på 60 minutter!\n\nPirate Legends er et spennende escape-spill som spilles i et eget rom hos oss – eller der dere ønsker, med en av våre gamemastere.",
+      "foresporsel_takk": "Vi gleder oss til å planlegge et pirat-eventyr sammen med dere!",
+      "om_spillet": [
+        "Et fysisk escape-spill med fem trekister, låser og 23 gåter – ikke et rom dere skal rømme fra.",
+        "Dere jobber sammen for å knekke kodene, åpne kistene og finne piratskatten.",
+        "En av våre gamemastere leder dere gjennom opplevelsen.",
+        "Spillet varer i 60 minutter og passer for 3–12 spillere.",
+        "Kan spilles inne eller ute – i et eget rom hos oss, eller der dere ønsker."
+      ]
     },
     {
       "type": "Mobilt spill",
@@ -104,7 +126,7 @@
       "navn": "Legacy of Nicolas Flamel",
       "kort_beskrivelse": "Finn De vises stein. Hent frem tryllestavene – eventyret starter nå.",
       "beskrivelse": "Alkymisten Nicolas Flamel gjemte livsverket sitt i en kiste full av skuffer, hemmelige rom og trollformler. Med staver og hatter bryter dere forbannelsene – sammen.",
-      "historie": "Alkymisten Nicolas Flamel gjemte livsverket sitt i en kiste full av skuffer, hemmelige rom og trollformler. Med staver og hatter bryter dere forbannelsene – sammen.\n\nPerfekt til firmafest og julebord, bursdager og private selskap. Vi kommer til dere, eller dere spiller hos oss i spillrommet vårt i Strandgaten.",
+      "historie": "Alkymisten Nicolas Flamel gjemte livsverket sitt i en kiste full av skuffer, hemmelige rom og trollformler. Med staver og hatter bryter dere forbannelsene – sammen.",
       "min_spillere": 2,
       "maks_spillere": 6,
       "ekstra_fakta": [
@@ -117,7 +139,17 @@
           "tekst": "aldre"
         }
       ],
-      "bilde": "assets/media/legacy-of-nicolas-flamel.jpg"
+      "bilde": "assets/media/legacy-of-nicolas-flamel.jpg",
+      "undertittel": "",
+      "ingress": "",
+      "foresporsel_takk": "",
+      "om_spillet": [
+        "Et fysisk escape-spill med en kiste full av skuffer, hemmelige rom og trollformler – ikke et rom dere skal rømme fra.",
+        "Med staver og hatter løser dere 15 gåter og bryter forbannelsene sammen.",
+        "En av våre gamemastere leder dere gjennom opplevelsen.",
+        "Spillet varer i 60 minutter, passer for 2–6 spillere og alle aldre.",
+        "Spill i et eget rom hos oss, eller der dere ønsker."
+      ]
     }
   ]
 }
