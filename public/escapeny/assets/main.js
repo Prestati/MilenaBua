@@ -110,57 +110,6 @@ function selectRoom(id, { focus = false } = {}) {
   $$(".booking-panel", panelsEl).forEach((p) => (p.hidden = p.id !== `panel-${id}`));
 }
 
-/* ---------- Finn riktig rom ---------- */
-const quiz = $("#quiz");
-const quizResult = $("#quiz-result");
-
-quiz.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const f = new FormData(quiz);
-  const erfaring = f.get("erfaring");
-  const stemning = f.get("stemning");
-  const antall = Number(f.get("antall"));
-
-  // Bare rom med stemning satt i admin er med i testen
-  const kandidater = PRODUCTS.filter(
-    (p) => p.romtest_stemning && p.romtest_stemning !== "ingen" && (!p.maks_spillere || p.maks_spillere >= antall)
-  );
-  if (!kandidater.length) return;
-
-  const score = (p) => {
-    const level = Number(p.vanskelighet) || 3;
-    let s = p.romtest_stemning === stemning ? 3 : 0;
-    if (erfaring === "ny") s += p.nybegynnervennlig ? 3 : 5 - level;
-    if (erfaring === "litt") s += level >= 3 && level <= 4 ? 2 : 0;
-    if (erfaring === "mye") s += level - 2;
-    return s;
-  };
-  // Ved likt: nybegynnere får det letteste rommet, erfarne det vanskeligste
-  const retning = erfaring === "ny" ? 1 : -1;
-  const best = kandidater
-    .map((p) => [p, score(p)])
-    .sort((a, b) => b[1] - a[1] || retning * ((Number(a[0].vanskelighet) || 3) - (Number(b[0].vanskelighet) || 3)))[0][0];
-
-  const grunner = [];
-  if (best.nybegynnervennlig && erfaring === "ny") grunner.push("perfekt første rom");
-  if (best.romtest_stemning === stemning) {
-    grunner.push({ mysterium: "et mysterium å nøste opp", skrekk: "for dere som tåler litt skrekk", tempo: "høyt tempo hele veien" }[stemning]);
-  }
-  if (erfaring === "mye" && Number(best.vanskelighet) >= 5) grunner.push("vår største utfordring");
-  if (!grunner.length) grunner.push("passer godt for dere");
-
-  quizResult.innerHTML = `
-    <img src="${esc(best.bilde)}" alt="">
-    <div>
-      <p class="why">Vi foreslår · ${grunner.join(" · ")}</p>
-      <h3>${esc(best.navn)}</h3>
-      <p>${esc(best.kort_beskrivelse || best.beskrivelse)}</p>
-      <a class="btn btn-primary" href="${roomUrl(best.id)}">Se ${esc(best.navn)} og book</a>
-    </div>`;
-  quizResult.hidden = false;
-  quizResult.scrollIntoView({ behavior: "smooth", block: "nearest" });
-});
-
 /* ---------- Priser ---------- */
 (() => {
   const body = $("#price-body");
@@ -252,6 +201,6 @@ loadProducts().then((list) => {
   PRODUCTS = list;
   renderProducts();
   renderBooking();
-  setupReveal(".section-head, .room, .steps li, .promo, .calc, .price-table, .quiz fieldset");
+  setupReveal(".section-head, .room, .steps li, .promo, .calc, .price-table");
   restoreHashScroll();
 });
