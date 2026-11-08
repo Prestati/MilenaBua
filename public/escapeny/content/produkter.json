@@ -24,8 +24,8 @@
       "navn": "Cold Fusion",
       "type": "Escape room",
       "synlig": true,
-      "merkelapp": "Anbefalt for nybegynnere",
-      "fremhevet": true,
+      "merkelapp": "Mysterium",
+      "fremhevet": false,
       "beskrivelse": "Professoren var bare dager unna et gjennombrudd som kunne forandret verden. Så forsvant han sporløst. Laboratoriet hans er det eneste sporet dere har.",
       "kort_beskrivelse": "Professoren er sporløst forsvunnet. Laboratoriet hans er det eneste sporet.",
       "min_spillere": 3,
@@ -36,7 +36,7 @@
       "film": "assets/media/cold-fusion.mp4",
       "bookero_widget_id": "3f6485e1-109b-45b0-af1e-51275b1a60ed",
       "romtest_stemning": "mysterium",
-      "nybegynnervennlig": true
+      "nybegynnervennlig": false
     },
     {
       "id": "contagion",
