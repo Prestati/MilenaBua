@@ -143,7 +143,7 @@ h2 { font-size: clamp(2rem, 4.4vw, 3.2rem); letter-spacing: -0.01em; }
   letter-spacing: -0.03em;
   line-height: 0.98;
 }
-.hero-lead { margin: 24px 0 36px; max-width: 520px; font-size: clamp(1.05rem, 1.6vw, 1.25rem); color: rgba(255, 255, 255, 0.8); }
+.hero-lead { margin: 24px 0 36px; max-width: 600px; font-size: clamp(1.05rem, 1.6vw, 1.25rem); color: rgba(255, 255, 255, 0.8); }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; }
 
 /* Stoppeklokke i hero */
@@ -755,7 +755,7 @@ h2 { font-size: clamp(2rem, 4.4vw, 3.2rem); letter-spacing: -0.01em; }
   .nav { gap: 14px; }
   .nav a { font-size: 13px; }
   .room-title { font-size: clamp(2rem, 9.5vw, 2.8rem); }
-  .hero-title { font-size: clamp(2rem, 9vw, 2.6rem); }
+  .hero-title { font-size: clamp(1.75rem, 8vw, 2.6rem); }
   .btn { padding: 0 26px; }
   .facts { grid-template-columns: repeat(2, 1fr); margin-top: 48px; }
   /* Mobil: klokka står til høyre for «Book nå»-knappen */
