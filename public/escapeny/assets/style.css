@@ -578,6 +578,28 @@ h2 { font-size: clamp(2rem, 4.4vw, 3.2rem); letter-spacing: -0.01em; }
 .booking-widget .bw-widget :is(.bw-variant-option-name, .bw-variant-option-price) { color: rgba(255, 255, 255, 0.85); }
 .booking-widget .bw-widget .bw-variant-option-selected :is(.bw-variant-option-name, .bw-variant-option-price) { color: var(--accent); }
 .booking-widget .bw-widget :is(.bw-variant-label, .bw-calendar-legend-label) { color: var(--muted); }
+
+/* Rekkefølge i bookingen: 1. dato, 2. tidspunkt, 3. antall spillere, så tillegg og oppsummering.
+   Bookero bygger delene som søsken, så de kan sorteres med flex-order uten å endre widgeten.
+   Testet: valgt dato og tid beholdes når antall endres etterpå, og prisen oppdateres. */
+.booking-widget .bw-step-calendar { display: flex; flex-direction: column; }
+.booking-widget .bw-step-calendar > .bw-calendar-container { order: 1; }
+.booking-widget .bw-step-calendar > .bw-timeslots-container { order: 2; }
+.booking-widget .bw-step-calendar > .bw-timeslot-resource-picker { order: 3; }
+.booking-widget .bw-step-calendar > .bw-variants-container { order: 4; margin-top: 24px; }
+.booking-widget .bw-step-calendar > .bw-pricing-container { order: 5; }
+.booking-widget .bw-step-calendar > .bw-resources-container { order: 6; }
+.booking-widget .bw-step-calendar > .bw-modifiers-container { order: 7; margin-top: 24px; }
+.booking-widget .bw-step-calendar > .bw-actions { order: 8; }
+/* Nummererte steg erstatter Bookeros egen overskrift («Booking: Cold Fusion» / «Velg alternativ») */
+.booking-widget .bw-step-calendar > :is(.bw-calendar-container, .bw-timeslots-container, .bw-variants-container)::before {
+  display: block; margin: 0 0 12px;
+  font: 700 12px var(--font); letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent);
+}
+.booking-widget .bw-step-calendar > .bw-calendar-container::before { content: "1. Velg dato"; }
+.booking-widget .bw-step-calendar > .bw-timeslots-container::before { content: "2. Velg tidspunkt"; margin-top: 8px; }
+.booking-widget .bw-step-calendar > .bw-variants-container::before { content: "3. Antall spillere"; }
+.booking-widget :is(.bw-variant-section-title, .bw-variant-label) { display: none; }
 .booking-fallback {
   display: grid; place-content: center; text-align: center; gap: 12px;
   padding: 40px 28px; min-height: 360px;
