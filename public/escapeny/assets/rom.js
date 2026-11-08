@@ -83,7 +83,13 @@ function renderRoom(p, all) {
   // Praktisk info. Prisen gjelder escape rooms (pris per lag)
   const minPris = isRoom ? PRICES[Math.max(2, Number(p.min_spillere) || 2)]?.[0] : null;
   const facts = [
-    spillere(p) && ["Spillere", `${spillere(p)} personer`],
+    spillere(p) && [
+      "Spillere",
+      // Escape rooms som kan spilles av to: si fra at det er krevende, men fullt mulig
+      isRoom && Number(p.min_spillere) === 2
+        ? `${spillere(p)} personer. Vi anbefaler 3 eller flere. Med to spillere blir det en ekstra utfordring, men mange spiller to og har en flott opplevelse.`
+        : `${spillere(p)} personer`,
+    ],
     p.varighet && ["Varighet", `${p.varighet} minutter`],
     level && ["Vanskelighet", `${dotsHTML(level)} <span class="sr-only">${level} av 5</span>`, true],
     minPris && ["Pris", `Fra ${kr(minPris)} per lag · <a href="index.html#priser">se alle priser</a>`, true],
