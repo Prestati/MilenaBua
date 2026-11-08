@@ -38,6 +38,10 @@ const inquiryUrl = (p) => `bedrift.html?spill=${encodeURIComponent(p.id)}#kontak
 // med en omskrivingsregel hos hostingen (se _redirects).
 const roomUrl = (id) => `rom.html?id=${encodeURIComponent(id)}`;
 
+// Bilder i CSS-variabler (--photo, --poster) leses relativt til stilarket, ikke siden.
+// Derfor gjøres stien om til full adresse før den settes inn.
+const absUrl = (path) => new URL(path, document.baseURI).href;
+
 const dotsHTML = (level) =>
   `<span class="dots" aria-label="Vanskelighet ${level} av 5">${Array.from({ length: 5 }, (_, i) => `<i class="${i < level ? "on" : ""}"></i>`).join("")}</span>`;
 
@@ -130,7 +134,7 @@ function bookingPanelHTML(p, { hidden = false, compact = false } = {}) {
   const level = Number(p.vanskelighet) || 0;
   return `
     <div class="booking-panel ${compact ? "booking-panel-compact" : ""}" ${compact ? "" : `role="tabpanel" aria-labelledby="tab-${esc(p.id)}"`} id="panel-${esc(p.id)}" ${hidden ? "hidden" : ""}>
-      ${compact ? "" : `<div class="booking-info" style="--poster: url('${esc(p.bilde)}')">
+      ${compact ? "" : `<div class="booking-info" style="--poster: url('${esc(absUrl(p.bilde))}')">
         <h3>${esc(p.navn)}</h3>
         <ul>
           ${spillere(p) ? `<li>${esc(spillere(p))} spillere</li>` : ""}

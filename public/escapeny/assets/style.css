@@ -640,6 +640,9 @@ h2 { font-size: clamp(2rem, 4.4vw, 3.2rem); letter-spacing: -0.01em; }
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.92) 70%);
 }
 .promo:hover::before { transform: scale(1.05); }
+/* Faste kortbilder. Stien er relativ til dette stilarket (assets/) */
+.photo-contagion { --photo: url("media/contagion.jpg"); }
+.photo-cold-fusion { --photo: url("media/cold-fusion.jpg"); }
 .promo h2 { font-size: clamp(1.8rem, 3vw, 2.4rem); }
 .promo p:not(.kicker) { color: rgba(255, 255, 255, 0.78); margin: 14px 0 26px; max-width: 460px; }
 
