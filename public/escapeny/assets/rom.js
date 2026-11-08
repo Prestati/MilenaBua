@@ -97,7 +97,7 @@ function renderRoom(p, all) {
     ],
     p.varighet && ["Varighet", `${p.varighet} minutter`],
     level && ["Vanskelighet", `${dotsHTML(level)} <span class="sr-only">${level} av 5</span>`, true],
-    minPris && ["Pris", `Fra ${kr(minPris)} per lag · <a href="index.html#priser">se alle priser</a>`, true],
+    minPris && ["Pris", `Fra ${kr(minPris)} per lag`],
     isRoom && ["Alder", "10–80 år. Under 14 år må ha med en voksen."],
     isRoom && ["Språk", "Oppgavene er på engelsk. Hint på norsk eller engelsk."],
     // Hvor og gamemaster står i «To måter å spille på» for spill som kan bookes hos oss

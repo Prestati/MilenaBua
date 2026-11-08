@@ -110,43 +110,6 @@ function selectRoom(id, { focus = false } = {}) {
   $$(".booking-panel", panelsEl).forEach((p) => (p.hidden = p.id !== `panel-${id}`));
 }
 
-/* ---------- Priser ---------- */
-(() => {
-  const body = $("#price-body");
-  body.innerHTML = Object.entries(PRICES)
-    .map(([n, [a, b]]) => `<tr data-n="${n}"><td>${n} personer</td><td>${kr(a)}</td><td>${kr(b)}</td></tr>`)
-    .join("");
-
-  const out = $("#calc-players");
-  const sum = $("#calc-sum");
-  const pp = $("#calc-pp");
-  const student = $("#calc-student");
-  const [minus, plus] = $$(".stepper button");
-  let n = 4;
-
-  function update() {
-    const helg = $("input[name=dag]:checked").value === "helg";
-    let total = PRICES[n][helg ? 1 : 0];
-    if (student.checked) total *= 0.8;
-    out.textContent = n;
-    sum.textContent = kr(total);
-    pp.textContent = `${kr(total / n)} per person`;
-    minus.disabled = n <= 2;
-    plus.disabled = n >= 6;
-    $$("tr", body).forEach((r) => r.classList.toggle("hl", Number(r.dataset.n) === n));
-  }
-
-  $$(".stepper button").forEach((b) =>
-    b.addEventListener("click", () => {
-      n = Math.min(6, Math.max(2, n + Number(b.dataset.step)));
-      update();
-    })
-  );
-  $$("input[name=dag]").forEach((r) => r.addEventListener("change", update));
-  student.addEventListener("change", update);
-  update();
-})();
-
 /* ---------- FAQ-søk ---------- */
 (() => {
   const input = $("#faq-search");
@@ -201,6 +164,6 @@ loadProducts().then((list) => {
   PRODUCTS = list;
   renderProducts();
   renderBooking();
-  setupReveal(".section-head, .room, .steps li, .promo, .calc, .price-table");
+  setupReveal(".section-head, .room, .steps li, .promo");
   restoreHashScroll();
 });
